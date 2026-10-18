@@ -23,6 +23,15 @@ const infoText = computed(() =>
     .join(' · '),
 )
 
+/** Zawsze jedna linia: opis, a jak go nie ma - podsumowanie i najbliższy termin. */
+const subline = computed(() => {
+  if (current.value.description) return current.value.description
+  const parts: string[] = []
+  if (summary.value) parts.push(summary.value)
+  if (nextTerm.value) parts.push(`najbliższy termin ${formatDate(nextTerm.value.date)}`)
+  return parts.join(' · ')
+})
+
 /** Wcięcie szyny łączącej rodzic → dzieci: środek pierwszej i ostatniej kolumny. */
 const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
 </script>
@@ -53,18 +62,15 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
               <InfoHint v-if="infoText" :text="infoText" />
             </div>
 
-            <h2 class="mt-1.5 text-lg leading-tight font-semibold tracking-tight text-balance sm:text-xl">
+            <h2
+              class="mt-1.5 line-clamp-1 text-lg leading-tight font-semibold tracking-tight sm:text-xl"
+              :title="current.name"
+            >
               {{ current.name }}
             </h2>
 
-            <p v-if="current.description" class="mt-1 max-w-prose text-sm text-muted-foreground">
-              {{ current.description }}
-            </p>
-            <p v-else-if="summary" class="mt-1 text-sm text-muted-foreground">
-              {{ summary }}
-              <template v-if="nextTerm">
-                · najbliższy termin {{ formatDate(nextTerm.date) }}
-              </template>
+            <p class="mt-1 min-h-5 truncate text-sm text-muted-foreground" :title="subline">
+              {{ subline }}
             </p>
           </div>
 

@@ -89,29 +89,19 @@ const scaleRows = computed(() => {
         </li>
       </ul>
 
-      <Separator v-if="score && showScale" class="mt-auto" />
-
-      <div v-if="score && showScale" class="space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="eyebrow">Skala ocen</span>
-          <span class="tnum text-2xs text-muted-foreground">
-            ocena {{ score.grade }}
-          </span>
-        </div>
-        <div class="flex gap-1">
-          <div
-            v-for="row in scaleRows"
-            :key="row.grade"
-            class="flex-1 rounded-md border px-1 py-1.5 text-center transition-colors"
-            :class="
-              row.achieved
-                ? 'border-primary/50 bg-primary/15 text-primary'
-                : 'border-border/60 bg-secondary/25 text-muted-foreground'
-            "
-          >
-            <div class="tnum text-xs font-semibold">{{ row.grade }}</div>
-            <div class="tnum mt-0.5 text-4xs opacity-70">{{ row.min }}</div>
-          </div>
+      <div v-if="score && showScale" class="mt-auto flex gap-1">
+        <div
+          v-for="row in scaleRows"
+          :key="row.grade"
+          class="flex-1 rounded-md border px-1 py-1.5 text-center transition-colors"
+          :class="
+            row.achieved
+              ? 'border-primary/50 bg-primary/15 text-primary'
+              : 'border-border/60 bg-secondary/25 text-muted-foreground'
+          "
+        >
+          <div class="tnum text-xs font-semibold">{{ row.grade }}</div>
+          <div class="tnum mt-0.5 text-4xs opacity-70">{{ row.min }}</div>
         </div>
       </div>
     </CardContent>
