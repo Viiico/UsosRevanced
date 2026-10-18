@@ -5,17 +5,16 @@ import type { GradeNode } from '~/types'
 import { terms } from '~/data/subjects'
 import { computeProgress } from '~/lib/tree'
 import { termsForNode } from '~/lib/requirements'
-import { childSummary, nodeIcon } from '~/lib/node-meta'
+import { childSummary, nodeIcon, type NodeVisual } from '~/lib/node-meta'
 import { formatDate, formatPercent } from '~/lib/format'
 
-const props = defineProps<{ node: GradeNode }>()
+const props = defineProps<{ node: GradeNode; visual?: NodeVisual }>()
 const emit = defineEmits<{ select: [id: string] }>()
 
 const progress = computed(() => computeProgress(props.node))
 const hasChildren = computed(() => (props.node.children?.length ?? 0) > 0)
-/** Punktowany = ma punkty własne albo w poddrzewie. */
 const hasPoints = computed(() => progress.value.max > 0)
-const icon = computed(() => nodeIcon(props.node))
+const icon = computed(() => nodeIcon(props.node, props.visual))
 
 const nextTerm = computed(() => termsForNode(props.node, terms)[0] ?? null)
 const summary = computed(() => childSummary(props.node))

@@ -35,6 +35,8 @@ export interface GradeNode {
   kind: GradeNodeKind
   name: string
   short?: string
+  /** Rodzaj zajęć - z niego bierze się ikona i odmiana podsumowania. */
+  visual?: 'lab' | 'colloquium' | 'project'
   /** Udział w średniej ważonej rodzeństwa. Zwykle równy maksimum punktów. */
   weight: number
   points?: NodePoints
@@ -78,7 +80,6 @@ export interface GradeScaleRow {
 
 export interface SubjectPolicy {
   ects: number
-  hours: { lecture: number; lab: number; project: number }
   totalPoints: number
   passingPoints: number
   gradeScale: GradeScaleRow[]

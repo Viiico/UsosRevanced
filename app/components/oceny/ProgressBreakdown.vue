@@ -22,12 +22,8 @@ const scaleRows = computed(() => {
 <template>
   <Card class="flex h-full flex-col">
     <CardHeader class="pb-3">
-      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-        <span />
+      <div class="flex items-center justify-center">
         <span class="text-sm font-semibold tracking-[0.14em] uppercase">Postęp</span>
-        <span v-if="score && showScale" class="justify-self-end text-2xs text-muted-foreground">
-          {{ score.scope }}
-        </span>
       </div>
 
       <div class="mt-2 flex items-end justify-between gap-3">

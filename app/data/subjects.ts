@@ -26,7 +26,6 @@ const technikaObrazowa: Subject = {
   demoData: true,
   policy: {
     ects: 5,
-    hours: { lecture: 30, lab: 15, project: 15 },
     totalPoints: 100,
     passingPoints: 50,
     gradeScale: [
@@ -98,6 +97,7 @@ const technikaObrazowa: Subject = {
       {
         id: 'to-lab',
         kind: 'category',
+        visual: 'lab',
         name: 'Laboratorium',
         weight: 30,
         points: { max: 30, earned: 24 },
@@ -170,6 +170,7 @@ const technikaObrazowa: Subject = {
       {
         id: 'to-kol',
         kind: 'category',
+        visual: 'colloquium',
         name: 'Kolokwia',
         weight: 40,
         points: { max: 40, earned: 22 },
@@ -209,6 +210,7 @@ const technikaObrazowa: Subject = {
       {
         id: 'to-proj',
         kind: 'category',
+        visual: 'project',
         name: 'Projekt',
         weight: 30,
         points: { max: 30, earned: 24 },

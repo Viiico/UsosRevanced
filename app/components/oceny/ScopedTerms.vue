@@ -1,56 +1,41 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CalendarClock, Check, Clock3, Lock, TriangleAlert } from 'lucide-vue-next'
-import type { Term, TermKind } from '~/types'
-import { TERM_KIND_LABEL, TERM_KIND_SHORT } from '~/lib/node-meta'
+import { CalendarClock, Lock } from 'lucide-vue-next'
+import type { Term } from '~/types'
+import {
+  TERM_GROUP,
+  TERM_GROUP_LABEL,
+  TERM_KIND_LABEL,
+  TERM_KIND_SHORT,
+  TERM_STATUS,
+} from '~/lib/node-meta'
 import { dayOfMonth, formatWeekday, monthShort, relativeDays } from '~/lib/format'
 
 const { scopedTerms, termStatus, nowIso } = useGrades()
 
-type Filter = 'all' | 'lab' | 'colloquium' | 'project'
+/** Filtry wynikają z danych: pojawiają się tylko grupy obecne w zakresie. */
+const filter = ref('all')
 
-const filter = ref<Filter>('all')
-
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'Wszystko' },
-  { id: 'lab', label: 'Laboratoria' },
-  { id: 'colloquium', label: 'Kolokwia' },
-  { id: 'project', label: 'Projekt' },
-]
-
-const projectKinds: TermKind[] = ['project-stage', 'project-deadline']
-
-const counts = computed(() => ({
-  all: scopedTerms.value.length,
-  lab: scopedTerms.value.filter((t) => t.kind === 'lab').length,
-  colloquium: scopedTerms.value.filter((t) => t.kind === 'colloquium').length,
-  project: scopedTerms.value.filter((t) => projectKinds.includes(t.kind)).length,
-}))
-
-const visibleTerms = computed(() => {
-  if (filter.value === 'all') return scopedTerms.value
-  if (filter.value === 'project') {
-    return scopedTerms.value.filter((t) => projectKinds.includes(t.kind))
+const filters = computed(() => {
+  const counts = new Map<string, number>()
+  for (const term of scopedTerms.value) {
+    const group = TERM_GROUP[term.kind]
+    counts.set(group, (counts.get(group) ?? 0) + 1)
   }
-  return scopedTerms.value.filter((t) => t.kind === filter.value)
+  return [
+    { id: 'all', label: 'Wszystko', count: scopedTerms.value.length },
+    ...[...counts].map(([id, count]) => ({ id, label: TERM_GROUP_LABEL[id] ?? id, count })),
+  ]
 })
 
-const STATUS_META = {
-  graded: { label: 'ocenione', icon: Check, class: 'text-success' },
-  overdue: { label: 'po terminie', icon: TriangleAlert, class: 'text-danger' },
-  pending: { label: 'oczekuje', icon: Clock3, class: 'text-muted-foreground' },
-} as const
+const visibleTerms = computed(() =>
+  filter.value === 'all'
+    ? scopedTerms.value
+    : scopedTerms.value.filter((term) => TERM_GROUP[term.kind] === filter.value),
+)
 
 function statusOf(term: Term) {
-  return STATUS_META[termStatus(term)]
-}
-
-function badgeVariant(term: Term) {
-  return termStatus(term) === 'graded'
-    ? 'success'
-    : termStatus(term) === 'overdue'
-      ? 'destructive'
-      : 'outline'
+  return TERM_STATUS[termStatus(term)]
 }
 </script>
 
@@ -65,7 +50,7 @@ function badgeVariant(term: Term) {
 
       <div class="flex flex-wrap gap-1.5">
         <button
-          v-for="item in FILTERS"
+          v-for="item in filters"
           :key="item.id"
           type="button"
           class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
@@ -77,7 +62,7 @@ function badgeVariant(term: Term) {
           @click="filter = item.id"
         >
           {{ item.label }}
-          <span class="tnum opacity-60">{{ counts[item.id] }}</span>
+          <span class="tnum opacity-60">{{ item.count }}</span>
         </button>
       </div>
     </CardHeader>
@@ -162,7 +147,7 @@ function badgeVariant(term: Term) {
               <span class="tnum text-3xs text-muted-foreground/70">
                 {{ relativeDays(term.date, nowIso) }}
               </span>
-              <Badge :variant="badgeVariant(term)" class="gap-1">
+              <Badge :variant="statusOf(term).variant" class="gap-1">
                 <component :is="statusOf(term).icon" class="size-3" />
                 {{ statusOf(term).label }}
               </Badge>

@@ -93,7 +93,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
           :key="child.id"
           class="min-w-[10.5rem] flex-1 basis-[calc(20%-0.6rem)] self-stretch sm:max-w-[21rem]"
         >
-          <SkillNodeCard :node="child" @select="select" />
+          <SkillNodeCard :node="child" :visual="current.visual" @select="select" />
         </div>
       </div>
 
@@ -114,7 +114,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
               class="absolute top-0 left-1/2 hidden h-3 w-px -translate-x-1/2 bg-border sm:block"
             />
             <div class="sm:pt-3">
-              <SkillNodeCard :node="child" @select="select" />
+              <SkillNodeCard :node="child" :visual="current.visual" @select="select" />
             </div>
           </div>
         </div>

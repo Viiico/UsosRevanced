@@ -38,7 +38,6 @@ Typy są w `app/types/index.ts`, a dane w `app/data/subjects.ts`.
       "teachers": [{ "name": "dr inż. Andrzej Buchowicz", "email": "…", "room": "pok. 451" }],
       "policy": {
         "ects": 5,
-        "hours": { "lecture": 30, "lab": 15, "project": 15 },
         "totalPoints": 100,
         "passingPoints": 50,
         "gradeScale": [{ "min": 90, "grade": "5" }],
@@ -111,7 +110,7 @@ CREATE TABLE semester  (id TEXT PRIMARY KEY, code TEXT, name TEXT, academic_year
 CREATE TABLE subject   (id TEXT PRIMARY KEY, semester_id TEXT REFERENCES semester(id),
                         code TEXT, name TEXT, "group" TEXT, ects INTEGER,
                         total_points INTEGER, passing_points INTEGER,
-                        policy_json TEXT);           -- hours, gradeScale, rules
+                        policy_json TEXT);           -- ects, gradeScale, rules
 
 CREATE TABLE grade_node (
   id TEXT PRIMARY KEY,

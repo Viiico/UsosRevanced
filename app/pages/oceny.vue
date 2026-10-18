@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ChevronRight, FlaskConical } from 'lucide-vue-next'
 
-const { current, path, crumbs, select, activeSubject, scoringSubject, semester } = useGrades()
+const { current, path, crumbs, select, activeSubject, scoringSubject, semester, heroMeta } =
+  useGrades()
 
 /**
  * Poniżej przedmiotu drzewo układa kafle w zawijany rząd zamiast jednej linii
@@ -15,17 +16,6 @@ const subtitle = computed(() =>
     ? null
     : `${semester.name} ${semester.code} · ${scoringSubject.value ? '1 przedmiot' : 'brak przedmiotów'}`,
 )
-
-const ects = computed(() =>
-  activeSubject.value ? `${activeSubject.value.policy.ects} ECTS` : null,
-)
-
-const hours = computed(() => {
-  const subject = activeSubject.value
-  if (!subject) return null
-  const { lecture, lab, project } = subject.policy.hours
-  return `${lecture} h wykładu · ${lab} h laboratorium · ${project} h projektu`
-})
 
 useHead({
   title: () => `Oceny · ${activeSubject.value?.name ?? `semestr ${semester.code}`}`,
@@ -43,22 +33,17 @@ useHead({
         </div>
 
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <template v-if="activeSubject">
-            <span class="inline-flex items-center gap-1.5 text-2xs text-muted-foreground">
-              <FlaskConical class="size-3" />
-              grupa {{ activeSubject.group ?? '-' }}
-            </span>
+          <template v-for="item in heroMeta" :key="item.id">
+            <Badge v-if="item.badge" variant="secondary">{{ item.text }}</Badge>
             <span
-              v-for="teacher in activeSubject.teachers"
-              :key="teacher.name"
+              v-else
               class="inline-flex items-center gap-1.5 text-2xs text-muted-foreground"
             >
-              <span class="size-1 rounded-full bg-primary/50" />
-              {{ teacher.name }}
+              <FlaskConical v-if="item.icon === 'group'" class="size-3" />
+              <span v-else class="size-1 rounded-full bg-primary/50" />
+              {{ item.text }}
             </span>
           </template>
-          <Badge v-if="ects" variant="secondary">{{ ects }}</Badge>
-          <Badge v-if="hours" variant="secondary" class="hidden sm:inline-flex">{{ hours }}</Badge>
         </div>
       </div>
 

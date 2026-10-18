@@ -123,10 +123,23 @@ export function useGrades() {
       total: subject.policy.totalPoints,
       passing: subject.policy.passingPoints,
       grade: gradeForPoints(earned, subject.policy.gradeScale).grade,
-      scope: activeSubject.value ? 'przedmiot' : 'semestr',
     }
   })
 
+  /** Metadane nagłówka przedmiotu - dane, nie markup. */
+  const heroMeta = computed(() => {
+    const subject = activeSubject.value
+    if (!subject) return []
+    return [
+      { id: 'group', text: `grupa ${subject.group ?? '-'}`, icon: 'group' as const },
+      ...subject.teachers.map((teacher) => ({
+        id: `teacher-${teacher.name}`,
+        text: teacher.name,
+        icon: 'dot' as const,
+      })),
+      { id: 'ects', text: `${subject.policy.ects} ECTS`, badge: true as const },
+    ]
+  })
 
   const crumbs = computed(() =>
     path.value.map((node) => ({ id: node.id, name: node.name, kind: node.kind })),
@@ -161,6 +174,7 @@ export function useGrades() {
     scopedTerms,
     score,
     showScale,
+    heroMeta,
     crumbs,
     nowIso,
     termStatus,
