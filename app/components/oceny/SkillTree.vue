@@ -33,7 +33,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
       <div class="flex items-center gap-2">
         <span class="eyebrow">Skilltree</span>
         <Separator orientation="vertical" class="h-3" />
-        <span class="text-[11px] text-muted-foreground">{{ kindLabel }}</span>
+        <span class="text-2xs text-muted-foreground">{{ kindLabel }}</span>
       </div>
       <Button v-if="canGoUp" variant="outline" size="sm" class="gap-1.5" @click="goUp">
         <ArrowLeft class="size-3.5" />
@@ -145,7 +145,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
       <div v-if="!children.length" class="mt-auto pt-4">
         <NuxtLink
           to="/kalendarz"
-          class="inline-flex items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:text-primary"
+          class="inline-flex items-center gap-1 text-2xs text-muted-foreground transition-colors hover:text-primary"
         >
           Zobacz w kalendarzu
           <ArrowUpRight class="size-3" />

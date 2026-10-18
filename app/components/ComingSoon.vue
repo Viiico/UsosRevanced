@@ -31,18 +31,18 @@ defineProps<{
         <li
           v-for="plan in plans"
           :key="plan"
-          class="flex items-start gap-2 rounded-lg border border-border/60 bg-secondary/20 px-3 py-2.5 text-[13px] text-muted-foreground"
+          class="flex items-start gap-2 rounded-lg border border-border/60 bg-secondary/20 px-3 py-2.5 text-dense text-muted-foreground"
         >
           <ArrowRight class="mt-0.5 size-3.5 shrink-0 text-primary/70" />
           <span>{{ plan }}</span>
         </li>
       </ul>
 
-      <p v-if="note" class="text-[11px] text-muted-foreground/80">{{ note }}</p>
+      <p v-if="note" class="text-2xs text-muted-foreground/80">{{ note }}</p>
 
       <NuxtLink
         to="/oceny"
-        class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-4 text-[13px] font-medium transition-colors hover:border-primary/40 hover:text-primary"
+        class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-4 text-dense font-medium transition-colors hover:border-primary/40 hover:text-primary"
       >
         Przejdź do zakładki Oceny
         <ArrowRight class="size-3.5" />

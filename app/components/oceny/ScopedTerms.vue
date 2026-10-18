@@ -68,7 +68,7 @@ function badgeVariant(term: Term) {
           v-for="item in FILTERS"
           :key="item.id"
           type="button"
-          class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-medium transition-colors"
+          class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
           :class="
             filter === item.id
               ? 'border-primary/45 bg-primary/12 text-primary'
@@ -92,7 +92,7 @@ function badgeVariant(term: Term) {
           <div class="shrink-0 pl-1">
             <div class="tnum text-lg leading-none font-semibold">{{ dayOfMonth(term.date) }}</div>
             <div class="eyebrow mt-1">{{ monthShort(term.date) }}</div>
-            <div class="mt-0.5 text-[10px] text-muted-foreground/80">
+            <div class="mt-0.5 text-3xs text-muted-foreground/80">
               {{ formatWeekday(term.date) }}
             </div>
           </div>
@@ -105,16 +105,16 @@ function badgeVariant(term: Term) {
               >
                 {{ TERM_KIND_SHORT[term.kind] }}
               </Badge>
-              <span class="text-[11px] text-muted-foreground">
+              <span class="text-2xs text-muted-foreground">
                 {{ TERM_KIND_LABEL[term.kind] }}
               </span>
-              <span v-if="term.start" class="tnum text-[11px] text-muted-foreground">
+              <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
                 · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
               </span>
               <Tooltip>
                 <TooltipTrigger>
                   <span
-                    class="inline-flex items-center gap-1 text-[10px] transition-colors"
+                    class="inline-flex items-center gap-1 text-3xs transition-colors"
                     :class="
                       term.canBeDoneBefore ? 'text-primary/80' : 'text-muted-foreground/80'
                     "
@@ -139,14 +139,14 @@ function badgeVariant(term: Term) {
               />
             </div>
 
-            <p class="mt-1.5 pr-2 text-[13px] leading-snug font-medium text-balance">
+            <p class="mt-1.5 pr-2 text-dense leading-snug font-medium text-balance">
               {{ term.title }}
             </p>
 
-            <p v-if="term.requirement" class="mt-1 text-[11px] text-muted-foreground">
+            <p v-if="term.requirement" class="mt-1 text-2xs text-muted-foreground">
               {{ term.requirement }}
             </p>
-            <p v-if="term.notes" class="mt-0.5 text-[11px] text-muted-foreground/80">
+            <p v-if="term.notes" class="mt-0.5 text-2xs text-muted-foreground/80">
               {{ term.notes }}
             </p>
           </div>
@@ -159,7 +159,7 @@ function badgeVariant(term: Term) {
               <span v-else class="text-muted-foreground">bez punktów</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="tnum text-[10px] text-muted-foreground/70">
+              <span class="tnum text-3xs text-muted-foreground/70">
                 {{ relativeDays(term.date, nowIso) }}
               </span>
               <Badge :variant="badgeVariant(term)" class="gap-1">

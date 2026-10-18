@@ -15,7 +15,7 @@ const items = [
     <div class="mx-auto flex h-16 w-full max-w-[100rem] items-center gap-3 px-4 sm:px-6">
       <NuxtLink to="/oceny" class="group flex items-center gap-2.5">
         <span
-          class="grid size-9 place-items-center rounded-lg border border-primary/35 bg-primary/10 text-[13px] font-semibold text-primary"
+          class="grid size-9 place-items-center rounded-lg border border-primary/35 bg-primary/10 text-dense font-semibold text-primary"
         >
           UR
         </span>
@@ -27,7 +27,7 @@ const items = [
           v-for="item in items"
           :key="item.to"
           :to="item.to"
-          class="inline-flex h-9 items-center gap-2 rounded-lg px-3 text-[13px] font-medium transition-colors"
+          class="inline-flex h-9 items-center gap-2 rounded-lg px-3 text-dense font-medium transition-colors"
           :class="
             route.path === item.to
               ? 'bg-secondary text-foreground'

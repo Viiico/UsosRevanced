@@ -29,7 +29,7 @@ const scaleRows = computed(() => {
             text="Pasek sumuje postępy dzieci bieżącego poziomu. Każdy segment ma szerokość proporcjonalną do zdobytych punktów, więc wypełnienia układają się ciągiem od lewej, a pusta reszta paska pokazuje, ile jeszcze brakuje."
           />
         </div>
-        <span v-if="score && showScale" class="text-[11px] text-muted-foreground">{{ score.scope }}</span>
+        <span v-if="score && showScale" class="text-2xs text-muted-foreground">{{ score.scope }}</span>
       </div>
 
       <div class="mt-1 flex items-end justify-between gap-3">
@@ -61,7 +61,7 @@ const scaleRows = computed(() => {
             />
           </div>
         </div>
-        <div class="mt-1.5 flex justify-between text-[10px] text-muted-foreground">
+        <div class="mt-1.5 flex justify-between text-3xs text-muted-foreground">
           <span>0%</span>
           <span>100%</span>
         </div>
@@ -79,10 +79,10 @@ const scaleRows = computed(() => {
             @click="canDrill && select(seg.id)"
           >
             <span
-              class="size-3 shrink-0 rounded-[3px]"
+              class="size-3 shrink-0 rounded-sm"
               :style="{ backgroundColor: segmentColor(seg.colorIndex) }"
             />
-            <span class="min-w-0 flex-1 truncate text-[13px]">{{ seg.label }}</span>
+            <span class="min-w-0 flex-1 truncate text-dense">{{ seg.label }}</span>
             <span class="tnum text-xs text-muted-foreground">{{ seg.earned }}/{{ seg.max }}</span>
             <span class="tnum w-10 text-right text-xs font-medium">{{ formatPercent(seg.ratio) }}</span>
           </component>
@@ -94,7 +94,7 @@ const scaleRows = computed(() => {
       <div v-if="score && showScale" class="space-y-2">
         <div class="flex items-center justify-between">
           <span class="eyebrow">Skala ocen</span>
-          <span class="tnum text-[11px] text-muted-foreground">
+          <span class="tnum text-2xs text-muted-foreground">
             ocena {{ score.grade }}
           </span>
         </div>
@@ -110,7 +110,7 @@ const scaleRows = computed(() => {
             "
           >
             <div class="tnum text-xs font-semibold">{{ row.grade }}</div>
-            <div class="tnum mt-0.5 text-[9px] opacity-70">{{ row.min }}</div>
+            <div class="tnum mt-0.5 text-4xs opacity-70">{{ row.min }}</div>
           </div>
         </div>
       </div>

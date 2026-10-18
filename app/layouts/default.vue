@@ -8,7 +8,7 @@
 
     <footer class="mt-4 border-t border-border/60 py-4">
       <div
-        class="mx-auto flex w-full max-w-[100rem] flex-wrap items-center justify-between gap-2 px-4 text-[11px] text-muted-foreground sm:px-6"
+        class="mx-auto flex w-full max-w-[100rem] flex-wrap items-center justify-between gap-2 px-4 text-2xs text-muted-foreground sm:px-6"
       >
         <span>USOS Revanced · dane trzymane lokalnie (JSON → SQLite)</span>
         <span class="flex items-center gap-1.5">

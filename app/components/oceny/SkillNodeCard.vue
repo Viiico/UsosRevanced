@@ -38,11 +38,11 @@ const summary = computed(() => childSummary(props.node))
         <component :is="icon" class="size-4" />
       </span>
 
-      <p class="min-w-0 flex-1 truncate text-[15px] leading-snug font-medium" :title="node.name">
+      <p class="min-w-0 flex-1 truncate text-lead leading-snug font-medium" :title="node.name">
         {{ node.short ?? node.name }}
       </p>
 
-      <span v-if="nextTerm" class="tnum shrink-0 text-[10px] text-muted-foreground">
+      <span v-if="nextTerm" class="tnum shrink-0 text-3xs text-muted-foreground">
         {{ formatDate(nextTerm.date) }}
       </span>
 
@@ -54,14 +54,14 @@ const summary = computed(() => childSummary(props.node))
 
     <div class="mt-auto space-y-2">
       <div v-if="hasPoints" class="flex items-baseline justify-between gap-1">
-        <span class="tnum text-[11px] font-semibold whitespace-nowrap">
+        <span class="tnum text-2xs font-semibold whitespace-nowrap">
           {{ progress.earned }}/{{ progress.max }} pkt
         </span>
-        <span class="tnum text-[11px] whitespace-nowrap text-muted-foreground">
+        <span class="tnum text-2xs whitespace-nowrap text-muted-foreground">
           {{ formatPercent(progress.ratio) }}
         </span>
       </div>
-      <div v-else class="text-[11px] text-muted-foreground">niepunktowane</div>
+      <div v-else class="text-2xs text-muted-foreground">niepunktowane</div>
 
       <div v-if="hasPoints" class="h-1.5 w-full overflow-hidden rounded-full bg-muted">
         <div
@@ -70,7 +70,7 @@ const summary = computed(() => childSummary(props.node))
         />
       </div>
 
-      <div v-if="summary" class="truncate text-[11px] text-muted-foreground">{{ summary }}</div>
+      <div v-if="summary" class="truncate text-2xs text-muted-foreground">{{ summary }}</div>
     </div>
   </div>
 </template>

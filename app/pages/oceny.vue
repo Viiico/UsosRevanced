@@ -75,7 +75,7 @@ useHead({
 
       <div
         v-if="activeSubject"
-        class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-muted-foreground"
+        class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-2xs text-muted-foreground"
       >
         <span class="inline-flex items-center gap-1.5">
           <FlaskConical class="size-3" />
