@@ -5,9 +5,8 @@ const { current, path, crumbs, select, activeSubject, scoringSubject, semester, 
   useGrades()
 
 /**
- * Semestr i przedmiot mają dość treści na dwie kolumny. Niżej (grupa, pojedyncza
- * ocena) karta postępu byłaby pusta w połowie wysokości, więc układ przechodzi
- * w jedną kolumnę, a postęp zamienia się w poziomy pasek.
+ * Poniżej przedmiotu drzewo układa kafle w zawijany rząd zamiast jednej linii
+ * z łącznikami, żeby szeroka kolumna nie rozciągała trzech kart na całą szerokość.
  */
 const isDeepLevel = computed(() => path.value.length > 2)
 
@@ -89,15 +88,10 @@ useHead({
       </div>
     </header>
 
-    <div v-if="!isDeepLevel" class="grid gap-4 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
-      <SkillTree />
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <SkillTree :compact="isDeepLevel" />
       <ProgressBreakdown />
     </div>
-
-    <template v-else>
-      <SkillTree compact />
-      <ProgressSummary />
-    </template>
 
     <RequirementList />
 
