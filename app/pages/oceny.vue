@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import { ChevronRight, FlaskConical } from 'lucide-vue-next'
 
-const { current, path, crumbs, select, activeSubject, scoringSubject, semester, heroMeta } =
-  useGrades()
-
-/**
- * Poniżej przedmiotu drzewo układa kafle w zawijany rząd zamiast jednej linii
- * z łącznikami, żeby szeroka kolumna nie rozciągała trzech kart na całą szerokość.
- */
-const isDeepLevel = computed(() => path.value.length > 2)
+const { crumbs, select, activeSubject, scoringSubject, semester, heroMeta } = useGrades()
 
 const heading = computed(() => (activeSubject.value ? activeSubject.value.name : 'Oceny'))
 const subtitle = computed(() =>
@@ -76,7 +69,7 @@ useHead({
     </header>
 
     <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-      <SkillTree :compact="isDeepLevel" />
+      <SkillTree />
       <ProgressBreakdown />
     </div>
 

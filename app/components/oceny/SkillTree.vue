@@ -8,8 +8,6 @@ import { formatDate, formatWeekday } from '~/lib/format'
 
 const { current, children, canGoUp, goUp, select, progress } = useGrades()
 
-withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
-
 const icon = computed(() => nodeIcon(current.value))
 const kindLabel = computed(() => NODE_KIND_LABEL[current.value.kind])
 const summary = computed(() => childSummary(current.value))
@@ -87,40 +85,35 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-if="children.length && compact" class="mt-5 flex flex-wrap gap-3">
-        <div
-          v-for="child in children"
-          :key="child.id"
-          class="min-w-[10.5rem] flex-1 basis-[calc(20%-0.6rem)] self-stretch sm:max-w-[21rem]"
-        >
-          <SkillNodeCard :node="child" :visual="current.visual" @select="select" />
-        </div>
-      </div>
-
-      <div v-else-if="children.length" class="relative mt-0 pt-6">
+      <div v-if="children.length" class="relative mt-5 flex flex-col pt-6 lg:h-32">
         <div class="absolute top-0 left-1/2 hidden h-6 w-px -translate-x-1/2 bg-border sm:block" />
         <div
           class="absolute top-6 hidden h-px bg-border sm:block"
           :style="{ left: railInset, right: railInset }"
         />
 
-        <div class="flex flex-col gap-2 sm:flex-row sm:gap-0">
+        <div class="flex flex-1 flex-col gap-2 sm:flex-row sm:gap-0">
           <div
             v-for="child in children"
             :key="child.id"
-            class="group/branch relative flex-1 sm:px-1.5"
+            class="group/branch relative flex flex-1 sm:px-1.5"
           >
             <div
               class="absolute top-0 left-1/2 hidden h-3 w-px -translate-x-1/2 bg-border sm:block"
             />
-            <div class="sm:pt-3">
-              <SkillNodeCard :node="child" :visual="current.visual" @select="select" />
+            <div class="flex flex-1 flex-col sm:pt-3">
+              <SkillNodeCard
+                :node="child"
+                :visual="current.visual"
+                class="h-full"
+                @select="select"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <div v-else class="mt-4 space-y-2">
+      <div v-else class="mt-5 flex flex-col gap-2 lg:h-32">
         <div
           v-if="nextTerm"
           class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/70 bg-secondary/25 px-4 py-3"
@@ -139,22 +132,11 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
           </Badge>
         </div>
 
-        <div
-          v-if="current.info"
-          class="rounded-lg border border-border/70 bg-secondary/25 px-4 py-3 text-xs leading-relaxed text-muted-foreground"
-        >
-          {{ current.info }}
-        </div>
+        <p v-else class="text-sm text-muted-foreground">Ten element nie ma jeszcze terminu.</p>
 
-        <p v-if="!nextTerm && !current.info" class="text-sm text-muted-foreground">
-          Ten element nie ma jeszcze terminu ani opisu.
-        </p>
-      </div>
-
-      <div v-if="!children.length" class="mt-auto pt-4">
         <NuxtLink
           to="/kalendarz"
-          class="inline-flex items-center gap-1 text-2xs text-muted-foreground transition-colors hover:text-primary"
+          class="mt-auto inline-flex items-center gap-1 text-2xs text-muted-foreground transition-colors hover:text-primary"
         >
           Zobacz w kalendarzu
           <ArrowUpRight class="size-3" />
