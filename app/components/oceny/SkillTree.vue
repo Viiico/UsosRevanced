@@ -34,9 +34,9 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
       </Button>
     </CardHeader>
 
-    <CardContent class="flex flex-1 flex-col pt-5">
+    <CardContent class="flex flex-1 flex-col pt-3">
       <div
-        class="relative overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/12 via-primary/[0.04] to-transparent p-5"
+        class="relative overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/12 via-primary/[0.04] to-transparent p-4"
       >
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div class="min-w-0">
@@ -46,7 +46,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
               <InfoHint v-if="current.info" :text="current.info" />
             </div>
 
-            <h2 class="mt-2 text-xl leading-tight font-semibold tracking-tight text-balance">
+            <h2 class="mt-1.5 text-lg leading-tight font-semibold tracking-tight text-balance sm:text-xl">
               {{ current.name }}
             </h2>
 
@@ -72,7 +72,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
 
         <p
           v-if="current.assumption"
-          class="mt-4 border-t border-primary/15 pt-3 text-[11px] leading-relaxed text-muted-foreground"
+          class="mt-3 border-t border-primary/15 pt-2 text-[11px] leading-relaxed text-muted-foreground"
         >
           <span class="font-medium text-primary/80">Założenie:</span> {{ current.assumption }}
         </p>

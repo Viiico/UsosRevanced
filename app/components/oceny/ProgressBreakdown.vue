@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CircleHelp } from 'lucide-vue-next'
 import { formatPercent, progressLabel } from '~/lib/format'
 import { segmentColor, segmentWidth, weightSumOf } from '~/lib/segments'
 
@@ -114,14 +113,6 @@ const scaleRows = computed(() => {
             <div class="tnum mt-0.5 text-[9px] opacity-70">{{ row.min }}</div>
           </div>
         </div>
-        <p v-if="score.next" class="flex items-start gap-1.5 text-[11px] text-muted-foreground">
-          <CircleHelp class="mt-px size-3 shrink-0" />
-          Do oceny {{ score.next.grade }} brakuje
-          <span class="tnum font-medium text-foreground">
-            {{ score.next.min - score.earned }} pkt
-          </span>
-        </p>
-        <p v-else class="text-[11px] text-muted-foreground">Maksymalna ocena osiągnięta.</p>
       </div>
     </CardContent>
   </Card>

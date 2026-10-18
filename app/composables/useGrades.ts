@@ -4,7 +4,6 @@ import { collectNodeIds, computeProgress, findNode, findPath } from '~/lib/tree'
 import {
   evaluateRequirements,
   gradeForPoints,
-  nextGradeThreshold,
   termsForNode,
 } from '~/lib/requirements'
 
@@ -124,7 +123,6 @@ export function useGrades() {
       total: subject.policy.totalPoints,
       passing: subject.policy.passingPoints,
       grade: gradeForPoints(earned, subject.policy.gradeScale).grade,
-      next: nextGradeThreshold(earned, subject.policy.gradeScale),
       scope: activeSubject.value ? 'przedmiot' : 'semestr',
     }
   })

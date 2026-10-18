@@ -37,9 +37,19 @@ const summary = computed(() => childSummary(props.node))
       >
         <component :is="icon" class="size-4" />
       </span>
-      <p class="line-clamp-2 flex-1 text-sm leading-snug font-medium" :title="node.name">
-        {{ node.name }}
-      </p>
+
+      <div class="min-w-0 flex-1">
+        <template v-if="node.short">
+          <p class="text-sm leading-snug font-medium">{{ node.short }}</p>
+          <p class="mt-0.5 line-clamp-2 text-[13px] leading-snug text-muted-foreground" :title="node.name">
+            {{ node.name }}
+          </p>
+        </template>
+        <p v-else class="line-clamp-2 text-sm leading-snug font-medium" :title="node.name">
+          {{ node.name }}
+        </p>
+      </div>
+
       <ChevronRight
         v-if="hasChildren"
         class="mt-1 size-4 shrink-0 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
@@ -65,7 +75,7 @@ const summary = computed(() => childSummary(props.node))
       </div>
 
       <div class="flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
-        <span class="truncate">{{ summary ?? node.short ?? node.description ?? '' }}</span>
+        <span class="truncate">{{ summary ?? node.description ?? '' }}</span>
         <span v-if="nextTerm" class="tnum shrink-0">{{ formatDate(nextTerm.date) }}</span>
       </div>
     </div>

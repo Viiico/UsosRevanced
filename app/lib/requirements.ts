@@ -12,10 +12,6 @@ export function gradeForPoints(points: number, scale: GradeScaleRow[]): GradeSca
   return sorted.find((row) => points >= row.min) ?? sorted[sorted.length - 1]!
 }
 
-export function nextGradeThreshold(points: number, scale: GradeScaleRow[]): GradeScaleRow | null {
-  const sorted = [...scale].sort((a, b) => a.min - b.min)
-  return sorted.find((row) => row.min > points) ?? null
-}
 
 function pkt(value: number): string {
   return `${Number.isInteger(value) ? value : value.toFixed(1)} pkt`
