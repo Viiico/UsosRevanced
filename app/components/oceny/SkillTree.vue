@@ -38,7 +38,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
 
 <template>
   <Card class="flex h-full flex-col">
-    <CardHeader class="flex-row items-center justify-between gap-3 pb-0">
+    <CardHeader class="min-h-[3.25rem] flex-row items-center justify-between gap-3 pb-0">
       <div class="flex items-center gap-2">
         <span class="eyebrow">Skilltree</span>
         <Separator orientation="vertical" class="h-3" />
