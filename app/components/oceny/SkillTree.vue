@@ -54,22 +54,25 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
       <div
         class="relative overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/12 via-primary/[0.04] to-transparent p-4"
       >
-        <div class="flex flex-wrap items-start justify-between gap-4">
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
+        <div class="flex items-start justify-between gap-4">
+          <div class="min-w-0 flex-1">
+            <div class="flex h-5 items-center gap-2">
               <component :is="icon" class="size-4 shrink-0 text-primary" />
               <span class="eyebrow text-primary/80">{{ kindLabel }}</span>
               <InfoHint v-if="infoText" :text="infoText" />
             </div>
 
             <h2
-              class="mt-1.5 line-clamp-1 text-lg leading-tight font-semibold tracking-tight sm:text-xl"
+              class="mt-1.5 h-7 truncate text-lg leading-7 font-semibold tracking-tight sm:text-xl"
               :title="current.name"
             >
               {{ current.name }}
             </h2>
 
-            <p class="mt-1 min-h-5 truncate text-sm text-muted-foreground" :title="subline">
+            <p
+              class="mt-1 h-5 truncate text-sm leading-5 text-muted-foreground"
+              :title="subline"
+            >
               {{ subline }}
             </p>
           </div>
