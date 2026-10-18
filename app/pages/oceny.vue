@@ -35,7 +35,7 @@ useHead({
 <template>
   <div class="space-y-4 sm:space-y-5">
     <header class="space-y-3">
-      <div class="flex flex-wrap items-end justify-between gap-3">
+      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <div class="min-w-0">
           <h1 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
             {{ heading }}
@@ -43,7 +43,21 @@ useHead({
           <p v-if="subtitle" class="mt-1 text-sm text-muted-foreground">{{ subtitle }}</p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <template v-if="activeSubject">
+            <span class="inline-flex items-center gap-1.5 text-2xs text-muted-foreground">
+              <FlaskConical class="size-3" />
+              grupa {{ activeSubject.group ?? '-' }}
+            </span>
+            <span
+              v-for="teacher in activeSubject.teachers"
+              :key="teacher.name"
+              class="inline-flex items-center gap-1.5 text-2xs text-muted-foreground"
+            >
+              <span class="size-1 rounded-full bg-primary/50" />
+              {{ teacher.name }}
+            </span>
+          </template>
           <Badge v-if="ects" variant="secondary">{{ ects }}</Badge>
           <Badge v-if="hours" variant="secondary" class="hidden sm:inline-flex">{{ hours }}</Badge>
         </div>
@@ -70,20 +84,6 @@ useHead({
           />
         </template>
       </nav>
-
-      <div
-        v-if="activeSubject"
-        class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-2xs text-muted-foreground"
-      >
-        <span class="inline-flex items-center gap-1.5">
-          <FlaskConical class="size-3" />
-          grupa {{ activeSubject.group ?? '-' }}
-        </span>
-        <span v-for="teacher in activeSubject.teachers" :key="teacher.name" class="inline-flex items-center gap-1.5">
-          <span class="size-1 rounded-full bg-primary/50" />
-          {{ teacher.name }}
-        </span>
-      </div>
     </header>
 
     <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
