@@ -99,12 +99,12 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
           <div
             v-for="child in children"
             :key="child.id"
-            class="group/branch relative flex flex-1 sm:px-1.5"
+            class="group/branch relative flex min-w-0 flex-1 sm:px-1.5"
           >
             <div
               class="absolute top-0 left-1/2 hidden h-3 w-px -translate-x-1/2 bg-border sm:block"
             />
-            <div class="flex flex-1 flex-col sm:pt-3">
+            <div class="flex min-w-0 flex-1 flex-col sm:pt-3">
               <SkillNodeCard
                 :node="child"
                 :visual="current.visual"
