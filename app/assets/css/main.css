@@ -1,0 +1,196 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Palety ze screenu: dark = schemat #3 (black & gold), light = schemat #1 (ink & plum). */
+
+:root {
+  --radius: 0.75rem;
+
+  --background: #f4efe6;
+  --foreground: #2b2b2b;
+
+  --card: #fbf7f0;
+  --card-foreground: #2b2b2b;
+
+  --popover: #fffdf9;
+  --popover-foreground: #2b2b2b;
+
+  --primary: #c8353b;
+  --primary-foreground: #f4efe6;
+
+  --secondary: #e8e0d4;
+  --secondary-foreground: #2b2b2b;
+
+  --muted: #eae2d6;
+  --muted-foreground: #6f6861;
+
+  --accent: #ffc2ce;
+  --accent-foreground: #2b2b2b;
+
+  --destructive: #d7391f;
+  --destructive-foreground: #f4efe6;
+
+  --border: #dcd2c4;
+  --input: #d3c8b8;
+  --ring: #c8353b;
+
+  --seg-1: #c8353b;
+  --seg-2: #d7391f;
+  --seg-3: #8e8a84;
+  --seg-4: #ffc2ce;
+  --seg-5: #2b2b2b;
+
+  --gold: #c9a24b;
+  --plum: #c8353b;
+
+  --success: #8a6a22;
+  --danger: #c8353b;
+}
+
+.dark {
+  --background: #1a1816;
+  --foreground: #f4efe6;
+
+  --card: #221f1c;
+  --card-foreground: #f4efe6;
+
+  --popover: #262320;
+  --popover-foreground: #f4efe6;
+
+  --primary: #c9a24b;
+  --primary-foreground: #1a1816;
+
+  --secondary: #3a3633;
+  --secondary-foreground: #f4efe6;
+
+  --muted: #2b2724;
+  --muted-foreground: #a79f93;
+
+  --accent: #ffe2a8;
+  --accent-foreground: #1a1816;
+
+  --destructive: #a82a33;
+  --destructive-foreground: #f4efe6;
+
+  --border: #3a3633;
+  --input: #443f3b;
+  --ring: #c9a24b;
+
+  --seg-1: #c9a24b;
+  --seg-2: #a82a33;
+  --seg-3: #ffe2a8;
+  --seg-4: #8e8a84;
+  --seg-5: #d7391f;
+
+  --gold: #c9a24b;
+  --plum: #a82a33;
+
+  --success: #c9a24b;
+  --danger: #e08a8e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-seg-1: var(--seg-1);
+  --color-seg-2: var(--seg-2);
+  --color-seg-3: var(--seg-3);
+  --color-seg-4: var(--seg-4);
+  --color-seg-5: var(--seg-5);
+
+  --color-gold: var(--gold);
+  --color-plum: var(--plum);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans:
+    'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-primary) 35%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Numeryczna typografia - punkty, procenty, daty */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-muted-foreground);
+  }
+
+  /* Papierowa faktura tła - bardzo subtelna */
+  .paper-grain {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklab, var(--color-foreground) 9%, transparent) 1px,
+      transparent 0
+    );
+    background-size: 22px 22px;
+  }
+}
+
+/* Cienki pasek przewijania */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
