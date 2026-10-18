@@ -19,6 +19,12 @@ const MONTH_FMT = new Intl.DateTimeFormat('pl-PL', {
   timeZone: 'Europe/Warsaw',
 })
 
+const MONTH_YEAR_FMT = new Intl.DateTimeFormat('pl-PL', {
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'Europe/Warsaw',
+})
+
 /** Południe UTC, żeby strefa nie przesuwała daty przy formatowaniu. */
 function asDate(iso: string): Date {
   return new Date(iso.length <= 10 ? `${iso}T12:00:00Z` : iso)
@@ -30,6 +36,12 @@ export function dayOfMonth(iso: string): string {
 
 export function monthShort(iso: string): string {
   return MONTH_FMT.format(asDate(iso)).replace('.', '')
+}
+
+/** „Październik 2026” - nagłówek miesiąca w harmonogramie. */
+export function monthLabel(iso: string): string {
+  const label = MONTH_YEAR_FMT.format(asDate(iso))
+  return label.charAt(0).toUpperCase() + label.slice(1)
 }
 
 export function formatDate(iso: string): string {
