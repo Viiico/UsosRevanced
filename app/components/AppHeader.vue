@@ -12,7 +12,7 @@ const items = [
 
 <template>
   <header class="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-    <div class="mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4 sm:px-6">
+    <div class="mx-auto flex h-16 w-full max-w-[100rem] items-center gap-3 px-4 sm:px-6">
       <NuxtLink to="/oceny" class="group flex items-center gap-2.5">
         <span
           class="grid size-9 place-items-center rounded-lg border border-primary/35 bg-primary/10 text-[13px] font-semibold text-primary"

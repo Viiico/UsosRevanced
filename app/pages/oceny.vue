@@ -89,7 +89,7 @@ useHead({
       </div>
     </header>
 
-    <div v-if="!isDeepLevel" class="grid gap-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+    <div v-if="!isDeepLevel" class="grid gap-4 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
       <SkillTree />
       <ProgressBreakdown />
     </div>
