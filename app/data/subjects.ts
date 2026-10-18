@@ -50,7 +50,6 @@ const technikaObrazowa: Subject = {
     id: 'to',
     kind: 'subject',
     name: 'Technika Obrazowa',
-    short: 'TO',
     weight: 5, // ECTS
     description: 'Wykład z ćwiczeniami, laboratorium i projekt',
     requirements: [
@@ -100,7 +99,6 @@ const technikaObrazowa: Subject = {
         id: 'to-lab',
         kind: 'category',
         name: 'Laboratorium',
-        short: 'LAB',
         weight: 30,
         points: { max: 30, earned: 24 },
         info: 'Pięć spotkań po 3 godziny. Obecność obowiązkowa, sprawozdanie oddawane do końca zajęć, na starcie krótki sprawdzian z teorii.',
@@ -173,7 +171,6 @@ const technikaObrazowa: Subject = {
         id: 'to-kol',
         kind: 'category',
         name: 'Kolokwia',
-        short: 'KOL',
         weight: 40,
         points: { max: 40, earned: 22 },
         info: 'Dwa sprawdziany wykładowe po 20 pkt - na wykładzie 9 i na wykładzie 15.',
@@ -213,7 +210,6 @@ const technikaObrazowa: Subject = {
         id: 'to-proj',
         kind: 'category',
         name: 'Projekt',
-        short: 'PROJ',
         weight: 30,
         points: { max: 30, earned: 24 },
         assumption:
