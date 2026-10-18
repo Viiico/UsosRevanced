@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Check, CircleDashed, Clock3, Info, X } from 'lucide-vue-next'
+import { Check, Clock3, Info, X } from 'lucide-vue-next'
 import type { RequirementStatus } from '~/types'
 
 const { requirements, current } = useGrades()
@@ -57,13 +57,6 @@ const STATUS_META: Record<
           </div>
         </li>
       </ul>
-
-      <p
-        class="mt-5 flex items-center gap-1.5 border-t border-border/60 pt-3 text-3xs text-muted-foreground/80"
-      >
-        <CircleDashed class="size-3" />
-        Warunki liczone na bieżąco z wpisanych punktów; pozostałe weryfikuje prowadzący.
-      </p>
     </CardContent>
   </Card>
 </template>

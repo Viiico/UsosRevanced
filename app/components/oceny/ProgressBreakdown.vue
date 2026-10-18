@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatPercent, progressLabel } from '~/lib/format'
+import { formatPercent } from '~/lib/format'
 import { segmentColor, segmentWidth, weightSumOf } from '~/lib/segments'
 
 const { progress, segments, score, select, children, scoringSubject, showScale } = useGrades()
@@ -22,25 +22,21 @@ const scaleRows = computed(() => {
 <template>
   <Card class="flex h-full flex-col">
     <CardHeader class="pb-3">
-      <div class="flex items-center justify-between gap-2">
-        <div class="flex items-center gap-1.5">
-          <span class="eyebrow">Postęp</span>
-          <InfoHint
-            text="Pasek sumuje postępy dzieci bieżącego poziomu. Każdy segment ma szerokość proporcjonalną do zdobytych punktów, więc wypełnienia układają się ciągiem od lewej, a pusta reszta paska pokazuje, ile jeszcze brakuje."
-          />
-        </div>
-        <span v-if="score && showScale" class="text-2xs text-muted-foreground">{{ score.scope }}</span>
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+        <span />
+        <span class="text-sm font-semibold tracking-[0.14em] uppercase">Postęp</span>
+        <span v-if="score && showScale" class="justify-self-end text-2xs text-muted-foreground">
+          {{ score.scope }}
+        </span>
       </div>
 
-      <div class="mt-1 flex items-end justify-between gap-3">
+      <div class="mt-2 flex items-end justify-between gap-3">
         <div class="tnum text-4xl leading-none font-semibold tracking-tight">
           {{ formatPercent(ratio) }}
         </div>
-        <div class="pb-1 text-right text-xs text-muted-foreground">
-          <div class="tnum">
-            <span class="text-sm font-medium text-foreground">{{ progress.earned }}</span> / {{ progress.max }} pkt
-          </div>
-          <div class="mt-0.5">{{ progressLabel(progress.gradedLeaves, progress.totalLeaves) }}</div>
+        <div class="tnum pb-1 text-base">
+          <span class="font-semibold">{{ progress.earned }}</span>
+          <span class="text-muted-foreground">/ {{ progress.max }} pkt</span>
         </div>
       </div>
     </CardHeader>

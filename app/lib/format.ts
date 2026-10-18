@@ -58,10 +58,3 @@ export function relativeDays(iso: string, nowIso: string): string {
 export function formatPercent(ratio: number, digits = 0): string {
   return `${(ratio * 100).toFixed(digits).replace('.', ',')}%`
 }
-
-export function progressLabel(graded: number, total: number): string {
-  if (total === 0) return 'brak elementów'
-  if (graded === 0) return 'brak ocen'
-  if (graded === total) return 'komplet ocen'
-  return `${graded} z ${total} ocenionych`
-}
