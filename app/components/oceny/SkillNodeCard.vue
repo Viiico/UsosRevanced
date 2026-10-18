@@ -31,28 +31,24 @@ const summary = computed(() => childSummary(props.node))
     @keydown.enter.prevent="emit('select', node.id)"
     @keydown.space.prevent="emit('select', node.id)"
   >
-    <div class="flex items-start gap-2">
+    <div class="flex items-center gap-2">
       <span
         class="grid size-8 shrink-0 place-items-center rounded-lg border border-border/70 bg-secondary/50 text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:text-primary"
       >
         <component :is="icon" class="size-4" />
       </span>
 
-      <div class="min-w-0 flex-1">
-        <template v-if="node.short">
-          <p class="text-sm leading-snug font-medium">{{ node.short }}</p>
-          <p class="mt-0.5 line-clamp-2 text-[13px] leading-snug text-muted-foreground" :title="node.name">
-            {{ node.name }}
-          </p>
-        </template>
-        <p v-else class="line-clamp-2 text-sm leading-snug font-medium" :title="node.name">
-          {{ node.name }}
-        </p>
-      </div>
+      <p class="min-w-0 flex-1 truncate text-[15px] leading-snug font-medium" :title="node.name">
+        {{ node.short ?? node.name }}
+      </p>
+
+      <span v-if="nextTerm" class="tnum shrink-0 text-[10px] text-muted-foreground">
+        {{ formatDate(nextTerm.date) }}
+      </span>
 
       <ChevronRight
         v-if="hasChildren"
-        class="mt-1 size-4 shrink-0 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
+        class="size-4 shrink-0 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
       />
     </div>
 
@@ -74,10 +70,7 @@ const summary = computed(() => childSummary(props.node))
         />
       </div>
 
-      <div class="flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
-        <span class="truncate">{{ summary ?? node.description ?? '' }}</span>
-        <span v-if="nextTerm" class="tnum shrink-0">{{ formatDate(nextTerm.date) }}</span>
-      </div>
+      <div v-if="summary" class="truncate text-[11px] text-muted-foreground">{{ summary }}</div>
     </div>
   </div>
 </template>

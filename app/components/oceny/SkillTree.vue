@@ -16,6 +16,13 @@ const summary = computed(() => childSummary(current.value))
 const nextTerm = computed(() => termsForNode(current.value, terms)[0] ?? null)
 const hasPoints = computed(() => progress.value.max > 0)
 
+/** Opis i założenia idą do dymka, żeby hub miał zawsze tę samą wysokość. */
+const infoText = computed(() =>
+  [current.value.info, current.value.assumption ? `Założenie: ${current.value.assumption}` : null]
+    .filter(Boolean)
+    .join(' · '),
+)
+
 /** Wcięcie szyny łączącej rodzic → dzieci: środek pierwszej i ostatniej kolumny. */
 const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
 </script>
@@ -43,7 +50,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
             <div class="flex items-center gap-2">
               <component :is="icon" class="size-4 shrink-0 text-primary" />
               <span class="eyebrow text-primary/80">{{ kindLabel }}</span>
-              <InfoHint v-if="current.info" :text="current.info" />
+              <InfoHint v-if="infoText" :text="infoText" />
             </div>
 
             <h2 class="mt-1.5 text-lg leading-tight font-semibold tracking-tight text-balance sm:text-xl">
@@ -69,13 +76,6 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
             <div class="eyebrow mt-1.5">punktów</div>
           </div>
         </div>
-
-        <p
-          v-if="current.assumption"
-          class="mt-3 border-t border-primary/15 pt-2 text-[11px] leading-relaxed text-muted-foreground"
-        >
-          <span class="font-medium text-primary/80">Założenie:</span> {{ current.assumption }}
-        </p>
       </div>
 
       <div v-if="children.length && compact" class="mt-5 flex flex-wrap gap-3">

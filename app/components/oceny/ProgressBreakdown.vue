@@ -73,18 +73,18 @@ const scaleRows = computed(() => {
             :is="canDrill ? 'button' : 'div'"
             :type="canDrill ? 'button' : undefined"
             :class="[
-              'flex w-full items-center gap-2.5 rounded-md px-1.5 py-1.5 text-left transition-colors',
+              'flex w-full items-center gap-3 rounded-md px-1.5 py-2 text-left transition-colors',
               canDrill ? 'hover:bg-secondary/50' : '',
             ]"
             @click="canDrill && select(seg.id)"
           >
             <span
-              class="size-2.5 shrink-0 rounded-[3px]"
+              class="size-3 shrink-0 rounded-[3px]"
               :style="{ backgroundColor: segmentColor(seg.colorIndex) }"
             />
-            <span class="min-w-0 flex-1 truncate text-xs">{{ seg.label }}</span>
-            <span class="tnum text-[11px] text-muted-foreground">{{ seg.earned }}/{{ seg.max }}</span>
-            <span class="tnum w-9 text-right text-[11px] font-medium">{{ formatPercent(seg.ratio) }}</span>
+            <span class="min-w-0 flex-1 truncate text-[13px]">{{ seg.label }}</span>
+            <span class="tnum text-xs text-muted-foreground">{{ seg.earned }}/{{ seg.max }}</span>
+            <span class="tnum w-10 text-right text-xs font-medium">{{ formatPercent(seg.ratio) }}</span>
           </component>
         </li>
       </ul>
