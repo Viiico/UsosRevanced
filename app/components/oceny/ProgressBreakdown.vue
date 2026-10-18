@@ -41,7 +41,7 @@ const scaleRows = computed(() => {
       </div>
     </CardHeader>
 
-    <CardContent class="flex flex-1 flex-col gap-4">
+    <CardContent class="flex flex-1 flex-col justify-between gap-4">
       <div class="relative">
         <div class="relative h-3.5 w-full overflow-hidden rounded-full bg-muted">
           <div class="absolute inset-0 flex">
@@ -85,7 +85,7 @@ const scaleRows = computed(() => {
         </li>
       </ul>
 
-      <div v-if="score && showScale" class="mt-auto flex gap-1">
+      <div v-if="score && showScale" class="flex gap-1">
         <div
           v-for="row in scaleRows"
           :key="row.grade"

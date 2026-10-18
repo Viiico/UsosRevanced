@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ChevronRight, FlaskConical, Sparkles } from 'lucide-vue-next'
+import { ChevronRight, FlaskConical } from 'lucide-vue-next'
 
-const { current, path, crumbs, select, activeSubject, scoringSubject, semester, demoData } =
-  useGrades()
+const { current, path, crumbs, select, activeSubject, scoringSubject, semester } = useGrades()
 
 /**
  * Poniżej przedmiotu drzewo układa kafle w zawijany rząd zamiast jednej linii
@@ -11,13 +10,15 @@ const { current, path, crumbs, select, activeSubject, scoringSubject, semester, 
 const isDeepLevel = computed(() => path.value.length > 2)
 
 const heading = computed(() => (activeSubject.value ? activeSubject.value.name : 'Oceny'))
-const subtitle = computed(() => {
-  const subject = activeSubject.value
-  if (!subject) {
-    return `${semester.name} ${semester.code} · ${scoringSubject.value ? '1 przedmiot' : 'brak przedmiotów'}`
-  }
-  return `${subject.code} · ${subject.policy.ects} ECTS`
-})
+const subtitle = computed(() =>
+  activeSubject.value
+    ? null
+    : `${semester.name} ${semester.code} · ${scoringSubject.value ? '1 przedmiot' : 'brak przedmiotów'}`,
+)
+
+const ects = computed(() =>
+  activeSubject.value ? `${activeSubject.value.policy.ects} ECTS` : null,
+)
 
 const hours = computed(() => {
   const subject = activeSubject.value
@@ -39,14 +40,11 @@ useHead({
           <h1 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
             {{ heading }}
           </h1>
-          <p class="mt-1 text-sm text-muted-foreground">{{ subtitle }}</p>
+          <p v-if="subtitle" class="mt-1 text-sm text-muted-foreground">{{ subtitle }}</p>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-          <Badge v-if="demoData" variant="outline" class="gap-1">
-            <Sparkles class="size-3" />
-            dane przykładowe
-          </Badge>
+          <Badge v-if="ects" variant="secondary">{{ ects }}</Badge>
           <Badge v-if="hours" variant="secondary" class="hidden sm:inline-flex">{{ hours }}</Badge>
         </div>
       </div>

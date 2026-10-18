@@ -127,7 +127,6 @@ export function useGrades() {
     }
   })
 
-  const demoData = computed(() => scoringSubject.value?.demoData ?? false)
 
   const crumbs = computed(() =>
     path.value.map((node) => ({ id: node.id, name: node.name, kind: node.kind })),
@@ -162,7 +161,6 @@ export function useGrades() {
     scopedTerms,
     score,
     showScale,
-    demoData,
     crumbs,
     nowIso,
     termStatus,
