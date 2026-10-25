@@ -117,6 +117,13 @@ function isToday(term: Term) {
   return term.date === today.value
 }
 
+/** Kolor ramki: „dziś” złote, „po terminie” delikatnie czerwone - jedyny stan, który wymaga reakcji. */
+function cardTone(term: Term) {
+  if (isToday(term)) return 'border-primary/40 ring-1 ring-primary/25 hover:border-primary/60'
+  if (termStatus(term) === 'overdue') return 'border-danger/35 hover:border-danger/55'
+  return 'border-border/70 hover:border-primary/40'
+}
+
 function nodeLink(term: Term) {
   return { path: '/oceny', query: term.nodeId ? { node: term.nodeId } : {} }
 }
@@ -246,14 +253,14 @@ function resetFilters() {
 
             <ol class="relative space-y-2.5">
               <span
-                class="pointer-events-none absolute top-4 bottom-4 left-13 w-px bg-border/80"
+                class="pointer-events-none absolute top-4 bottom-4 left-14 w-px bg-border/80"
                 aria-hidden="true"
               />
 
               <li
                 v-for="term in group.terms"
                 :key="term.id"
-                class="relative grid grid-cols-[3.25rem_1fr] items-start gap-4"
+                class="relative grid grid-cols-[2.75rem_minmax(0,1fr)] items-start gap-6"
               >
                 <div class="pt-2 text-right">
                   <div
@@ -270,17 +277,15 @@ function resetFilters() {
 
                 <div class="relative">
                   <span
-                    class="absolute top-5 -left-4 size-2 -translate-x-1/2 rounded-full ring-4 ring-card"
+                    class="absolute top-5 -left-3 size-2 -translate-x-1/2 rounded-full ring-4 ring-card"
                     :class="STATUS_DOT[termStatus(term)]"
                     aria-hidden="true"
                   />
 
                   <NuxtLink
                     :to="nodeLink(term)"
-                    class="group block rounded-xl border border-border/70 bg-secondary/15 px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-secondary/30 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
-                    :class="
-                      isToday(term) ? 'border-primary/40 ring-1 ring-primary/25' : undefined
-                    "
+                    class="group block rounded-xl border bg-secondary/15 px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary/30 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+                    :class="cardTone(term)"
                   >
                     <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <Badge
@@ -295,10 +300,13 @@ function resetFilters() {
                       <Badge
                         v-if="data.subjects.length > 1 && subjectOf(term)"
                         variant="outline"
-                        class="gap-1"
+                        class="max-w-full min-w-0 gap-1"
+                        :title="subjectOf(term)?.name"
                       >
                         <BookOpen class="size-3" />
-                        {{ subjectOf(term)?.name }}
+                        <!-- Na telefonie kod przedmiotu - pełna nazwa (np. PSIR) rozpychała stronę. -->
+                        <span class="sm:hidden">{{ subjectOf(term)?.code }}</span>
+                        <span class="hidden truncate sm:inline">{{ subjectOf(term)?.name }}</span>
                       </Badge>
                       <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
                         · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
