@@ -176,12 +176,6 @@ const slots = computed<Slot[]>(() => {
     }))
 })
 
-const subtitle = computed(() =>
-  view.value === 'week'
-    ? `${data.semester.name} ${data.semester.code} · tydzień pon-pt z zajęciami i terminami`
-    : `${data.semester.name} ${data.semester.code} · stały plan bez dat i powtórzeń`,
-)
-
 function shiftWeek(amount: number) {
   weekStart.value = addDays(weekStart.value, amount * 7)
 }
@@ -374,10 +368,6 @@ function pad(hour: number) {
             Kompakt
           </button>
         </div>
-      </div>
-
-      <div class="flex h-6 items-center">
-        <p class="truncate text-sm text-muted-foreground">{{ subtitle }}</p>
       </div>
     </header>
 

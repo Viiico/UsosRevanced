@@ -1,28 +1,9 @@
 <script setup lang="ts">
 import { ChevronRight, FlaskConical } from 'lucide-vue-next'
 
-const data = useAppData()
 const { crumbs, select, activeSubject, semester, heroMeta } = useGrades()
 
-function subjectCount(count: number) {
-  if (!count) return 'brak przedmiotów'
-  const mod10 = count % 10
-  const mod100 = count % 100
-  const label =
-    count === 1
-      ? 'przedmiot'
-      : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)
-        ? 'przedmioty'
-        : 'przedmiotów'
-  return `${count} ${label}`
-}
-
 const heading = computed(() => (activeSubject.value ? activeSubject.value.name : 'Oceny'))
-const subtitle = computed(() =>
-  activeSubject.value
-    ? null
-    : `${semester.name} ${semester.code} · ${subjectCount(data.subjects.length)}`,
-)
 
 useHead({
   title: () => `Oceny · ${activeSubject.value?.name ?? `semestr ${semester.code}`}`,
@@ -54,12 +35,9 @@ useHead({
         </div>
       </div>
 
-      <!-- Stały wiersz meta: w semestrze podtytuł, głębiej okruszki - ta sama wysokość. -->
-      <div class="flex h-6 items-center">
-        <p v-if="subtitle" class="truncate text-sm text-muted-foreground">{{ subtitle }}</p>
-
+      <!-- Okruszki tylko głębiej niż semestr - na samym semestrze nie ma dokąd wracać. -->
+      <div v-if="activeSubject" class="flex h-6 items-center">
         <nav
-          v-else
           aria-label="Ścieżka w drzewie ocen"
           class="flex w-full min-w-0 items-center gap-0.5 text-xs"
         >

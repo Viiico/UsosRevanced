@@ -532,12 +532,6 @@ function resetData() {
           <Badge variant="secondary" class="tnum">{{ state.terms.length }} terminów</Badge>
         </div>
       </div>
-
-      <div class="flex h-6 items-center">
-        <p class="truncate text-sm text-muted-foreground">
-          Edycja drzewa danych: formularz po prawej zmienia JSON po lewej na żywo
-        </p>
-      </div>
     </header>
 
     <Card>
