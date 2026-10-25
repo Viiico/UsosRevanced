@@ -22,12 +22,31 @@ const { root, nowIso } = useGrades()
 
 const today = computed(() => nowIso.value.slice(0, 10))
 
-/** Stała siatka 06:00-20:00 w obu widokach - ten sam układ i ta sama wysokość. */
-const DAY_START = 6
-const DAY_END = 20
+/**
+ * Zakres godzin z danych całego semestru (najwcześniejszy start, najpóźniejszy koniec),
+ * żeby nie pokazywać pustych porannych godzin - ale wspólny dla wszystkich tygodni
+ * i obu widoków, więc siatka nie skacze przy przełączaniu.
+ */
 const HOUR_HEIGHT = 44
-const HOURS = Array.from({ length: DAY_END - DAY_START + 1 }, (_, index) => DAY_START + index)
-const GRID_HEIGHT = (DAY_END - DAY_START) * HOUR_HEIGHT
+const hourRange = computed(() => {
+  // Tylko zajęcia z godziną startu - deadline'y trzymają w `end` godzinę oddania i rozciągały siatkę.
+  const timed = data.terms.filter((term) => term.start)
+  const starts = timed.map((term) => toMinutes(term.start)!)
+  const ends = timed.map((term) => toMinutes(term.end)).filter((m): m is number => m != null)
+  if (!starts.length) return { start: 8, end: 18 }
+  return {
+    start: Math.floor(Math.min(...starts) / 60),
+    end: Math.max(Math.ceil(Math.max(...ends, ...starts) / 60), Math.floor(Math.min(...starts) / 60) + 1),
+  }
+})
+const DAY_START = computed(() => hourRange.value.start)
+const HOURS = computed(() =>
+  Array.from(
+    { length: hourRange.value.end - hourRange.value.start + 1 },
+    (_, index) => hourRange.value.start + index,
+  ),
+)
+const GRID_HEIGHT = computed(() => (hourRange.value.end - hourRange.value.start) * HOUR_HEIGHT)
 const COMPACT_DAYS = ['pon', 'wt', 'śr', 'czw', 'pt']
 
 const KIND_ICON: Record<TermKind, Component> = {
@@ -223,14 +242,16 @@ function slotLink(slot: Slot) {
 }
 
 function slotsFor(weekday: number) {
-  return slots.value.filter((slot) => slot.weekday === weekday)
+  return slots.value
+    .filter((slot) => slot.weekday === weekday)
+    .sort((a, b) => a.start.localeCompare(b.start))
 }
 
 function blockStyle(start?: string | null, end?: string | null) {
-  const startMinutes = toMinutes(start) ?? DAY_START * 60
+  const startMinutes = toMinutes(start) ?? DAY_START.value * 60
   const endMinutes = toMinutes(end) ?? startMinutes + 90
   return {
-    top: `${((startMinutes - DAY_START * 60) / 60) * HOUR_HEIGHT}px`,
+    top: `${((startMinutes - DAY_START.value * 60) / 60) * HOUR_HEIGHT}px`,
     height: `${Math.max(24, ((endMinutes - startMinutes) / 60) * HOUR_HEIGHT - 2)}px`,
   }
 }
@@ -290,7 +311,7 @@ const weekLayout = computed(() => {
   const byDay = new Map<string, Map<string, IntervalBox>>()
   for (const day of weekDays.value) {
     const items = timedForDay(day).map((term) => {
-      const start = toMinutes(term.start) ?? DAY_START * 60
+      const start = toMinutes(term.start) ?? DAY_START.value * 60
       const end = toMinutes(term.end) ?? start + 90
       return { id: term.id, start, end }
     })
@@ -303,7 +324,7 @@ const compactLayout = computed(() => {
   const byDay = new Map<number, Map<string, IntervalBox>>()
   for (const weekday of [1, 2, 3, 4, 5]) {
     const items = slotsFor(weekday).map((slot) => {
-      const start = toMinutes(slot.start) ?? DAY_START * 60
+      const start = toMinutes(slot.start) ?? DAY_START.value * 60
       const end = toMinutes(slot.end) ?? start + 90
       return { id: slot.key, start, end }
     })
@@ -328,7 +349,7 @@ function positionedStyle(
 }
 
 function hourTop(hour: number) {
-  return `${(hour - DAY_START) * HOUR_HEIGHT}px`
+  return `${(hour - DAY_START.value) * HOUR_HEIGHT}px`
 }
 
 function pad(hour: number) {
@@ -371,8 +392,8 @@ function pad(hour: number) {
       </CardHeader>
 
       <CardContent class="pt-0">
-        <div class="relative overflow-x-auto">
-          <div class="min-w-[34rem]">
+        <div class="relative overflow-x-auto max-sm:hidden">
+          <div class="min-w-[34rem] pb-2">
             <div class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))] border-b border-border/60">
               <div />
               <div
@@ -494,6 +515,51 @@ function pad(hour: number) {
           </div>
         </div>
 
+        <!-- Telefon: lista dni zamiast siatki - pięć kolumn nie mieściło się bez przewijania w bok. -->
+        <div class="space-y-3 sm:hidden">
+          <section v-for="day in weekDays" :key="day">
+            <h3
+              class="mb-1.5 flex items-baseline gap-2 text-2xs"
+              :class="isToday(day) ? 'text-primary' : 'text-muted-foreground'"
+            >
+              <span class="eyebrow" :class="isToday(day) ? 'text-primary' : undefined">
+                {{ formatWeekday(day) }}
+              </span>
+              <span class="tnum font-semibold">{{ formatDate(day) }}</span>
+              <span v-if="isToday(day)" class="font-medium">· dziś</span>
+            </h3>
+            <div
+              v-if="!deadlinesForDay(day).length && !timedForDay(day).length"
+              class="text-3xs text-muted-foreground/70"
+            >
+              bez zajęć
+            </div>
+            <div v-else class="space-y-1.5">
+              <NuxtLink
+                v-for="term in [...deadlinesForDay(day), ...timedForDay(day)]"
+                :key="term.id"
+                :to="termLink(term)"
+                class="flex items-center gap-2.5 rounded-lg border px-2.5 py-2 transition-colors"
+                :class="KIND_STYLE[term.kind].block"
+              >
+                <component :is="KIND_ICON[term.kind]" class="size-3.5 shrink-0 opacity-80" />
+                <span class="tnum w-20 shrink-0 text-3xs text-muted-foreground">
+                  <template v-if="term.start">
+                    {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
+                  </template>
+                  <template v-else>termin</template>
+                </span>
+                <span class="min-w-0 flex-1 truncate text-2xs font-medium">
+                  {{ shortTitle(term) }}
+                </span>
+                <span class="shrink-0 text-3xs text-muted-foreground uppercase">
+                  {{ term.subjectId }}
+                </span>
+              </NuxtLink>
+            </div>
+          </section>
+        </div>
+
         <div
           v-if="weekendTerms.length"
           class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-border/60 pt-3"
@@ -523,8 +589,8 @@ function pad(hour: number) {
       </CardHeader>
 
       <CardContent class="pt-0">
-        <div class="overflow-x-auto">
-          <div class="min-w-[34rem]">
+        <div class="overflow-x-auto max-sm:hidden">
+          <div class="min-w-[34rem] pb-2">
             <div class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))] border-b border-border/60">
               <div />
               <div
@@ -599,6 +665,37 @@ function pad(hour: number) {
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Telefon: plan jako lista dni tygodnia. -->
+        <div class="space-y-3 sm:hidden">
+          <section v-for="(label, index) in COMPACT_DAYS" :key="label">
+            <h3 class="eyebrow mb-1.5 text-muted-foreground">{{ label }}</h3>
+            <div v-if="!slotsFor(index + 1).length" class="text-3xs text-muted-foreground/70">
+              bez zajęć
+            </div>
+            <div v-else class="space-y-1.5">
+              <NuxtLink
+                v-for="slot in slotsFor(index + 1)"
+                :key="slot.key"
+                :to="slotLink(slot)"
+                class="flex items-center gap-2.5 rounded-lg border px-2.5 py-2 transition-colors"
+                :class="KIND_STYLE[slot.kind].block"
+              >
+                <component :is="KIND_ICON[slot.kind]" class="size-3.5 shrink-0 opacity-80" />
+                <span class="tnum w-20 shrink-0 text-3xs text-muted-foreground">
+                  {{ slot.start }}-{{ slot.end }}
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-2xs font-medium">{{ slot.subjectName }}</span>
+                  <span class="block truncate text-3xs text-muted-foreground/80">
+                    {{ TERM_KIND_LABEL[slot.kind] }} · {{ slot.cadence
+                    }}<template v-if="slot.group"> · {{ slot.group }}</template>
+                  </span>
+                </span>
+              </NuxtLink>
+            </div>
+          </section>
         </div>
       </CardContent>
     </Card>
