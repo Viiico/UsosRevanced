@@ -20,7 +20,7 @@ import {
   Upload,
 } from 'lucide-vue-next'
 import type { GradeNode, GradeScaleRow, Subject } from '~/types'
-import { useAppData, cloneData } from '~/composables/useAppData'
+import { useAppData, cloneData, downloadAppData } from '~/composables/useAppData'
 import { normalizeData, normalizeSubject } from '~/lib/normalize'
 import { findNode, collectNodeIds } from '~/lib/tree'
 import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
@@ -495,13 +495,7 @@ async function onFileChange(event: Event) {
 }
 
 function exportJson() {
-  const blob = new Blob([json.value], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = 'usos-revanced.json'
-  link.click()
-  URL.revokeObjectURL(url)
+  downloadAppData(state)
 }
 
 function resetEditor() {

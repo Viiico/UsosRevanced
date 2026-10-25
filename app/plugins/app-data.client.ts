@@ -1,5 +1,5 @@
 import type { AppData } from '~/types'
-import { cloneData } from '~/composables/useAppData'
+import { cloneData, useAppDataSaveState } from '~/composables/useAppData'
 import { normalizeData } from '~/lib/normalize'
 
 const STORAGE_KEY = 'usos-revanced:data'
@@ -14,6 +14,7 @@ const STORAGE_KEY = 'usos-revanced:data'
 export default defineNuxtPlugin((nuxtApp) => {
   const state = useState<AppData>('app-data', cloneData)
   const loaded = useState<boolean>('app-data-loaded', () => false)
+  const { savedAt, failed } = useAppDataSaveState()
 
   nuxtApp.hook('app:mounted', () => {
     try {
@@ -38,8 +39,11 @@ export default defineNuxtPlugin((nuxtApp) => {
         timer = setTimeout(() => {
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state.value))
+            savedAt.value = new Date().toISOString()
+            failed.value = false
           } catch {
             // brak miejsca / tryb prywatny - dane zostają w pamięci
+            failed.value = true
           }
         }, 300)
       },
