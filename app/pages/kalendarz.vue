@@ -77,6 +77,10 @@ const KIND_STYLE: Record<TermKind, { block: string }> = {
 
 const view = ref<'week' | 'compact'>('week')
 
+/** Dzień pokazywany na telefonie (0 = pon): domyślnie dzisiejszy, w weekend poniedziałek. */
+const todayWeekday = (new Date(`${nowIso.value.slice(0, 10)}T12:00:00Z`).getUTCDay() + 6) % 7
+const selectedDay = ref(todayWeekday < 5 ? todayWeekday : 0)
+
 function isoDay(iso: string): number {
   return new Date(`${iso}T12:00:00Z`).getUTCDay()
 }
@@ -392,9 +396,14 @@ function pad(hour: number) {
       </CardHeader>
 
       <CardContent class="pt-0">
-        <div class="relative overflow-x-auto max-sm:hidden">
-          <div class="min-w-[34rem] pb-2">
-            <div class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))] border-b border-border/60">
+        <!-- Telefon: wybór dnia, a siatka pokazuje tylko ten dzień - pięć kolumn się nie mieściło. -->
+        <DayPicker
+          v-model="selectedDay"
+          :days="weekDays.map((day) => ({ label: formatWeekday(day), sub: dayOfMonth(day), today: isToday(day) }))"
+        />
+        <div class="relative overflow-x-auto">
+          <div class="pb-2 sm:min-w-[34rem]">
+            <div class="grid grid-cols-[3rem_minmax(0,1fr)] border-b border-border/60 max-sm:hidden sm:grid-cols-[3rem_repeat(5,minmax(0,1fr))]">
               <div />
               <div
                 v-for="day in weekDays"
@@ -415,13 +424,15 @@ function pad(hour: number) {
 
             <div
               v-if="hasDeadlines"
-              class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))] border-b border-border/60"
+              class="grid grid-cols-[3rem_minmax(0,1fr)] border-b border-border/60 sm:grid-cols-[3rem_repeat(5,minmax(0,1fr))]"
+              :class="deadlinesForDay(weekDays[selectedDay]!).length ? undefined : 'max-sm:hidden'"
             >
               <div class="pt-2 pr-2 text-right text-3xs text-muted-foreground">terminy</div>
               <div
-                v-for="day in weekDays"
+                v-for="(day, dayIndex) in weekDays"
                 :key="day"
                 class="min-h-9 border-l border-border/40 px-1 py-1.5"
+                :class="dayIndex === selectedDay ? undefined : 'max-sm:hidden'"
               >
                 <NuxtLink
                   v-for="term in deadlinesForDay(day)"
@@ -435,7 +446,7 @@ function pad(hour: number) {
               </div>
             </div>
 
-            <div class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))]">
+            <div class="grid grid-cols-[3rem_minmax(0,1fr)] sm:grid-cols-[3rem_repeat(5,minmax(0,1fr))]">
               <div class="relative" :style="{ height: `${GRID_HEIGHT}px` }">
                 <div
                   v-for="hour in HOURS"
@@ -448,10 +459,13 @@ function pad(hour: number) {
               </div>
 
               <div
-                v-for="day in weekDays"
+                v-for="(day, dayIndex) in weekDays"
                 :key="day"
                 class="relative border-l border-border/40"
-                :class="isToday(day) ? 'bg-primary/[0.04]' : undefined"
+                :class="[
+                  isToday(day) ? 'bg-primary/[0.04]' : undefined,
+                  dayIndex === selectedDay ? undefined : 'max-sm:hidden',
+                ]"
                 :style="{ height: `${GRID_HEIGHT}px` }"
               >
                 <div
@@ -515,51 +529,6 @@ function pad(hour: number) {
           </div>
         </div>
 
-        <!-- Telefon: lista dni zamiast siatki - pięć kolumn nie mieściło się bez przewijania w bok. -->
-        <div class="space-y-3 sm:hidden">
-          <section v-for="day in weekDays" :key="day">
-            <h3
-              class="mb-1.5 flex items-baseline gap-2 text-2xs"
-              :class="isToday(day) ? 'text-primary' : 'text-muted-foreground'"
-            >
-              <span class="eyebrow" :class="isToday(day) ? 'text-primary' : undefined">
-                {{ formatWeekday(day) }}
-              </span>
-              <span class="tnum font-semibold">{{ formatDate(day) }}</span>
-              <span v-if="isToday(day)" class="font-medium">· dziś</span>
-            </h3>
-            <div
-              v-if="!deadlinesForDay(day).length && !timedForDay(day).length"
-              class="text-3xs text-muted-foreground/70"
-            >
-              bez zajęć
-            </div>
-            <div v-else class="space-y-1.5">
-              <NuxtLink
-                v-for="term in [...deadlinesForDay(day), ...timedForDay(day)]"
-                :key="term.id"
-                :to="termLink(term)"
-                class="flex items-center gap-2.5 rounded-lg border px-2.5 py-2 transition-colors"
-                :class="KIND_STYLE[term.kind].block"
-              >
-                <component :is="KIND_ICON[term.kind]" class="size-3.5 shrink-0 opacity-80" />
-                <span class="tnum w-20 shrink-0 text-3xs text-muted-foreground">
-                  <template v-if="term.start">
-                    {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
-                  </template>
-                  <template v-else>termin</template>
-                </span>
-                <span class="min-w-0 flex-1 truncate text-2xs font-medium">
-                  {{ shortTitle(term) }}
-                </span>
-                <span class="shrink-0 text-3xs text-muted-foreground uppercase">
-                  {{ term.subjectId }}
-                </span>
-              </NuxtLink>
-            </div>
-          </section>
-        </div>
-
         <div
           v-if="weekendTerms.length"
           class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-border/60 pt-3"
@@ -589,9 +558,13 @@ function pad(hour: number) {
       </CardHeader>
 
       <CardContent class="pt-0">
-        <div class="overflow-x-auto max-sm:hidden">
-          <div class="min-w-[34rem] pb-2">
-            <div class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))] border-b border-border/60">
+        <DayPicker
+          v-model="selectedDay"
+          :days="COMPACT_DAYS.map((label) => ({ label }))"
+        />
+        <div class="overflow-x-auto">
+          <div class="pb-2 sm:min-w-[34rem]">
+            <div class="grid grid-cols-[3rem_minmax(0,1fr)] border-b border-border/60 max-sm:hidden sm:grid-cols-[3rem_repeat(5,minmax(0,1fr))]">
               <div />
               <div
                 v-for="label in COMPACT_DAYS"
@@ -602,7 +575,7 @@ function pad(hour: number) {
               </div>
             </div>
 
-            <div class="grid grid-cols-[3rem_repeat(5,minmax(0,1fr))]">
+            <div class="grid grid-cols-[3rem_minmax(0,1fr)] sm:grid-cols-[3rem_repeat(5,minmax(0,1fr))]">
               <div class="relative" :style="{ height: `${GRID_HEIGHT}px` }">
                 <div
                   v-for="hour in HOURS"
@@ -618,6 +591,7 @@ function pad(hour: number) {
                 v-for="(label, index) in COMPACT_DAYS"
                 :key="label"
                 class="relative border-l border-border/40"
+                :class="index === selectedDay ? undefined : 'max-sm:hidden'"
                 :style="{ height: `${GRID_HEIGHT}px` }"
               >
                 <div
@@ -665,37 +639,6 @@ function pad(hour: number) {
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Telefon: plan jako lista dni tygodnia. -->
-        <div class="space-y-3 sm:hidden">
-          <section v-for="(label, index) in COMPACT_DAYS" :key="label">
-            <h3 class="eyebrow mb-1.5 text-muted-foreground">{{ label }}</h3>
-            <div v-if="!slotsFor(index + 1).length" class="text-3xs text-muted-foreground/70">
-              bez zajęć
-            </div>
-            <div v-else class="space-y-1.5">
-              <NuxtLink
-                v-for="slot in slotsFor(index + 1)"
-                :key="slot.key"
-                :to="slotLink(slot)"
-                class="flex items-center gap-2.5 rounded-lg border px-2.5 py-2 transition-colors"
-                :class="KIND_STYLE[slot.kind].block"
-              >
-                <component :is="KIND_ICON[slot.kind]" class="size-3.5 shrink-0 opacity-80" />
-                <span class="tnum w-20 shrink-0 text-3xs text-muted-foreground">
-                  {{ slot.start }}-{{ slot.end }}
-                </span>
-                <span class="min-w-0 flex-1">
-                  <span class="block truncate text-2xs font-medium">{{ slot.subjectName }}</span>
-                  <span class="block truncate text-3xs text-muted-foreground/80">
-                    {{ TERM_KIND_LABEL[slot.kind] }} · {{ slot.cadence
-                    }}<template v-if="slot.group"> · {{ slot.group }}</template>
-                  </span>
-                </span>
-              </NuxtLink>
-            </div>
-          </section>
         </div>
       </CardContent>
     </Card>
