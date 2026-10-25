@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { TriangleAlert } from 'lucide-vue-next'
 import type { Subject, Term } from '~/types'
 import { TERM_KIND_SHORT, TERM_STATUS } from '~/lib/node-meta'
 import { formatDate } from '~/lib/format'
@@ -68,8 +69,8 @@ function laneIndex(subjectId: string) {
 
 /**
  * Wypełnienie kropki = stan, obwódka = gałąź. Kształt zamiast samego koloru, bo w palecie
- * success/primary/danger częściowo się pokrywają: pełna - zrobione, środek - w trakcie,
- * czerwona - po terminie, pusta - nadchodzące.
+ * success/primary/danger częściowo się pokrywają (a czerwień miesza się z kolorami gałęzi):
+ * pełna - zrobione, środek - w trakcie, ikona ostrzeżenia - po terminie, pusta - nadchodzące.
  */
 function nodeFill(term: Term, color: string | undefined) {
   switch (termStatus(term)) {
@@ -77,8 +78,6 @@ function nodeFill(term: Term, color: string | undefined) {
       return color
     case 'inProgress':
       return `radial-gradient(circle, ${color} 0 35%, var(--card) 40%)`
-    case 'overdue':
-      return 'var(--danger)'
     default:
       return 'var(--card)'
   }
@@ -123,14 +122,21 @@ function codeOf(term: Term) {
           <!-- Commit: obwódka = gałąź (przedmiot), wypełnienie = stan terminu. -->
           <span
             v-if="row.type === 'term'"
-            class="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
+            class="absolute top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2"
+            :class="termStatus(row.term) === 'overdue' ? 'size-4' : 'size-3'"
             :style="{
               left: `${laneIndex(row.term.subjectId) * LANE + LANE / 2}px`,
               borderColor: lanes[laneIndex(row.term.subjectId)]?.color,
               background: nodeFill(row.term, lanes[laneIndex(row.term.subjectId)]?.color),
             }"
             :title="TERM_STATUS[termStatus(row.term)].label"
-          />
+          >
+            <TriangleAlert
+              v-if="termStatus(row.term) === 'overdue'"
+              class="size-2 text-foreground"
+              :stroke-width="3"
+            />
+          </span>
         </div>
 
         <div v-if="row.type === 'today'" class="flex flex-1 items-center gap-2 ps-3">
