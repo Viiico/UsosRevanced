@@ -11,7 +11,7 @@ import {
 import { dayOfMonth, formatWeekday, monthShort, relativeDays } from '~/lib/format'
 
 const { scopedTerms, termStatus, nowIso } = useGrades()
-const hideDone = useHideDoneTerms()
+const showDone = useShowDoneTerms()
 
 /** Filtry wynikają z danych: pojawiają się tylko grupy obecne w zakresie. */
 const filter = ref('all')
@@ -31,7 +31,7 @@ const filters = computed(() => {
 const visibleTerms = computed(() =>
   scopedTerms.value
     .filter((term) => filter.value === 'all' || TERM_GROUP[term.kind] === filter.value)
-    .filter((term) => !hideDone.value || termStatus(term) !== 'done'),
+    .filter((term) => showDone.value || termStatus(term) !== 'done'),
 )
 
 /** Ten sam kierunek co w głównym harmonogramie: termin -> jego węzeł ocen. */
@@ -66,7 +66,7 @@ function nodeLink(term: Term) {
           <span class="tnum opacity-60">{{ item.count }}</span>
         </button>
 
-        <SwitchChip v-model="hideDone" class="ml-auto">Ukryj zrobione</SwitchChip>
+        <SwitchChip v-model="showDone" class="ml-auto">Pokaż zrobione</SwitchChip>
       </div>
     </CardHeader>
 

@@ -43,7 +43,7 @@ const STATUS_DOT: Record<TermStatus, string> = {
 const subjectFilter = ref('all')
 const groupFilter = ref('all')
 const onlyActionable = ref(false)
-const hideDone = useHideDoneTerms()
+const showDone = useShowDoneTerms()
 
 const today = computed(() => nowIso.value.slice(0, 10))
 
@@ -63,7 +63,7 @@ const visible = computed(() =>
   items.value
     .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
     .filter((term) => groupFilter.value === 'all' || TERM_GROUP[term.kind] === groupFilter.value)
-    .filter((term) => !hideDone.value || termStatus(term) !== 'done')
+    .filter((term) => showDone.value || termStatus(term) !== 'done')
     .filter(
       (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) === 'upcoming'),
     )
@@ -125,7 +125,7 @@ function resetFilters() {
   subjectFilter.value = 'all'
   groupFilter.value = 'all'
   onlyActionable.value = false
-  hideDone.value = false
+  showDone.value = false
 }
 </script>
 
@@ -210,7 +210,7 @@ function resetFilters() {
           </p>
 
           <div class="flex flex-wrap gap-1.5">
-            <SwitchChip v-model="hideDone">Ukryj zrobione</SwitchChip>
+            <SwitchChip v-model="showDone">Pokaż zrobione</SwitchChip>
             <SwitchChip v-model="onlyActionable">Tylko do zrobienia teraz</SwitchChip>
           </div>
         </div>
@@ -225,7 +225,7 @@ function resetFilters() {
           <div class="space-y-1">
             <p class="text-sm font-medium">Brak terminów w tym widoku</p>
             <p class="text-2xs text-muted-foreground">
-              Zmień filtr rodzaju zajęć albo wyłącz przełączniki „ukryj zrobione” i „tylko do zrobienia teraz”.
+              Zmień filtr rodzaju zajęć albo włącz „pokaż zrobione” albo wyłącz „tylko do zrobienia teraz”.
             </p>
           </div>
           <Button variant="outline" size="sm" class="gap-1.5" @click="resetFilters">
