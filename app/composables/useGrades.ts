@@ -95,8 +95,11 @@ export function useGrades() {
         },
       ]
     }
-    return kids.map(({ child, weight }, index) => {
+    return kids.map(({ child, weight }) => {
       const childProgress = computeProgress(child)
+      // Kolor idzie za przedmiotem (slot w semestrze), nie za pozycją po filtrze wag -
+      // inaczej przedmiot z wagą 0 przesuwałby kolory pozostałych względem koła i gałęzi.
+      const subjectIndex = data.subjects.findIndex((subject) => subject.tree.id === child.id)
       return {
         id: child.id,
         label: child.short || child.name,
@@ -105,7 +108,7 @@ export function useGrades() {
         weight,
         earned: childProgress.earned,
         max: childProgress.max,
-        colorIndex: index,
+        colorIndex: subjectIndex >= 0 ? subjectIndex : all.indexOf(child),
       }
     })
   })

@@ -1,5 +1,8 @@
+/** Kolor przedmiotu wg jego stałego slotu (8 barw w ustalonej kolejności, patrz main.css). */
+export const SEGMENT_SLOTS = 8
+
 export function segmentColor(index: number): string {
-  return `var(--seg-${(index % 5) + 1})`
+  return `var(--seg-${(index % SEGMENT_SLOTS) + 1})`
 }
 
 export function weightSumOf(segments: { weight: number }[]): number {

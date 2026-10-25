@@ -36,11 +36,18 @@
   --input: #d3c8b8;
   --ring: #c8353b;
 
-  --seg-1: #c8353b;
-  --seg-2: #d7391f;
-  --seg-3: #8e8a84;
-  --seg-4: #ffc2ce;
-  --seg-5: #2b2b2b;
+  /* Paleta przedmiotów (8 slotów, stała kolejność) - sprawdzona walidatorem dataviz na tle karty:
+     sąsiednie pary i para zawinięta w kole; bez czystej czerwieni, zarezerwowanej dla „po terminie”. */
+  --seg-1: #b07f22;
+  --seg-2: #c2508e;
+  --seg-3: #3a96c4;
+  --seg-4: #cf6435;
+  --seg-5: #0f8f80;
+  --seg-6: #7457c0;
+  --seg-7: #6b8a2a;
+  --seg-8: #4d6fb5;
+  /* Mnożnik półprzezroczystych wypełnień koła postępu - na kremowym tle muszą być mocniejsze. */
+  --pie-boost: 1.8;
 
   --gold: #c9a24b;
   --plum: #c8353b;
@@ -78,11 +85,15 @@
   --input: #443f3b;
   --ring: #c9a24b;
 
-  --seg-1: #c9a24b;
-  --seg-2: #a82a33;
-  --seg-3: #ffe2a8;
-  --seg-4: #8e8a84;
-  --seg-5: #d7391f;
+  --seg-1: #b98a28;
+  --seg-2: #cc6aa0;
+  --seg-3: #3f9fc8;
+  --seg-4: #d26c3e;
+  --seg-5: #1fa090;
+  --seg-6: #9584dd;
+  --seg-7: #7e9a33;
+  --seg-8: #6f8ad0;
+  --pie-boost: 1;
 
   --gold: #c9a24b;
   --plum: #a82a33;
@@ -117,6 +128,9 @@
   --color-seg-3: var(--seg-3);
   --color-seg-4: var(--seg-4);
   --color-seg-5: var(--seg-5);
+  --color-seg-6: var(--seg-6);
+  --color-seg-7: var(--seg-7);
+  --color-seg-8: var(--seg-8);
 
   --color-gold: var(--gold);
   --color-plum: var(--plum);

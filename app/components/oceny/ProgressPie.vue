@@ -18,9 +18,15 @@ const data = useAppData()
 
 const SIZE = 200
 const CENTER = SIZE / 2
-const EDGE = 98
+const EDGE = 95
 const HOLE = 22
 const RING = 12
+/**
+ * Odstęp między pierścieniami = pasek postępu: separator wypełnia się wzdłuż łuku
+ * proporcjonalnie do zdobytych punktów (zewnętrzny - cały przedmiot).
+ */
+const GAP = 3.5
+const BAR = 2
 const FULL = Math.PI * 2
 
 interface Shape {
@@ -28,7 +34,7 @@ interface Shape {
   path: string
   color: string
   opacity: number
-  kind: 'tint' | 'band' | 'ring' | 'outline'
+  kind: 'tint' | 'band' | 'ring' | 'outline' | 'track' | 'progress'
   trail: string[]
   node: GradeNode
 }
@@ -98,6 +104,23 @@ function arcLabel(
   return { key, x, y, rotate: flip ? degrees + 180 : degrees, text, size }
 }
 
+/**
+ * Podpis pasma: najpierw wzdłuż łuku, a gdy pasmo jest wąskie (np. lab w PSIR, blisko środka) -
+ * wzdłuż promienia, bo grubość pasma zwykle wystarcza na „L1”.
+ */
+function bandLabel(key: string, text: string, a0: number, a1: number, r0: number, r1: number, size: number) {
+  const along = arcLabel(key, text, a0, a1, (r0 + r1) / 2, size)
+  if (along) return r1 - r0 >= size + 1 ? along : null
+  const radius = (r0 + r1) / 2
+  if (r1 - r0 < text.length * size * 0.62 + 1.5 || (a1 - a0) * radius < size * 0.95) return null
+  const mid = (a0 + a1) / 2
+  const { x, y } = xy(mid, radius)
+  const degrees = (mid * 180) / Math.PI
+  // Tekst czytany od środka na zewnątrz; po lewej stronie koła odwrócony, żeby nie był do góry nogami.
+  const rotate = degrees < 180 ? degrees - 90 : degrees + 90
+  return { key, x, y, rotate, text, size }
+}
+
 const GROUP_LABEL: Record<string, string> = { lab: 'lab', colloquium: 'kol', project: 'proj' }
 
 /** Podpis pierścienia: przedmiot - kod, grupa - lab/kol/proj, reszta - skrót nazwy. */
@@ -137,13 +160,21 @@ function angularLevels(node: GradeNode): number {
 }
 
 const levels = computed(() => angularLevels(props.root))
-const pieRadius = computed(() => EDGE - levels.value * (RING + 1))
+const pieRadius = computed(() => EDGE - levels.value * (RING + GAP))
+
+/** Udział zdobytych punktów; null, gdy węzeł nie ma punktów albo żadnej oceny jeszcze nie ma. */
+function earnedRatio(node: GradeNode): number | null {
+  const progress = computeProgress(node)
+  if (!progress.max || !progress.gradedLeaves) return null
+  return Math.min(1, progress.ratio)
+}
 
 const drawing = computed(() => {
   const tints: Shape[] = []
   const bands: Shape[] = []
   const rings: Shape[] = []
   const outlines: Shape[] = []
+  const bars: Shape[] = []
   const labels: Label[] = []
   const pie = pieRadius.value
 
@@ -168,8 +199,23 @@ const drawing = computed(() => {
         trail,
         node,
       })
-      const text = arcLabel(`b-${node.id}`, bandText(node), a0, a1, (r0 + r1) / 2, 5)
-      if (text && r1 - r0 >= 6) labels.push(text)
+      // Wąskie pasma przy środku dostają mniejszą czcionkę, zanim podpis zostanie pominięty.
+      const text = [5, 4, 3.6]
+        .map((size) => bandLabel(`b-${node.id}`, bandText(node), a0, a1, r0, r1, size))
+        .find(Boolean)
+      if (text) labels.push(text)
+      // Pasek oceny na zewnętrznej krawędzi pasma - w miejscu separatora.
+      const ratio = earnedRatio(node)
+      if (ratio)
+        bars.push({
+          id: node.id,
+          path: sector(a0, a0 + (a1 - a0) * ratio, r1 - BAR, r1),
+          color: colorOf(node),
+          opacity: 1,
+          kind: 'progress',
+          trail,
+          node,
+        })
       return
     }
 
@@ -193,7 +239,9 @@ const drawing = computed(() => {
     const weights = weightsOf(children)
     const total = weights.reduce((sum, weight) => sum + weight, 0)
     // Pierścień tego poziomu: najbliżej koła najgłębszy, na zewnątrz najwyższy (przedmioty).
-    const ringIn = pie + 1 + (levels.value - depth - 1) * (RING + 1)
+    const ringIn = pie + GAP + (levels.value - depth - 1) * (RING + GAP)
+    // Pasek tego poziomu leży w odstępie tuż za pierścieniem (dla przedmiotów - warstwa zewnętrzna).
+    const barIn = ringIn + RING + (GAP - BAR) / 2
     let angle = a0
     children.forEach((child, index) => {
       const span = ((a1 - a0) * weights[index]!) / total
@@ -224,14 +272,32 @@ const drawing = computed(() => {
         6,
       )
       if (text) labels.push(text)
+      const shared = { id: child.id, color: colorOf(child), trail: childTrail, node: child }
+      bars.push({ ...shared, path: sector(angle, angle + span, barIn, barIn + BAR), opacity: 0.18, kind: 'track' })
+      const ratio = earnedRatio(child)
+      if (ratio)
+        bars.push({
+          ...shared,
+          path: sector(angle, angle + span * ratio, barIn, barIn + BAR),
+          opacity: 1,
+          kind: 'progress',
+        })
       layout(child, angle, angle + span, r0, r1, childTrail, depth + 1)
       angle += span
     })
   }
 
   layout(props.root, 0, FULL, HOLE, pie, [], 0)
-  return { shapes: [...tints, ...bands, ...rings, ...outlines], labels }
+  return { shapes: [...tints, ...bands, ...rings, ...outlines, ...bars], labels }
 })
+
+/**
+ * Półprzezroczyste wypełnienia mnożone przez --pie-boost: na jasnym, kremowym tle te same
+ * wartości wyglądały na wyblakłe, więc jasny motyw je wzmacnia. Paski postępu zawsze pełne.
+ */
+function fillOpacity(shape: Shape) {
+  return shape.kind === 'progress' ? '1' : `min(1, calc(${shape.opacity} * var(--pie-boost, 1)))`
+}
 
 const hovered = ref<Shape | null>(null)
 const total = computed(() => computeProgress(props.root))
@@ -267,22 +333,25 @@ const hoverInfo = computed(() => {
           class="pointer-events-none"
         />
         <path
+          v-else-if="shape.kind === 'track' || shape.kind === 'progress' || shape.kind === 'tint'"
+          :d="shape.path"
+          :fill="shape.color"
+          :style="{ fillOpacity: fillOpacity(shape) }"
+          class="pointer-events-none"
+        />
+        <path
           v-else
           :d="shape.path"
           :fill="shape.color"
-          :fill-opacity="shape.opacity"
-          :stroke="shape.kind === 'tint' ? 'none' : 'var(--card)'"
+          stroke="var(--card)"
           stroke-width="0.6"
-          :class="
-            shape.kind === 'tint' ? 'pointer-events-none' : 'cursor-pointer transition-[fill-opacity]'
-          "
-          :style="
-            hovered?.id === shape.id && shape.kind !== 'tint'
-              ? { fillOpacity: Math.min(1, shape.opacity + 0.25) }
-              : undefined
-          "
-          @mouseenter="shape.kind !== 'tint' && (hovered = shape)"
-          @click="shape.kind !== 'tint' && emit('select', shape.id)"
+          class="cursor-pointer transition-[fill-opacity]"
+          :style="{
+            fillOpacity:
+              hovered?.id === shape.id ? `min(1, ${fillOpacity(shape)} + 0.25)` : fillOpacity(shape),
+          }"
+          @mouseenter="hovered = shape"
+          @click="emit('select', shape.id)"
         >
           <title>{{ shape.trail.join(' › ') }}</title>
         </path>
