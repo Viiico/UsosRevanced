@@ -47,26 +47,35 @@ const showDone = useShowDoneTerms()
 
 const today = computed(() => nowIso.value.slice(0, 10))
 
+/** Wszystkie filtry poza rodzajem zajęć - z tego liczymy liczniki przy rodzajach. */
+const scoped = computed(() =>
+  items.value
+    .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
+    .filter((term) => showDone.value || termStatus(term) !== 'done')
+    .filter(
+      (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) === 'upcoming'),
+    ),
+)
+
 const filters = computed(() => {
+  // Kolejność z pełnej listy, żeby chipy nie skakały przy zmianie przedmiotu.
   const counts = new Map<string, number>()
-  for (const term of items.value) {
+  for (const term of items.value) counts.set(TERM_GROUP[term.kind], 0)
+  for (const term of scoped.value) {
     const group = TERM_GROUP[term.kind]
     counts.set(group, (counts.get(group) ?? 0) + 1)
   }
   return [
-    { id: 'all', label: 'Wszystko', count: items.value.length },
-    ...[...counts].map(([id, count]) => ({ id, label: TERM_GROUP_LABEL[id] ?? id, count })),
+    { id: 'all', label: 'Wszystko', count: scoped.value.length },
+    ...[...counts]
+      .filter(([id, count]) => count > 0 || id === groupFilter.value)
+      .map(([id, count]) => ({ id, label: TERM_GROUP_LABEL[id] ?? id, count })),
   ]
 })
 
 const visible = computed(() =>
-  items.value
-    .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
+  scoped.value
     .filter((term) => groupFilter.value === 'all' || TERM_GROUP[term.kind] === groupFilter.value)
-    .filter((term) => showDone.value || termStatus(term) !== 'done')
-    .filter(
-      (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) === 'upcoming'),
-    )
     .slice()
     .sort(byDate),
 )
@@ -290,74 +299,96 @@ function resetFilters() {
                     class="group block rounded-xl border bg-secondary/15 px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary/30 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
                     :class="cardTone(term)"
                   >
-                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <Badge
-                        :variant="term.kind === 'colloquium' ? 'default' : 'secondary'"
-                        class="font-mono tracking-normal uppercase"
-                      >
-                        {{ TERM_KIND_SHORT[term.kind] }}
-                      </Badge>
-                      <span class="text-2xs text-muted-foreground">
-                        {{ TERM_KIND_LABEL[term.kind] }}
-                      </span>
-                      <Badge
-                        v-if="data.subjects.length > 1 && subjectOf(term)"
-                        variant="outline"
-                        class="max-w-full min-w-0 gap-1"
-                        :title="subjectOf(term)?.name"
-                      >
-                        <BookOpen class="size-3" />
-                        <!-- Na telefonie kod przedmiotu - pełna nazwa (np. PSIR) rozpychała stronę. -->
-                        <span class="sm:hidden">{{ subjectOf(term)?.code }}</span>
-                        <span class="hidden truncate sm:inline">{{ subjectOf(term)?.name }}</span>
-                      </Badge>
-                      <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
-                        · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
-                      </span>
-                      <span v-if="term.weekNo" class="tnum text-2xs text-muted-foreground/80">
-                        · tydzień {{ term.weekNo }}
-                      </span>
-                      <span v-if="isToday(term)" class="text-2xs font-medium text-primary">
-                        · dziś
-                      </span>
+                    <!--
+                      Mniej wierszy: po lewej rodzaj + tytuł, pod nimi metadane w jednej linii;
+                      po prawej punkty i stan. Poniżej md prawa kolumna schodzi na dół.
+                    -->
+                    <div class="flex flex-col gap-2.5 md:flex-row md:items-start md:gap-6">
+                      <div class="min-w-0 flex-1">
+                        <div class="flex items-start gap-2">
+                          <Badge
+                            :variant="term.kind === 'colloquium' ? 'default' : 'secondary'"
+                            class="mt-px shrink-0 font-mono tracking-normal uppercase"
+                          >
+                            {{ TERM_KIND_SHORT[term.kind] }}
+                          </Badge>
+                          <p class="min-w-0 text-dense leading-snug font-medium text-balance">
+                            {{ term.title }}
+                          </p>
+                        </div>
 
-                      <span class="ml-auto flex items-center gap-2 text-2xs">
-                        <span v-if="term.pointsMax" class="tnum font-medium">
-                          {{ term.pointsMax }} pkt
+                        <div
+                          class="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-2xs text-muted-foreground"
+                        >
+                          <span>{{ TERM_KIND_LABEL[term.kind] }}</span>
+                          <template v-if="data.subjects.length > 1 && subjectOf(term)">
+                            <span aria-hidden="true">·</span>
+                            <Badge
+                              variant="outline"
+                              class="max-w-full min-w-0 gap-1"
+                              :title="subjectOf(term)?.name"
+                            >
+                              <BookOpen class="size-3" />
+                              <!-- Poniżej xl kod przedmiotu - pełna nazwa (np. PSIR) zawijała wiersz metadanych. -->
+                              <span class="xl:hidden">{{ subjectOf(term)?.code }}</span>
+                              <span class="hidden truncate xl:inline">{{ subjectOf(term)?.name }}</span>
+                            </Badge>
+                          </template>
+                          <template v-if="term.start">
+                            <span aria-hidden="true">·</span>
+                            <span class="tnum">
+                              {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
+                            </span>
+                          </template>
+                          <template v-if="term.weekNo">
+                            <span aria-hidden="true">·</span>
+                            <span class="tnum">tydzień {{ term.weekNo }}</span>
+                          </template>
+                          <span aria-hidden="true">·</span>
+                          <span class="inline-flex items-center gap-1">
+                            <CalendarClock v-if="term.canBeDoneBefore" class="size-3" />
+                            <Lock v-else class="size-3" />
+                            {{ term.canBeDoneBefore ? 'przed terminem' : 'na zajęciach' }}
+                          </span>
+                          <template v-if="term.group">
+                            <span aria-hidden="true">·</span>
+                            <span class="truncate">{{ term.group }}</span>
+                          </template>
+                          <template v-if="term.location">
+                            <span aria-hidden="true">·</span>
+                            <span class="truncate">{{ term.location }}</span>
+                          </template>
+                          <template v-if="isToday(term)">
+                            <span aria-hidden="true">·</span>
+                            <span class="font-medium text-primary">dziś</span>
+                          </template>
+                        </div>
+
+                        <p
+                          v-if="term.requirement || term.notes"
+                          class="mt-1 text-2xs text-muted-foreground/80"
+                        >
+                          {{ [term.requirement, term.notes].filter(Boolean).join(' · ') }}
+                        </p>
+                      </div>
+
+                      <div
+                        class="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-1.5 md:flex-col md:items-end md:justify-start"
+                      >
+                        <span class="flex items-center gap-2 text-2xs">
+                          <span v-if="term.pointsMax" class="tnum font-medium">
+                            {{ term.pointsMax }} pkt
+                          </span>
+                          <span v-else class="text-muted-foreground max-sm:hidden">bez punktów</span>
+                          <ArrowRight
+                            class="size-3.5 -translate-x-1 text-muted-foreground/0 transition-all group-hover:translate-x-0 group-hover:text-primary max-md:hidden"
+                          />
                         </span>
-                        <span v-else class="text-muted-foreground max-sm:hidden">bez punktów</span>
-                        <ArrowRight
-                          class="size-3.5 -translate-x-1 text-muted-foreground/0 transition-all group-hover:translate-x-0 group-hover:text-primary"
-                        />
-                      </span>
-                    </div>
-
-                    <p class="mt-1.5 text-dense leading-snug font-medium text-balance">
-                      {{ term.title }}
-                    </p>
-
-                    <p v-if="term.requirement" class="mt-1 text-2xs text-muted-foreground">
-                      {{ term.requirement }}
-                    </p>
-                    <p v-if="term.notes" class="mt-0.5 text-2xs text-muted-foreground/80">
-                      {{ term.notes }}
-                    </p>
-
-                    <div
-                      class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-3xs text-muted-foreground"
-                    >
-                      <span class="inline-flex items-center gap-1">
-                        <CalendarClock v-if="term.canBeDoneBefore" class="size-3" />
-                        <Lock v-else class="size-3" />
-                        {{ term.canBeDoneBefore ? 'przed terminem' : 'na zajęciach' }}
-                      </span>
-                      <span v-if="term.group" class="truncate">{{ term.group }}</span>
-                      <span v-if="term.location" class="truncate">{{ term.location }}</span>
-
-                      <span class="ml-auto flex items-center gap-1.5">
-                        <span class="tnum whitespace-nowrap">{{ relativeDays(term.date, nowIso) }}</span>
-                        <TermStatusControl :term="term" />
-                      </span>
+                        <span class="ml-auto flex items-center gap-1.5 text-3xs text-muted-foreground md:ml-0">
+                          <span class="tnum whitespace-nowrap">{{ relativeDays(term.date, nowIso) }}</span>
+                          <TermStatusControl :term="term" />
+                        </span>
+                      </div>
                     </div>
                   </NuxtLink>
                 </div>
