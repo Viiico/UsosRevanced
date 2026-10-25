@@ -53,8 +53,9 @@ const semesterLabel = computed(() => {
 <template>
   <footer class="mt-4 border-t border-border/60 py-4">
     <div
-      class="mx-auto flex w-full max-w-[100rem] flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 text-2xs text-muted-foreground sm:px-6"
+      class="mx-auto flex w-full max-w-[100rem] flex-col items-center gap-1.5 px-4 text-center text-2xs text-muted-foreground sm:flex-row sm:flex-wrap sm:justify-between sm:gap-x-4 sm:text-left sm:px-6"
     >
+      <!-- Na telefonie dwa wyśrodkowane wiersze - wyrównane do lewej wyglądały na rozjechane. -->
       <span class="flex items-center gap-2">
         <span
           class="size-1.5 rounded-full"
