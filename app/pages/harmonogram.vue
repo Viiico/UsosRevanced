@@ -5,9 +5,20 @@ import {
   BookOpen,
   CalendarClock,
   CalendarX2,
+  GitGraph,
   Lock,
   RotateCcw,
+  X,
 } from 'lucide-vue-next'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+} from 'reka-ui'
 import type { Term, TermStatus } from '~/types'
 import {
   TERM_GROUP,
@@ -42,7 +53,6 @@ const STATUS_DOT: Record<TermStatus, string> = {
 
 const subjectFilter = ref('all')
 const groupFilter = ref('all')
-const onlyActionable = ref(false)
 const showDone = useShowDoneTerms()
 
 const today = computed(() => nowIso.value.slice(0, 10))
@@ -51,10 +61,7 @@ const today = computed(() => nowIso.value.slice(0, 10))
 const scoped = computed(() =>
   items.value
     .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
-    .filter((term) => showDone.value || termStatus(term) !== 'done')
-    .filter(
-      (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) === 'upcoming'),
-    ),
+    .filter((term) => showDone.value || termStatus(term) !== 'done'),
 )
 
 const filters = computed(() => {
@@ -127,12 +134,8 @@ function cardTone(term: Term) {
 const route = useRoute()
 const focusedTermId = ref<string | null>(null)
 
-onMounted(async () => {
-  const { subject, group, term: termId } = route.query
-  if (typeof subject === 'string') subjectFilter.value = subject
-  if (typeof group === 'string') groupFilter.value = group
-  if (typeof termId !== 'string') return
-
+/** Przewija do karty terminu i na chwilę ją podświetla - z kalendarza i z widoku gałęzi. */
+async function focusTerm(termId: string) {
   const term = items.value.find((item) => item.id === termId)
   if (!term) return
   if (termStatus(term) === 'done') showDone.value = true
@@ -142,7 +145,22 @@ onMounted(async () => {
   setTimeout(() => {
     if (focusedTermId.value === term.id) focusedTermId.value = null
   }, 2500)
+}
+
+onMounted(() => {
+  const { subject, group, term: termId } = route.query
+  if (typeof subject === 'string') subjectFilter.value = subject
+  if (typeof group === 'string') groupFilter.value = group
+  if (typeof termId === 'string') focusTerm(termId)
 })
+
+/** Widok gałęzi (popup): te same filtry, klik w commit zamyka go i pokazuje kartę. */
+const graphOpen = ref(false)
+
+function openFromGraph(termId: string) {
+  graphOpen.value = false
+  focusTerm(termId)
+}
 
 function nodeLink(term: Term) {
   return { path: '/oceny', query: term.nodeId ? { node: term.nodeId } : {} }
@@ -151,7 +169,6 @@ function nodeLink(term: Term) {
 function resetFilters() {
   subjectFilter.value = 'all'
   groupFilter.value = 'all'
-  onlyActionable.value = false
   showDone.value = false
 }
 </script>
@@ -159,73 +176,30 @@ function resetFilters() {
 <template>
   <div class="space-y-5">
     <Card class="flex flex-col">
-      <CardHeader class="gap-3 pb-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div v-if="data.subjects.length > 1" class="flex flex-wrap gap-1.5">
-            <button
-              type="button"
-              class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
-              :class="
-                subjectFilter === 'all'
-                  ? 'border-primary/45 bg-primary/12 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
-              "
-              :aria-pressed="subjectFilter === 'all'"
-              @click="subjectFilter = 'all'"
-            >
-              Wszystkie<span class="hidden lg:inline">&nbsp;przedmioty</span>
-            </button>
-            <button
-              v-for="subject in data.subjects"
-              :key="subject.id"
-              type="button"
-              class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
-              :class="
-                subjectFilter === subject.id
-                  ? 'border-primary/45 bg-primary/12 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
-              "
-              :aria-pressed="subjectFilter === subject.id"
-              :title="subject.name"
-              @click="subjectFilter = subject.id"
-            >
-              <!-- Poniżej lg kody - pełne nazwy zajmowały 3-6 wierszy filtrów. -->
-              <span class="lg:hidden">{{ subject.code }}</span>
-              <span class="hidden lg:inline">{{ subject.name }}</span>
-            </button>
-          </div>
-
-          <div class="flex flex-wrap gap-1.5">
-            <button
-              v-for="item in filters"
-              :key="item.id"
-              type="button"
-              class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
-              :class="
-                groupFilter === item.id
-                  ? 'border-primary/45 bg-primary/12 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
-              "
-              :aria-pressed="groupFilter === item.id"
-              @click="groupFilter = item.id"
-            >
-              {{ item.label }}
-              <span class="tnum opacity-60">{{ item.count }}</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <p class="text-2xs text-muted-foreground">
+      <CardHeader class="pb-4">
+        <HarmonogramFilters
+          v-model:subject="subjectFilter"
+          v-model:group="groupFilter"
+          v-model:show-done="showDone"
+          :subjects="data.subjects"
+          :groups="filters"
+        >
+          <template #meta>
             {{ stats.total }} {{ termsLabel(stats.total) }} · {{ stats.points }} pkt
             <template v-if="stats.overdue"> · {{ stats.overdue }} po terminie</template>
-          </p>
-
-          <div class="flex flex-wrap gap-1.5">
-            <SwitchChip v-model="showDone">Pokaż zrobione</SwitchChip>
-            <SwitchChip v-model="onlyActionable">Tylko do zrobienia teraz</SwitchChip>
-          </div>
-        </div>
+          </template>
+          <template #actions>
+            <button
+              type="button"
+              aria-label="Widok gałęzi"
+              title="Widok gałęzi"
+              class="grid size-7 place-items-center rounded-full border border-border/70 text-muted-foreground transition-colors hover:border-primary/45 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+              @click="graphOpen = true"
+            >
+              <GitGraph class="size-3.5" />
+            </button>
+          </template>
+        </HarmonogramFilters>
       </CardHeader>
 
       <CardContent class="flex-1 pt-0">
@@ -237,7 +211,7 @@ function resetFilters() {
           <div class="space-y-1">
             <p class="text-sm font-medium">Brak terminów w tym widoku</p>
             <p class="text-2xs text-muted-foreground">
-              Zmień filtr rodzaju zajęć albo włącz „pokaż zrobione” albo wyłącz „tylko do zrobienia teraz”.
+              Zmień filtr rodzaju zajęć albo włącz „pokaż zrobione”.
             </p>
           </div>
           <Button variant="outline" size="sm" class="gap-1.5" @click="resetFilters">
@@ -370,5 +344,55 @@ function resetFilters() {
         </div>
       </CardContent>
     </Card>
+
+    <DialogRoot v-model:open="graphOpen">
+      <DialogPortal>
+        <DialogOverlay class="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px]" />
+        <DialogContent
+          class="fixed inset-x-2 top-4 bottom-4 z-50 mx-auto flex max-w-4xl flex-col gap-4 rounded-xl border border-border/80 bg-card p-4 shadow-xl focus:outline-none sm:inset-x-6 sm:top-[6vh] sm:bottom-[6vh] sm:p-5"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <GitGraph class="size-4 text-primary" />
+              <DialogTitle class="text-lg font-semibold tracking-tight">Gałęzie</DialogTitle>
+            </div>
+            <DialogClose
+              aria-label="Zamknij"
+              class="grid size-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            >
+              <X class="size-4" />
+            </DialogClose>
+          </div>
+          <DialogDescription class="sr-only">
+            Terminy ułożone jak gałęzie w git - jedna gałąź na przedmiot, najstarszy na górze.
+          </DialogDescription>
+
+          <HarmonogramFilters
+            v-model:subject="subjectFilter"
+            v-model:group="groupFilter"
+            v-model:show-done="showDone"
+            :subjects="data.subjects"
+            :groups="filters"
+          >
+            <template #meta>
+              {{ stats.total }} {{ termsLabel(stats.total) }} · {{ stats.points }} pkt
+            </template>
+          </HarmonogramFilters>
+
+          <div class="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
+            <HarmonogramGraph
+              v-if="visible.length"
+              :terms="visible"
+              :subjects="data.subjects"
+              :today="today"
+              @select="openFromGraph"
+            />
+            <p v-else class="py-10 text-center text-sm text-muted-foreground">
+              Brak terminów w tym widoku.
+            </p>
+          </div>
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
   </div>
 </template>
