@@ -71,7 +71,7 @@ export interface Term {
   requirement?: string
   notes?: string
   weekNo?: number
-  /** Oddane / zrobione, czeka na ocenę - z danych tego nie wyczytamy, ustawia się ręcznie. */
+  /** Ręczne „zrobione” - z danych tego nie wyczytamy. Termin z punktami czeka potem na ocenę. */
   submitted?: boolean
 }
 

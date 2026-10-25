@@ -133,7 +133,8 @@ export function useGrades() {
   function termStatus(term: Term): TermStatus {
     const node = term.nodeId ? findNode(root.value, term.nodeId) : null
     if (node?.points && node.points.earned != null) return 'done'
-    if (term.submitted) return 'inProgress'
+    // Bez punktów (np. zapisy do zespołów) nie ma na co czekać - zrobione kończy sprawę.
+    if (term.submitted) return term.pointsMax ? 'inProgress' : 'done'
     if (term.date < nowIso.value.slice(0, 10)) return 'overdue'
     return 'upcoming'
   }
