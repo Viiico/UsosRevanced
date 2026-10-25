@@ -142,11 +142,11 @@ const tree = computed<Row[]>(() => [
   },
 ])
 
+/** Domyślnie widać tylko listę przedmiotów - rozwijanie ich zostawiamy użytkownikowi. */
 const expanded = reactive(new Set<string>())
 function resetExpanded() {
   expanded.clear()
   expanded.add('semester')
-  for (const subject of state.subjects) expanded.add(`subject:${subject.id}`)
 }
 resetExpanded()
 
@@ -623,7 +623,7 @@ function resetData() {
             </Badge>
           </div>
           <p class="text-2xs text-muted-foreground">
-            Drzewo semestru z rozwiniętymi przedmiotami. Wybierz element, żeby go edytować.
+            Drzewo semestru - rozwiń przedmiot, żeby zobaczyć jego elementy. Wybierz element, żeby go edytować.
           </p>
         </CardHeader>
 
