@@ -90,7 +90,7 @@ function evaluateOne(
   return {
     ...requirement,
     status: 'pending',
-    detail: `${pkt(earned)} / ${pkt(threshold)} · brakuje ${pkt(threshold - earned)}`,
+    detail: `${pkt(earned)} / ${pkt(threshold)}`,
   }
 }
 
