@@ -17,9 +17,9 @@ const icon = computed(() => nodeIcon(props.node, props.visual))
 /** Na poziomie semestru każde dziecko to przedmiot - ikona nic nie mówi, a zjada miejsce na nazwę. */
 const showIcon = computed(() => props.node.kind !== 'subject')
 
-const label = computed(
-  () => (props.compact && subjectCode(props.node)) || props.node.short || props.node.name,
-)
+/** Kod (np. „TO”) stoi sam, wyśrodkowany w karcie - obok daty wyglądałby jak przyklejony. */
+const code = computed(() => (props.compact ? subjectCode(props.node) : null))
+const label = computed(() => props.node.short || props.node.name)
 const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
 </script>
 
@@ -43,6 +43,7 @@ const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
       </span>
 
       <p
+        v-if="!code"
         class="order-last line-clamp-2 min-w-0 basis-full text-sm leading-snug font-medium break-words hyphens-auto @[18rem]:order-none @[18rem]:text-lead @[18rem]:flex-1 @[18rem]:basis-0"
         :title="node.name"
       >
@@ -58,5 +59,13 @@ const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
         class="ms-auto size-4 shrink-0 text-muted-foreground/50 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
       />
     </div>
+
+    <p
+      v-if="code"
+      class="flex flex-1 items-center justify-center text-lead font-semibold tracking-wide"
+      :title="node.name"
+    >
+      {{ code }}
+    </p>
   </div>
 </template>
