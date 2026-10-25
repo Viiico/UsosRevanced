@@ -66,6 +66,24 @@ function laneIndex(subjectId: string) {
   return lanes.value.findIndex((lane) => lane.subject.id === subjectId)
 }
 
+/**
+ * Wypełnienie kropki = stan, obwódka = gałąź. Kształt zamiast samego koloru, bo w palecie
+ * success/primary/danger częściowo się pokrywają: pełna - zrobione, środek - w trakcie,
+ * czerwona - po terminie, pusta - nadchodzące.
+ */
+function nodeFill(term: Term, color: string | undefined) {
+  switch (termStatus(term)) {
+    case 'done':
+      return color
+    case 'inProgress':
+      return `radial-gradient(circle, ${color} 0 35%, var(--card) 40%)`
+    case 'overdue':
+      return 'var(--danger)'
+    default:
+      return 'var(--card)'
+  }
+}
+
 function codeOf(term: Term) {
   return props.subjects.find((subject) => subject.id === term.subjectId)?.code ?? ''
 }
@@ -102,18 +120,16 @@ function codeOf(term: Term) {
             />
           </template>
 
-          <!-- Commit: pełna kropka = zrobione, pusta = jeszcze przed nami. -->
+          <!-- Commit: obwódka = gałąź (przedmiot), wypełnienie = stan terminu. -->
           <span
             v-if="row.type === 'term'"
-            class="absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
+            class="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
             :style="{
               left: `${laneIndex(row.term.subjectId) * LANE + LANE / 2}px`,
               borderColor: lanes[laneIndex(row.term.subjectId)]?.color,
-              backgroundColor:
-                termStatus(row.term) === 'done'
-                  ? lanes[laneIndex(row.term.subjectId)]?.color
-                  : 'var(--card)',
+              background: nodeFill(row.term, lanes[laneIndex(row.term.subjectId)]?.color),
             }"
+            :title="TERM_STATUS[termStatus(row.term)].label"
           />
         </div>
 
@@ -149,15 +165,7 @@ function codeOf(term: Term) {
           <span class="tnum w-12 shrink-0 text-right text-2xs max-sm:hidden">
             <template v-if="row.term.pointsMax">{{ row.term.pointsMax }} pkt</template>
           </span>
-          <span class="grid w-4 shrink-0 place-items-center">
-            <component
-              :is="TERM_STATUS[termStatus(row.term)].icon"
-              v-if="termStatus(row.term) !== 'upcoming'"
-              class="size-3.5"
-              :class="TERM_STATUS[termStatus(row.term)].class"
-              :aria-label="TERM_STATUS[termStatus(row.term)].label"
-            />
-          </span>
+          <span class="sr-only">{{ TERM_STATUS[termStatus(row.term)].label }}</span>
         </button>
       </li>
     </ol>
