@@ -38,7 +38,7 @@ import {
 useHead({ title: 'Harmonogram' })
 
 const data = useAppData()
-const { termStatus, nowIso } = useGrades()
+const { termStatus, termPoints, nowIso } = useGrades()
 
 /** Harmonogram zbiera terminy oceniane - wykłady zostają w kalendarzu. */
 const items = computed(() => data.terms.filter((term) => term.nodeId))
@@ -104,7 +104,7 @@ const groups = computed(() => {
 const stats = computed(() => ({
   total: visible.value.length,
   overdue: visible.value.filter((term) => termStatus(term) === 'overdue').length,
-  points: visible.value.reduce((sum, term) => sum + (term.pointsMax ?? 0), 0),
+  points: visible.value.reduce((sum, term) => sum + (termPoints(term) ?? 0), 0),
 }))
 
 function byDate(a: Term, b: Term) {
@@ -299,8 +299,8 @@ function resetFilters() {
                       </span>
 
                       <span class="ml-auto flex items-center gap-2 text-2xs">
-                        <span v-if="term.pointsMax" class="tnum font-medium">
-                          {{ term.pointsMax }} pkt
+                        <span v-if="termPoints(term)" class="tnum font-medium">
+                          {{ termPoints(term) }} pkt
                         </span>
                         <span v-else class="text-muted-foreground max-sm:hidden">bez punktów</span>
                         <ArrowRight

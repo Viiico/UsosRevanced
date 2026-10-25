@@ -30,8 +30,9 @@ import {
 import type { GradeNode, GradeScaleRow, Subject } from '~/types'
 import { useAppData, downloadAppData } from '~/composables/useAppData'
 import { normalizeData, normalizeSubject } from '~/lib/normalize'
-import { findNode, collectNodeIds } from '~/lib/tree'
+import { findNode, findPath, collectNodeIds, collectPointLeaves } from '~/lib/tree'
 import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
+import { syncPassingFromPolicy } from '~/lib/policy'
 
 useHead({ title: 'Dane' })
 
@@ -273,13 +274,38 @@ function ensurePoints(node: GradeNode) {
   return node.points
 }
 
+/** Suma punktów węzła: liść - jego maksimum, grupa - suma maksimów ocen pod nią. */
+function pointsOf(node: GradeNode): number {
+  if (node.children?.length) {
+    return collectPointLeaves(node).reduce((sum, leaf) => sum + (leaf.points?.max ?? 0), 0)
+  }
+  return node.points?.max ?? 0
+}
+
+/**
+ * Waga, która była równa punktom (domyślny przypadek), idzie za nimi - w edytowanym węźle
+ * i w grupach nad nim (bez korzenia przedmiotu, którego wagą jest ECTS). Waga ustawiona
+ * ręcznie na inną wartość zostaje - to świadomy wyjątek.
+ */
 function patchMaxPoints(event: Event) {
   const node = activeNode.value
-  if (!node) return
+  const subject = activeSubject.value
+  if (!node || !subject) return
   const raw = (event.target as HTMLInputElement).value.trim()
+  const chain = findPath(subject.tree, node.id).slice(1)
+  const synced = chain.filter((entry) => entry.weight === pointsOf(entry))
   const points = ensurePoints(node)
   points.max = raw === '' ? 0 : Number(raw)
+  for (const entry of synced) entry.weight = pointsOf(entry)
   focusJson('max', points.max)
+}
+
+function patchPassing(event: Event) {
+  const subject = activeSubject.value
+  if (!subject) return
+  const raw = (event.target as HTMLInputElement).value.trim()
+  syncPassingFromPolicy(subject, raw === '' ? 0 : Number(raw))
+  focusJson('passingPoints', subject.policy.passingPoints)
 }
 
 function patchEarnedPoints(event: Event) {
@@ -405,7 +431,8 @@ function addCategory(kind: 'lab' | 'colloquium' | 'project') {
     visual: preset.visual,
     name: preset.name,
     short: '',
-    weight: 1,
+    // 0 = zgodna z punktami (też 0); patchMaxPoints podciąga ją razem z maksimum.
+    weight: 0,
     points: { max: 0, earned: null },
     children: [],
     requirements: [],
@@ -455,7 +482,8 @@ function addItem() {
     kind: preset.kind,
     name: preset.name,
     short: preset.short,
-    weight: 1,
+    // 0 = zgodna z punktami (też 0); patchMaxPoints podciąga ją razem z maksimum.
+    weight: 0,
     points: { max: 0, earned: null },
     children: [],
     requirements: [],
@@ -758,7 +786,7 @@ function resetEditor() {
                   type="number"
                   min="0"
                   :value="activeSubject?.policy.passingPoints ?? 0"
-                  @input="patchNumber(activeSubject?.policy, 'passingPoints', $event, 0)"
+                  @input="patchPassing"
                 />
               </label>
             </div>
@@ -843,9 +871,9 @@ function resetEditor() {
               />
             </label>
 
-            <p class="text-3xs text-muted-foreground">
-              Terminy w modelu: {{ state.terms.filter((term) => term.subjectId === activeSubject?.id).length }}
-            </p>
+            <GradeScaleEditor v-if="activeSubject" :subject="activeSubject" />
+
+            <SubjectTermsEditor v-if="activeSubject" :subject="activeSubject" />
           </div>
 
           <div v-else-if="activeNode" class="space-y-3">

@@ -10,7 +10,7 @@ import {
 } from '~/lib/node-meta'
 import { dayOfMonth, formatWeekday, monthShort, relativeDays } from '~/lib/format'
 
-const { scopedTerms, termStatus, nowIso } = useGrades()
+const { scopedTerms, termStatus, termPoints, nowIso } = useGrades()
 const showDone = useShowDoneTerms()
 
 /** Filtry wynikają z danych: pojawiają się tylko grupy obecne w zakresie. */
@@ -146,7 +146,7 @@ function nodeLink(term: Term) {
               class="col-span-2 flex items-center justify-between gap-3 sm:col-span-1 sm:flex-col sm:items-end sm:justify-start sm:gap-1.5"
             >
               <div class="tnum text-xs font-medium">
-                <template v-if="term.pointsMax"> {{ term.pointsMax }} pkt </template>
+                <template v-if="termPoints(term)"> {{ termPoints(term) }} pkt </template>
                 <span v-else class="text-muted-foreground">bez punktów</span>
               </div>
               <div class="flex items-center gap-1.5">

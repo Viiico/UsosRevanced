@@ -13,7 +13,7 @@ import { segmentColor } from '~/lib/segments'
 const props = defineProps<{ terms: Term[]; subjects: Subject[]; today: string }>()
 const emit = defineEmits<{ select: [id: string] }>()
 
-const { termStatus } = useGrades()
+const { termStatus, termPoints } = useGrades()
 
 /** Szerokość pasa gałęzi w px - wiersze mają stałą wysokość, więc odcinki się stykają. */
 const LANE = 16
@@ -169,7 +169,7 @@ function codeOf(term: Term) {
             {{ codeOf(row.term) }}
           </span>
           <span class="tnum w-12 shrink-0 text-right text-2xs max-sm:hidden">
-            <template v-if="row.term.pointsMax">{{ row.term.pointsMax }} pkt</template>
+            <template v-if="termPoints(row.term)">{{ termPoints(row.term) }} pkt</template>
           </span>
           <span class="sr-only">{{ TERM_STATUS[termStatus(row.term)].label }}</span>
         </button>

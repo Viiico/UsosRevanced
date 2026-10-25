@@ -142,11 +142,23 @@ export function useGrades() {
 
   const nowIso = useState('now-iso', () => new Date().toISOString())
 
+  /**
+   * Punkty terminu z bieżącego drzewa (maksimum oceny, którą termin zamyka), a nie kopia
+   * z chwili wczytania danych - edycja w „Dane” od razu zmienia „5 pkt” w harmonogramie.
+   * `pointsMax` w terminie mówi tylko, że termin jest oceniany.
+   */
+  function termPoints(term: Term): number | null {
+    if (term.pointsMax == null) return null
+    const node = term.nodeId ? findNode(root.value, term.nodeId) : null
+    if (!node || node.children?.length) return term.pointsMax
+    return node.points?.max ?? 0
+  }
+
   function termStatus(term: Term): TermStatus {
     const node = term.nodeId ? findNode(root.value, term.nodeId) : null
     if (node?.points && node.points.earned != null) return 'done'
     // Bez punktów (np. zapisy do zespołów) nie ma na co czekać - zrobione kończy sprawę.
-    if (term.submitted) return term.pointsMax ? 'inProgress' : 'done'
+    if (term.submitted) return termPoints(term) ? 'inProgress' : 'done'
     if (term.date < nowIso.value.slice(0, 10)) return 'overdue'
     return 'upcoming'
   }
@@ -216,6 +228,7 @@ export function useGrades() {
     crumbs,
     nowIso,
     termStatus,
+    termPoints,
     subjectCode,
     select,
     goUp,
