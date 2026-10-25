@@ -14,7 +14,6 @@ import {
   FolderTree,
   GitBranch,
   Plus,
-  RotateCcw,
   Trash2,
   Upload,
   X,
@@ -29,7 +28,7 @@ import {
   DialogTitle,
 } from 'reka-ui'
 import type { GradeNode, GradeScaleRow, Subject } from '~/types'
-import { useAppData, cloneData, downloadAppData } from '~/composables/useAppData'
+import { useAppData, downloadAppData } from '~/composables/useAppData'
 import { normalizeData, normalizeSubject } from '~/lib/normalize'
 import { findNode, collectNodeIds } from '~/lib/tree'
 import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
@@ -519,11 +518,6 @@ function resetEditor() {
   resetExpanded()
 }
 
-function resetData() {
-  Object.assign(state, cloneData())
-  importedName.value = null
-  resetEditor()
-}
 </script>
 
 <template>
@@ -539,10 +533,6 @@ function resetData() {
             <Download class="size-3.5" />
             Eksport JSON
           </Button>
-          <Button variant="ghost" class="gap-1.5" @click="resetData">
-            <RotateCcw class="size-3.5" />
-            Dane demo
-          </Button>
           <Button
             variant="outline"
             class="gap-1.5"
@@ -554,10 +544,8 @@ function resetData() {
           </Button>
         </div>
 
-        <p class="min-w-0 flex-1 text-2xs text-muted-foreground">
-          Import zastępuje cały zestaw danych (semestr, przedmioty, terminy). Eksport zapisuje
-          aktualny stan do pliku JSON.
-          <span v-if="importedName" class="text-foreground">Wczytano: {{ importedName }}.</span>
+        <p v-if="importedName" class="min-w-0 flex-1 text-2xs text-muted-foreground">
+          Wczytano: <span class="text-foreground">{{ importedName }}</span>
         </p>
 
         <p

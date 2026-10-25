@@ -7,7 +7,7 @@ const STORAGE_KEY = 'usos-revanced:data'
 /**
  * Trwała kopia robocza danych (localStorage) - edycje z zakładki „Dane" i punkty
  * przeżywają reload. Po hydracji ma pierwszeństwo nad bazowym JSON-em
- * (`app/data/base.json`); „Reset danych" przywraca zawartość pliku.
+ * (`app/data/base.json`); zastępuje ją tylko import w zakładce „Dane”.
  *
  * Wczytujemy po hydracji (`app:mounted`), żeby nie rozjechać SSR z klientem.
  */
