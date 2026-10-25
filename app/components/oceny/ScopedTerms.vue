@@ -37,6 +37,11 @@ const visibleTerms = computed(() =>
 function statusOf(term: Term) {
   return TERM_STATUS[termStatus(term)]
 }
+
+/** Ten sam kierunek co w głównym harmonogramie: termin -> jego węzeł ocen. */
+function nodeLink(term: Term) {
+  return { path: '/oceny', query: term.nodeId ? { node: term.nodeId } : {} }
+}
 </script>
 
 <template>
@@ -69,90 +74,94 @@ function statusOf(term: Term) {
 
     <CardContent class="pt-0">
       <ul v-if="visibleTerms.length" class="divide-y divide-border/60">
-        <li
-          v-for="term in visibleTerms"
-          :key="term.id"
-          class="group grid grid-cols-[52px_1fr] items-start gap-3 py-3.5 transition-colors first:pt-0 last:pb-0 sm:grid-cols-[60px_1fr_auto] sm:gap-4 hover:bg-secondary/20"
-        >
-          <div class="shrink-0 pl-1">
-            <div class="tnum text-lg leading-none font-semibold">{{ dayOfMonth(term.date) }}</div>
-            <div class="eyebrow mt-1">{{ monthShort(term.date) }}</div>
-            <div class="mt-0.5 text-3xs text-muted-foreground/80">
-              {{ formatWeekday(term.date) }}
-            </div>
-          </div>
-
-          <div class="min-w-0">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <Badge
-                :variant="term.kind === 'colloquium' ? 'default' : 'secondary'"
-                class="font-mono tracking-normal uppercase"
-              >
-                {{ TERM_KIND_SHORT[term.kind] }}
-              </Badge>
-              <span class="text-2xs text-muted-foreground">
-                {{ TERM_KIND_LABEL[term.kind] }}
-              </span>
-              <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
-                · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
-              </span>
-              <Tooltip>
-                <TooltipTrigger>
-                  <span
-                    class="inline-flex items-center gap-1 text-3xs transition-colors"
-                    :class="
-                      term.canBeDoneBefore ? 'text-primary/80' : 'text-muted-foreground/80'
-                    "
-                  >
-                    <CalendarClock v-if="term.canBeDoneBefore" class="size-3" />
-                    <Lock v-else class="size-3" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {{
-                    term.canBeDoneBefore
-                      ? 'Można (i trzeba) zrobić przed terminem - np. etap projektu.'
-                      : 'Realizacja wyłącznie w terminie zajęć - nie da się zrobić wcześniej.'
-                  }}
-                </TooltipContent>
-              </Tooltip>
-              <InfoHint
-                v-if="term.notes || term.requirement"
-                :text="[term.requirement, term.notes].filter(Boolean).join(' · ')"
-                side="right"
-                class="-ml-0.5"
-              />
+        <li v-for="term in visibleTerms" :key="term.id" class="first:pt-0 last:pb-0">
+          <NuxtLink
+            :to="nodeLink(term)"
+            class="group grid grid-cols-[52px_1fr] items-start gap-3 rounded-lg py-3.5 transition-colors hover:bg-secondary/20 focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none sm:grid-cols-[60px_1fr_auto] sm:gap-4"
+          >
+            <div class="shrink-0 pl-1">
+              <div class="tnum text-lg leading-none font-semibold">
+                {{ dayOfMonth(term.date) }}
+              </div>
+              <div class="eyebrow mt-1">{{ monthShort(term.date) }}</div>
+              <div class="mt-0.5 text-3xs text-muted-foreground/80">
+                {{ formatWeekday(term.date) }}
+              </div>
             </div>
 
-            <p class="mt-1.5 pr-2 text-dense leading-snug font-medium text-balance">
-              {{ term.title }}
-            </p>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <Badge
+                  :variant="term.kind === 'colloquium' ? 'default' : 'secondary'"
+                  class="font-mono tracking-normal uppercase"
+                >
+                  {{ TERM_KIND_SHORT[term.kind] }}
+                </Badge>
+                <span class="text-2xs text-muted-foreground">
+                  {{ TERM_KIND_LABEL[term.kind] }}
+                </span>
+                <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
+                  · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
+                </span>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span
+                      class="inline-flex items-center gap-1 text-3xs transition-colors"
+                      @click.stop
+                      :class="
+                        term.canBeDoneBefore ? 'text-primary/80' : 'text-muted-foreground/80'
+                      "
+                    >
+                      <CalendarClock v-if="term.canBeDoneBefore" class="size-3" />
+                      <Lock v-else class="size-3" />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {{
+                      term.canBeDoneBefore
+                        ? 'Można (i trzeba) zrobić przed terminem - np. etap projektu.'
+                        : 'Realizacja wyłącznie w terminie zajęć - nie da się zrobić wcześniej.'
+                    }}
+                  </TooltipContent>
+                </Tooltip>
+                <InfoHint
+                  v-if="term.notes || term.requirement"
+                  :text="[term.requirement, term.notes].filter(Boolean).join(' · ')"
+                  side="right"
+                  class="-ml-0.5"
+                />
+              </div>
 
-            <p v-if="term.requirement" class="mt-1 text-2xs text-muted-foreground">
-              {{ term.requirement }}
-            </p>
-            <p v-if="term.notes" class="mt-0.5 text-2xs text-muted-foreground/80">
-              {{ term.notes }}
-            </p>
-          </div>
+              <p class="mt-1.5 pr-2 text-dense leading-snug font-medium text-balance">
+                {{ term.title }}
+              </p>
 
-          <div class="col-span-2 flex items-center justify-between gap-3 sm:col-span-1 sm:flex-col sm:items-end sm:justify-start sm:gap-1.5">
-            <div class="tnum text-xs font-medium">
-              <template v-if="term.pointsMax">
-                {{ term.pointsMax }} pkt
-              </template>
-              <span v-else class="text-muted-foreground">bez punktów</span>
+              <p v-if="term.requirement" class="mt-1 text-2xs text-muted-foreground">
+                {{ term.requirement }}
+              </p>
+              <p v-if="term.notes" class="mt-0.5 text-2xs text-muted-foreground/80">
+                {{ term.notes }}
+              </p>
             </div>
-            <div class="flex items-center gap-1.5">
-              <span class="tnum text-3xs text-muted-foreground/70">
-                {{ relativeDays(term.date, nowIso) }}
-              </span>
-              <Badge :variant="statusOf(term).variant" class="gap-1">
-                <component :is="statusOf(term).icon" class="size-3" />
-                {{ statusOf(term).label }}
-              </Badge>
+
+            <div
+              class="col-span-2 flex items-center justify-between gap-3 sm:col-span-1 sm:flex-col sm:items-end sm:justify-start sm:gap-1.5"
+            >
+              <div class="tnum text-xs font-medium">
+                <template v-if="term.pointsMax"> {{ term.pointsMax }} pkt </template>
+                <span v-else class="text-muted-foreground">bez punktów</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="tnum text-3xs text-muted-foreground/70">
+                  {{ relativeDays(term.date, nowIso) }}
+                </span>
+                <Badge :variant="statusOf(term).variant" class="gap-1">
+                  <component :is="statusOf(term).icon" class="size-3" />
+                  {{ statusOf(term).label }}
+                </Badge>
+              </div>
             </div>
-          </div>
+          </NuxtLink>
         </li>
       </ul>
 

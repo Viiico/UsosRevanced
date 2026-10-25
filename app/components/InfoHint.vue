@@ -18,6 +18,7 @@ const props = withDefaults(
       <button
         type="button"
         aria-label="Więcej informacji"
+        @click.stop
         :class="
           cn(
             'inline-flex size-5 items-center justify-center rounded-full text-muted-foreground/70 transition-colors',
