@@ -4,13 +4,14 @@ Lokalna aplikacja do ogarniania studiów: **Harmonogram**, **Oceny**, **Kalendar
 Pierwszy działający widok to **Oceny** - drzewo ocen, ważony pasek postępu i harmonogram
 zawężony do wybranego poziomu.
 
-- **Framework:** Nuxt 4 (Vue 3 + TypeScript), SSR
+- **Framework:** Nuxt 4 (Vue 3 + TypeScript), SPA (`ssr: false`)
+- **Aplikacja:** Tauri 2, cel: Android; dane w SQLite (`tauri-plugin-sql`)
 - **Styl:** Tailwind CSS v4 + komponenty w konwencji [shadcn-vue](https://www.shadcn-vue.com/)
   (`app/components/ui/*`, reka-ui, cva, `cn()`)
 - **Ikony:** `lucide-vue-next`
 - **Runtime:** [Bun](https://bun.sh/) (instalacja i uruchamianie)
-- **Dane:** jeden dokument JSON (`app/data/base.json`) rzutowany na typowany model przez
-  `app/data/index.ts` - gotowe pod SQLite i przyszłą migrację do Tauri
+- **Dane:** baza SQLite w aplikacji; `app/data/base.json` wypełnia ją przy pierwszym
+  uruchomieniu
 
 ## Uruchomienie
 
@@ -23,10 +24,30 @@ Skrypty `dev` / `build` / `preview` uruchamiają Nuxt bezpośrednio na Bunie
 (`bun --bun ./node_modules/nuxt/bin/nuxt.mjs …`). Wersje na Node: `dev:node`, `build:node`.
 `bun run typecheck` sprawdza typy (obecnie 0 błędów).
 
+W przeglądarce aplikacja działa jako **podgląd bez zapisu** - baza SQLite istnieje tylko
+w aplikacji Tauri.
+
+### Android
+
+Wymagane na komputerze, który buduje APK:
+
+- Rust (`rustup`) z celami `aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android`
+  (`rustup target add …`); na Windowsie także Visual Studio Build Tools (C++)
+- Android Studio z SDK Platform, Build-Tools, Command-line Tools i NDK
+- zmienne: `JAVA_HOME` (JDK z Android Studio, katalog `jbr`), `ANDROID_HOME`, `NDK_HOME`
+
+```bash
+bun run android:init    # raz: generuje projekt Gradle w src-tauri/gen/android
+bun run android:dev     # telefon/emulator z hot reloadem (telefon w tej samej sieci)
+bun run android:build   # APK do instalacji
+```
+
+Wydanie APK wymaga podpisu - klucz (keystore) trzymaj poza repozytorium.
+
 ## Paleta
 
-Dwa schematy z dostarczonego screenshotu, przełączane w nagłówku (cookie `theme`, więc SSR
-od razu renderuje właściwy motyw - bez mignięcia):
+Dwa schematy z dostarczonego screenshotu, przełączane w nagłówku (zapamiętywane w tabeli
+`settings` bazy aplikacji):
 
 | Tryb | Schemat | Tło | Powierzchnia | Akcent | Alert | Tekst |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -54,8 +75,13 @@ app/
     ui/…                       # button, card, badge, tooltip, separator
   composables/
     useGrades.ts           # stan widoku: wybrany węzeł, postępy, segmenty, terminy
-    useAppTheme.ts         # ciemny/jasny + cookie
+    useAppTheme.ts         # ciemny/jasny
+  plugins/
+    app-data.client.ts     # wczytanie bazy przy starcie i zapis po każdej zmianie
+    now.client.ts          # odświeżanie „dziś” po powrocie do aplikacji
   lib/
+    db.ts                  # model ↔ wiersze SQLite, zapis różnicowy
+    storage.ts             # połączenie z bazą, tabela settings
     tree.ts                # nawigacja po drzewie i liczenie postępu
     requirements.ts        # ewaluacja warunków zaliczenia + terminy w zasięgu
     base-validate.ts       # walidator dokumentu v2 (wspólny z `bun run validate`)
@@ -68,6 +94,10 @@ app/
 scripts/
   migrate-v1-to-v2.ts      # jednorazowa migracja danych
   validate-data.ts         # `bun run validate`
+src-tauri/
+  migrations/              # schemat SQLite (migracje uruchamia tauri-plugin-sql)
+  src/lib.rs               # wtyczki: sql, dialog, fs
+  capabilities/default.json
 docs/data-model.md
 ```
 
@@ -81,9 +111,11 @@ a `bun run validate` sprawdza referencje, sumy, kalendarz i zakresy punktów.
 Adapter istnieje tylko dlatego, że widoki i edytor nadal mówią wersją v1 - po migracji UI
 zniknie. Zmiana źródła (Tauri `appDataDir`, SQLite) dotyczy loadera, nie widoków.
 
-Edycja w zakładce „Dane” zapisuje **runtime v1** w `localStorage` (`usos-revanced:data`),
-który po reloadzie ma pierwszeństwo nad plikiem; „Reset danych” przywraca zawartość
-`base.json`. Eksport z edytora to nadal v1 - to dług do spłaty razem z adapterem.
+W aplikacji źródłem prawdy jest **baza SQLite**. Przy pierwszym uruchomieniu (pusta baza)
+wypełnia ją `base.json`; potem plik nie jest już czytany. Każda zmiana - punkty, „zrobione”,
+edycja w „Dane”, import - od razu zapisuje do bazy tylko zmienione wiersze (`app/lib/db.ts`).
+Katalog (przedmioty, drzewo, terminy) i stan (`progress`, `term_state`) to osobne tabele.
+Eksport z edytora to nadal v1 - to dług do spłaty razem z adapterem.
 
 Migracja: `bun scripts/migrate-v1-to-v2.ts <wejście> <wyjście>` (domyślnie czyta
 `.tmp/base.v1.json`).
@@ -141,6 +173,5 @@ Uwagi:
 ## Co dalej
 
 - Migracja UI i edytora na v2 - usunięcie `app/data/adapt-v2.ts` i eksportu v1 z „Danych”.
-- Rozdzielenie katalogu od stanu: `progress` poza `base.json` (plik/`appDataDir`).
-- SQLite dopiero po powyższym (patrz `docs/data-model.md`); Tauri jako runtime docelowy.
+- Pierwsze uruchomienie na Androidzie: `android:init`, test zapisu i eksportu na urządzeniu.
 - Historia prób i poprawki jako `attempt` zamiast osobnych węzłów.

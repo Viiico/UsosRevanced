@@ -5,22 +5,23 @@ import { base } from '~/data'
 import { downloadAppData, useAppDataSaveState } from '~/composables/useAppData'
 
 /**
- * Stopka w jednej linii: stan zapisu w przeglądarce (z kopią do pobrania - dane żyją tylko
- * w localStorage) oraz miejsce w semestrze.
+ * Stopka w jednej linii: stan zapisu w bazie aplikacji (z kopią do wyeksportowania)
+ * oraz miejsce w semestrze.
  */
 const data = useAppData()
-const { savedAt, failed } = useAppDataSaveState()
+const { savedAt, failed, preview } = useAppDataSaveState()
 const nowIso = useState('now-iso', () => new Date().toISOString())
 const today = computed(() => nowIso.value.slice(0, 10))
 
 const saveLabel = computed(() => {
-  if (failed.value) return 'Nie udało się zapisać w przeglądarce'
-  if (!savedAt.value) return 'Dane zapisywane w przeglądarce'
+  if (preview.value) return 'Podgląd w przeglądarce - zmiany nie są zapisywane'
+  if (failed.value) return 'Nie udało się zapisać w bazie'
+  if (!savedAt.value) return 'Dane zapisywane w aplikacji'
   const time = new Date(savedAt.value).toLocaleTimeString('pl-PL', {
     hour: '2-digit',
     minute: '2-digit',
   })
-  return `Zapisano w przeglądarce o ${time}`
+  return `Zapisano o ${time}`
 })
 
 function daysBetween(from: string, to: string) {
@@ -59,7 +60,7 @@ const semesterLabel = computed(() => {
       <span class="flex items-center gap-2">
         <span
           class="size-1.5 rounded-full"
-          :class="failed ? 'bg-danger' : 'bg-success/80'"
+          :class="failed ? 'bg-danger' : preview ? 'bg-primary' : 'bg-success/80'"
           aria-hidden="true"
         />
         <span :class="failed ? 'text-danger' : undefined">{{ saveLabel }}</span>

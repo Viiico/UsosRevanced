@@ -10,8 +10,18 @@ export default defineNuxtConfig({
   // Tauri (frontendDist). Wszystkie dane i tak żyją po stronie klienta.
   ssr: false,
 
+  // `tauri android dev` ustawia TAURI_DEV_HOST na adres komputera w sieci - telefon
+  // musi dosięgnąć serwera deweloperskiego, a nie swojego localhosta.
+  devServer: { host: process.env.TAURI_DEV_HOST || 'localhost' },
+
   vite: {
     plugins: [tailwindcss()],
+    clearScreen: false,
+    envPrefix: ['VITE_', 'TAURI_'],
+    server: {
+      strictPort: true,
+      watch: { ignored: ['**/src-tauri/**'] },
+    },
     optimizeDeps: {
       include: [
         'class-variance-authority',
@@ -36,7 +46,7 @@ export default defineNuxtConfig({
       title: 'USOS Revanced: dziennik studiów',
       htmlAttrs: { lang: 'pl' },
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
         {
           name: 'description',
           content: 'Harmonogram, oceny i kalendarz zajęć w jednym miejscu.',

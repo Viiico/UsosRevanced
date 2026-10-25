@@ -5,7 +5,7 @@ import { readValue, writeValue } from '~/lib/storage'
 const THEME_KEY = 'usos-revanced:theme'
 
 /**
- * Motyw w trwałym zapisie aplikacji (Tauri store / localStorage) - aplikacja jest SPA,
+ * Motyw w tabeli `settings` bazy aplikacji (w podglądzie bez zapisu) - aplikacja jest SPA,
  * więc cookie dla SSR nie ma sensu. Domyślnie ciemny - schemat #3.
  */
 export function useAppTheme() {

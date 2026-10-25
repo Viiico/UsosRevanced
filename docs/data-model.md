@@ -1,14 +1,15 @@
 # Model danych (v2)
 
-`app/data/base.json` to jeden dokument JSON i jedyne źródło treści. Ma
+`app/data/base.json` to dokument startowy: wypełnia bazę SQLite aplikacji przy
+pierwszym uruchomieniu (patrz [SQLite](#sqlite-w-aplikacji)). Ma
 `schemaVersion: 2`; kontrakt typów jest w `app/types/base.ts`, a walidator w
 `app/lib/base-validate.ts` (`bun run validate`).
 
 ## Dlaczego tak
 
 - **Katalog ≠ stan.** Semestr, przedmioty, drzewo, wymagania i terminy są
-  katalogiem. Punkty (`progress`) to stan użytkownika i docelowo mieszka
-  osobno - w pliku, `appDataDir` w Tauri albo tabeli SQLite.
+  katalogiem. Punkty (`progress`) i „zrobione” to stan użytkownika - w bazie
+  aplikacji osobne tabele.
 - **Jedna krawędź.** Termin zna `nodeId`; `node.termIds` nie istnieje i jest
   wyliczane przez adapter. Kategorie agregują terminy z poddrzewa.
 - **Wartości pochodne nie są zapisywane.** `weight` domyślnie równa się
@@ -119,8 +120,8 @@ Widoki i edytor nadal czytają stary kształt `AppData` (`app/types/index.ts`).
 - buduje `teachers`, `policy` i `semester`.
 
 To warstwa zgodności, nie drugie źródło prawdy. Po migracji UI adapter znika,
-a `base` jest zwracane bezpośrednio. Edytor w zakładce „Dane” nadal zapisuje
-runtime v1 w `localStorage`; eksport z edytora też jest v1 - to dług do spłaty.
+a `base` jest zwracane bezpośrednio. Baza SQLite przechowuje runtime v1 (niżej);
+eksport z edytora też jest v1 - to dług do spłaty.
 
 ## Walidacja i migracja
 
@@ -134,74 +135,35 @@ Walidator sprawdza m.in. unikalność ID, prefiksy `n:`/`t:`, referencje
 zakres `progress`, ciągłość kalendarza, daty w semestrze i to, że `graded`
 wskazuje liść z punktami.
 
-## SQLite (pod Tauri)
+## SQLite w aplikacji
 
-Model mapuje się 1:1; ID z prefiksami są dobrymi kluczami tekstowymi:
+Aplikacja (Tauri, Android) trzyma dane w SQLite przez `tauri-plugin-sql`.
+Schemat jest w `src-tauri/migrations/` i uruchamia go wtyczka przy starcie;
+nowa zmiana schematu = nowy plik migracji i wpis w `src-tauri/src/lib.rs`.
 
-```sql
-CREATE TABLE semester (
-  id TEXT PRIMARY KEY, code TEXT, name TEXT, academic_year TEXT,
-  starts_at TEXT, ends_at TEXT, weeks_json TEXT, overrides_json TEXT
-);
+| Tabela | Zawartość |
+| --- | --- |
+| `semester` | jeden wiersz: kod, nazwa, daty |
+| `subject` | przedmiot; skala, zasady i prowadzący jako JSON |
+| `node` | drzewo ocen (`parent_id` + `position`); wymagania jako JSON |
+| `term` | terminy (`position` = kolejność na liście) |
+| `progress` | **stan**: punkty ocenionych węzłów |
+| `term_state` | **stan**: terminy oznaczone jako zrobione |
+| `settings` | klucz-wartość (motyw) |
 
-CREATE TABLE grade_scale (id TEXT PRIMARY KEY, passing REAL);
-CREATE TABLE grade_row (
-  grade_scale_id TEXT REFERENCES grade_scale(id),
-  min REAL NOT NULL, grade TEXT NOT NULL,
-  PRIMARY KEY (grade_scale_id, min)
-);
+Tabele odpowiadają runtime v1 (`app/types/index.ts`), bo to ten kształt edytują
+widoki - bez konwersji przy każdym zapisie. `app/lib/db.ts` mapuje model na
+wiersze i z powrotem.
 
-CREATE TABLE teacher (
-  id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT, room TEXT
-);
+**Zapis.** Po każdej zmianie stanu (mikrozadanie zbiera mutacje jednej akcji)
+`createSync().flush()` wylicza wiersze z modelu, porównuje je z obrazem tego,
+co jest w bazie, i wysyła tylko różnice: `INSERT OR REPLACE` dla zmienionych,
+`DELETE` dla usuniętych. Zapytania idą po kolei, bez transakcji - wtyczka
+używa puli połączeń, więc `BEGIN`/`COMMIT` z osobnych wywołań nie są
+gwarantowane. Obraz aktualizuje się po każdym udanym wierszu, więc po błędzie
+kolejny zapis dokończy resztę.
 
-CREATE TABLE subject (
-  id TEXT PRIMARY KEY, semester_id TEXT REFERENCES semester(id),
-  code TEXT, name TEXT, ects INTEGER,
-  grade_scale_id TEXT REFERENCES grade_scale(id),
-  group_code TEXT, group_label TEXT, policy_notes_json TEXT
-);
+**Start.** Pusta baza (brak wiersza w `semester`) = pierwsze uruchomienie:
+model z `base.json` zapisuje się w całości. Potem `base.json` nie jest czytany.
+W przeglądarce bazy nie ma - aplikacja działa jako podgląd bez zapisu.
 
-CREATE TABLE node (
-  id TEXT PRIMARY KEY, subject_id TEXT REFERENCES subject(id),
-  parent_id TEXT REFERENCES node(id), position INTEGER,
-  type TEXT NOT NULL, activity_kind TEXT, name TEXT, short TEXT,
-  max REAL, weight REAL, info TEXT, description TEXT, assumption_note TEXT
-);
-
-CREATE TABLE requirement (
-  id TEXT PRIMARY KEY, node_id TEXT REFERENCES node(id),
-  kind TEXT NOT NULL, label TEXT NOT NULL, threshold REAL,
-  target_node_id TEXT REFERENCES node(id), note TEXT
-);
-
-CREATE TABLE term (
-  id TEXT PRIMARY KEY, subject_id TEXT REFERENCES subject(id),
-  node_id TEXT REFERENCES node(id), kind TEXT NOT NULL,
-  title TEXT NOT NULL, date TEXT NOT NULL, start TEXT, end TEXT, due TEXT,
-  location TEXT, group_label TEXT, attempt INTEGER NOT NULL DEFAULT 1,
-  graded INTEGER NOT NULL DEFAULT 0, requirement_note TEXT, notes TEXT
-);
-
-CREATE TABLE progress (
-  node_id TEXT REFERENCES node(id), attempt INTEGER NOT NULL DEFAULT 1,
-  earned REAL NOT NULL, updated_at TEXT,
-  PRIMARY KEY (node_id, attempt)
-);
-```
-
-`progress` jest osobną tabelą - dzięki temu katalog można aktualizować bez
-dotykania ocen, a eksport/import nie nadpisuje stanu użytkownika. Punkty,
-postępy i `termIds` nie są przechowywane w tabelach katalogu: liczy je
-`app/lib/tree.ts` i adapter.
-
-## Eksport / import
-
-`base.json` jest gotowym dokumentem do zapisu (wersjonowany `schemaVersion`).
-Docelowo:
-
-1. `base.json` → `appDataDir` w Tauri (albo tabela SQLite),
-2. `progress` → osobny plik/tabela,
-3. migracje wg `schemaVersion` (`v1 → v2` już jest w `scripts/`).
-
-Ten sam JSON można wrzucić na telefon: bez serwera, bez konta, bez kosztów.

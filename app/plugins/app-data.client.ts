@@ -1,62 +1,65 @@
 import type { AppData } from '~/types'
 import { cloneData, useAppDataSaveState } from '~/composables/useAppData'
-import { normalizeData } from '~/lib/normalize'
-import { readValue, writeValue } from '~/lib/storage'
-
-const STORAGE_KEY = 'usos-revanced:data'
+import { createSync, loadAppData } from '~/lib/db'
+import { isTauri } from '~/lib/storage'
 
 /**
- * Trwała kopia robocza danych (lib/storage: Tauri store albo localStorage) - edycje
- * z zakładki „Dane" i punkty przeżywają restart. Po wczytaniu ma pierwszeństwo nad
- * bazowym JSON-em (`app/data/base.json`); zastępuje ją tylko import w zakładce „Dane”.
+ * Trwały zapis w SQLite (aplikacja Tauri). Przy pierwszym uruchomieniu baza jest pusta,
+ * więc wypełnia ją dokument bazowy (`app/data/base.json`); potem źródłem prawdy jest baza.
+ * Każda zmiana stanu - punkty, „zrobione”, edycja w „Dane”, import - trafia do bazy
+ * od razu, jako różnica wierszy (lib/db). W przeglądarce to tylko podgląd bez zapisu.
  */
 export default defineNuxtPlugin((nuxtApp) => {
   const state = useState<AppData>('app-data', cloneData)
   const loaded = useState<boolean>('app-data-loaded', () => false)
-  const { savedAt, failed } = useAppDataSaveState()
+  const { savedAt, failed, preview } = useAppDataSaveState()
 
   nuxtApp.hook('app:mounted', async () => {
-    // Zapis przez lib/storage: w Tauri plugin store, w przeglądarce localStorage.
+    if (!isTauri()) {
+      preview.value = true
+      loaded.value = true
+      return
+    }
+
+    let sync: ReturnType<typeof createSync>
     try {
-      const raw = await readValue(STORAGE_KEY)
-      if (raw) {
-        const parsed: unknown = JSON.parse(raw)
-        if (parsed && typeof parsed === 'object' && 'subjects' in parsed && 'semester' in parsed) {
-          Object.assign(state.value, normalizeData(parsed as AppData))
-        }
-      }
-    } catch {
-      // uszkodzony zapis - zostają dane demo
+      const stored = await loadAppData()
+      if (stored) Object.assign(state.value, stored)
+      sync = createSync(stored)
+    } catch (error) {
+      console.error('Nie udało się wczytać bazy', error)
+      failed.value = true
+      loaded.value = true
+      return
     }
     loaded.value = true
 
-    let timer: ReturnType<typeof setTimeout> | undefined
-    watch(
-      state,
-      () => {
-        if (!loaded.value) return
-        clearTimeout(timer)
-        timer = setTimeout(async () => {
-          try {
-            await writeValue(STORAGE_KEY, JSON.stringify(state.value))
-            savedAt.value = new Date().toISOString()
-            failed.value = false
-          } catch {
-            // brak miejsca / tryb prywatny - dane zostają w pamięci
-            failed.value = true
-          }
-        }, 300)
-      },
-      { deep: true },
-    )
-
-    window.addEventListener('storage', (event) => {
-      if (event.key !== STORAGE_KEY || !event.newValue) return
-      try {
-        Object.assign(state.value, normalizeData(JSON.parse(event.newValue) as AppData))
-      } catch {
-        // ignorujemy uszkodzony wpis z innej karty
+    // Zapisy idą po kolei; zmiany zgłoszone w trakcie zapisu dochodzą w następnym przebiegu.
+    let running = false
+    let pending = false
+    async function save() {
+      if (running) {
+        pending = true
+        return
       }
-    })
+      running = true
+      try {
+        do {
+          pending = false
+          if (await sync.flush(state.value)) savedAt.value = new Date().toISOString()
+          failed.value = false
+        } while (pending)
+      } catch (error) {
+        console.error('Nie udało się zapisać w bazie', error)
+        failed.value = true
+      } finally {
+        running = false
+      }
+    }
+
+    // Pierwsze uruchomienie: zapis dokumentu bazowego.
+    await save()
+    // Mikrozadanie zbiera kilka mutacji z jednej akcji w jeden przebieg zapisu.
+    watch(state, () => queueMicrotask(save), { deep: true })
   })
 })

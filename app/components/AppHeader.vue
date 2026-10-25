@@ -12,7 +12,10 @@ const items = [
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
+  <!-- pt: pasek statusu, gdy Android rysuje aplikację pod nim (viewport-fit=cover) -->
+  <header
+    class="sticky top-0 z-40 border-b border-border/70 bg-background/85 pt-[env(safe-area-inset-top)] backdrop-blur-md"
+  >
     <div class="mx-auto flex h-16 w-full max-w-[100rem] items-center gap-3 px-4 sm:px-6">
       <NuxtLink to="/oceny" class="group flex items-center gap-2.5">
         <span
