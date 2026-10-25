@@ -9,13 +9,12 @@ import {
   Lock,
   RotateCcw,
 } from 'lucide-vue-next'
-import type { Term } from '~/types'
+import type { Term, TermStatus } from '~/types'
 import {
   TERM_GROUP,
   TERM_GROUP_LABEL,
   TERM_KIND_LABEL,
   TERM_KIND_SHORT,
-  TERM_STATUS,
 } from '~/lib/node-meta'
 import {
   dayOfMonth,
@@ -35,11 +34,12 @@ const { semester, termStatus, nowIso } = useGrades()
 const items = computed(() => data.terms.filter((term) => term.nodeId))
 
 /** Kropka na osi czasu: kolor zależy od stanu terminu. */
-const STATUS_DOT = {
-  graded: 'bg-success',
+const STATUS_DOT: Record<TermStatus, string> = {
+  done: 'bg-success',
+  inProgress: 'bg-primary',
   overdue: 'bg-danger',
-  pending: 'bg-muted-foreground/50',
-} as const
+  upcoming: 'bg-muted-foreground/50',
+}
 
 const subjectFilter = ref('all')
 const groupFilter = ref('all')
@@ -64,7 +64,7 @@ const visible = computed(() =>
     .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
     .filter((term) => groupFilter.value === 'all' || TERM_GROUP[term.kind] === groupFilter.value)
     .filter(
-      (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) !== 'graded'),
+      (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) === 'upcoming'),
     )
     .slice()
     .sort(byDate),
@@ -106,10 +106,6 @@ function termsLabel(count: number) {
   if (count === 1) return 'termin'
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'terminy'
   return 'terminów'
-}
-
-function statusOf(term: Term) {
-  return TERM_STATUS[termStatus(term)]
 }
 
 function subjectOf(term: Term) {
@@ -367,10 +363,7 @@ function resetFilters() {
 
                       <span class="ml-auto flex items-center gap-1.5">
                         <span class="tnum">{{ relativeDays(term.date, nowIso) }}</span>
-                        <Badge :variant="statusOf(term).variant" class="gap-1">
-                          <component :is="statusOf(term).icon" class="size-3" />
-                          {{ statusOf(term).label }}
-                        </Badge>
+                        <TermStatusControl :term="term" />
                       </span>
                     </div>
                   </NuxtLink>

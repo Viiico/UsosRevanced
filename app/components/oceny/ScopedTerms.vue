@@ -7,11 +7,10 @@ import {
   TERM_GROUP_LABEL,
   TERM_KIND_LABEL,
   TERM_KIND_SHORT,
-  TERM_STATUS,
 } from '~/lib/node-meta'
 import { dayOfMonth, formatWeekday, monthShort, relativeDays } from '~/lib/format'
 
-const { scopedTerms, termStatus, nowIso } = useGrades()
+const { scopedTerms, nowIso } = useGrades()
 
 /** Filtry wynikają z danych: pojawiają się tylko grupy obecne w zakresie. */
 const filter = ref('all')
@@ -33,10 +32,6 @@ const visibleTerms = computed(() =>
     ? scopedTerms.value
     : scopedTerms.value.filter((term) => TERM_GROUP[term.kind] === filter.value),
 )
-
-function statusOf(term: Term) {
-  return TERM_STATUS[termStatus(term)]
-}
 
 /** Ten sam kierunek co w głównym harmonogramie: termin -> jego węzeł ocen. */
 function nodeLink(term: Term) {
@@ -155,10 +150,7 @@ function nodeLink(term: Term) {
                 <span class="tnum text-3xs text-muted-foreground/70">
                   {{ relativeDays(term.date, nowIso) }}
                 </span>
-                <Badge :variant="statusOf(term).variant" class="gap-1">
-                  <component :is="statusOf(term).icon" class="size-3" />
-                  {{ statusOf(term).label }}
-                </Badge>
+                <TermStatusControl :term="term" />
               </div>
             </div>
           </NuxtLink>

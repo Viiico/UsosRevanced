@@ -1,4 +1,4 @@
-import type { GradeNode, NodeProgress, Term } from '~/types'
+import type { GradeNode, NodeProgress, Term, TermStatus } from '~/types'
 import { collectNodeIds, computeProgress, effectiveWeight, findNode, findPath } from '~/lib/tree'
 import { evaluateRequirements, gradeForPoints, termsForNode } from '~/lib/requirements'
 
@@ -130,11 +130,12 @@ export function useGrades() {
 
   const nowIso = useState('now-iso', () => new Date().toISOString())
 
-  function termStatus(term: Term): 'graded' | 'overdue' | 'pending' {
+  function termStatus(term: Term): TermStatus {
     const node = term.nodeId ? findNode(root.value, term.nodeId) : null
-    if (node?.points && node.points.earned != null) return 'graded'
+    if (node?.points && node.points.earned != null) return 'done'
+    if (term.submitted) return 'inProgress'
     if (term.date < nowIso.value.slice(0, 10)) return 'overdue'
-    return 'pending'
+    return 'upcoming'
   }
 
   const score = computed(() => {

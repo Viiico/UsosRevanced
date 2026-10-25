@@ -71,6 +71,8 @@ export interface Term {
   requirement?: string
   notes?: string
   weekNo?: number
+  /** Oddane / zrobione, czeka na ocenę - z danych tego nie wyczytamy, ustawia się ręcznie. */
+  submitted?: boolean
 }
 
 export interface GradeScaleRow {
@@ -121,6 +123,9 @@ export interface AppData {
 }
 
 export type RequirementStatus = 'met' | 'failed' | 'pending' | 'info'
+
+/** `upcoming` to stan domyślny - harmonogram go nie oznacza. */
+export type TermStatus = 'done' | 'inProgress' | 'overdue' | 'upcoming'
 
 export interface EvaluatedRequirement extends Requirement {
   status: RequirementStatus

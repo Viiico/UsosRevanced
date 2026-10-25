@@ -3,6 +3,7 @@ import type {
   GradeNodeKind,
   RequirementStatus,
   TermKind,
+  TermStatus,
 } from '~/types'
 import {
   Beaker,
@@ -16,6 +17,7 @@ import {
   FlaskConical,
   FolderGit2,
   GitBranch,
+  Hourglass,
   Info,
   TriangleAlert,
   X,
@@ -67,20 +69,26 @@ export const TERM_GROUP_LABEL: Record<string, string> = {
 }
 
 export const TERM_STATUS = {
-  graded: { label: 'ocenione', icon: Check, variant: 'success' as const, class: 'text-success' },
+  done: { label: 'zrobione', icon: Check, variant: 'success' as const, class: 'text-success' },
+  inProgress: {
+    label: 'w trakcie',
+    icon: Hourglass,
+    variant: 'default' as const,
+    class: 'text-primary',
+  },
   overdue: {
     label: 'po terminie',
     icon: TriangleAlert,
     variant: 'destructive' as const,
     class: 'text-danger',
   },
-  pending: {
-    label: 'oczekuje',
+  upcoming: {
+    label: 'nadchodzące',
     icon: Clock3,
     variant: 'outline' as const,
     class: 'text-muted-foreground',
   },
-}
+} satisfies Record<TermStatus, unknown>
 
 export const REQUIREMENT_STATUS: Record<
   RequirementStatus,
