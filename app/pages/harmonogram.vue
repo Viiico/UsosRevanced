@@ -171,7 +171,7 @@ function resetFilters() {
               :aria-pressed="subjectFilter === 'all'"
               @click="subjectFilter = 'all'"
             >
-              Wszystkie przedmioty
+              Wszystkie<span class="hidden lg:inline">&nbsp;przedmioty</span>
             </button>
             <button
               v-for="subject in data.subjects"
@@ -184,9 +184,12 @@ function resetFilters() {
                   : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
               "
               :aria-pressed="subjectFilter === subject.id"
+              :title="subject.name"
               @click="subjectFilter = subject.id"
             >
-              {{ subject.name }}
+              <!-- Poniżej lg kody - pełne nazwy zajmowały 3-6 wierszy filtrów. -->
+              <span class="lg:hidden">{{ subject.code }}</span>
+              <span class="hidden lg:inline">{{ subject.name }}</span>
             </button>
           </div>
 
@@ -322,7 +325,7 @@ function resetFilters() {
                         <span v-if="term.pointsMax" class="tnum font-medium">
                           {{ term.pointsMax }} pkt
                         </span>
-                        <span v-else class="text-muted-foreground">bez punktów</span>
+                        <span v-else class="text-muted-foreground max-sm:hidden">bez punktów</span>
                         <ArrowRight
                           class="size-3.5 -translate-x-1 text-muted-foreground/0 transition-all group-hover:translate-x-0 group-hover:text-primary"
                         />
@@ -352,7 +355,7 @@ function resetFilters() {
                       <span v-if="term.location" class="truncate">{{ term.location }}</span>
 
                       <span class="ml-auto flex items-center gap-1.5">
-                        <span class="tnum">{{ relativeDays(term.date, nowIso) }}</span>
+                        <span class="tnum whitespace-nowrap">{{ relativeDays(term.date, nowIso) }}</span>
                         <TermStatusControl :term="term" />
                       </span>
                     </div>
