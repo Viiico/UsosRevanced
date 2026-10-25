@@ -3,14 +3,12 @@ import { computed, ref, type Component } from 'vue'
 import {
   Beaker,
   BookOpen,
-  CalendarDays,
   CalendarX2,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
   Flag,
   FolderGit2,
-  LayoutList,
 } from 'lucide-vue-next'
 import type { Term, TermKind } from '~/types'
 import { findNode } from '~/lib/tree'
@@ -332,45 +330,6 @@ function pad(hour: number) {
 
 <template>
   <div class="space-y-5">
-    <header class="space-y-2">
-      <div class="flex min-h-10 flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h1 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
-          Kalendarz
-        </h1>
-
-        <div class="inline-flex items-center gap-0.5 rounded-lg border border-border/80 bg-card p-0.5">
-          <button
-            type="button"
-            class="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-2xs font-medium transition-colors"
-            :class="
-              view === 'week'
-                ? 'bg-secondary text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            "
-            :aria-pressed="view === 'week'"
-            @click="view = 'week'"
-          >
-            <CalendarDays class="size-3.5" />
-            Tydzień
-          </button>
-          <button
-            type="button"
-            class="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-2xs font-medium transition-colors"
-            :class="
-              view === 'compact'
-                ? 'bg-secondary text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            "
-            :aria-pressed="view === 'compact'"
-            @click="view = 'compact'"
-          >
-            <LayoutList class="size-3.5" />
-            Kompakt
-          </button>
-        </div>
-      </div>
-    </header>
-
     <Card v-if="view === 'week'" class="flex flex-col">
       <CardHeader class="flex-row flex-wrap items-center justify-between gap-3 pb-3">
         <div class="flex items-center gap-2">
@@ -395,9 +354,12 @@ function pad(hour: number) {
           </button>
         </div>
 
-        <Button variant="outline" size="sm" :disabled="isCurrentWeek" @click="goToday">
-          Dziś
-        </Button>
+        <div class="flex items-center gap-2">
+          <Button variant="outline" size="sm" :disabled="isCurrentWeek" @click="goToday">
+            Dziś
+          </Button>
+          <ViewToggle v-model="view" />
+        </div>
       </CardHeader>
 
       <CardContent class="pt-0">
@@ -544,17 +506,12 @@ function pad(hour: number) {
 
     <Card v-else class="flex flex-col">
       <CardHeader class="flex-row flex-wrap items-center justify-between gap-3 pb-3">
-        <div class="flex items-center gap-2">
-          <h2
-            class="inline-block border-b-2 border-primary/70 pb-1 text-lg font-semibold tracking-tight"
-          >
-            Plan stały
-          </h2>
-          <Badge variant="outline">bez dat</Badge>
-        </div>
-        <p class="text-2xs text-muted-foreground">
-          Zajęcia cykliczne, bez terminów jednorazowych
-        </p>
+        <h2
+          class="inline-block border-b-2 border-primary/70 pb-1 text-lg font-semibold tracking-tight"
+        >
+          Plan
+        </h2>
+        <ViewToggle v-model="view" />
       </CardHeader>
 
       <CardContent class="pt-0">

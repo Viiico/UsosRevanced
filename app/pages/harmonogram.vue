@@ -26,7 +26,7 @@ import {
 useHead({ title: 'Harmonogram' })
 
 const data = useAppData()
-const { semester, termStatus, nowIso } = useGrades()
+const { termStatus, nowIso } = useGrades()
 
 /** Harmonogram zbiera terminy oceniane - wykłady zostają w kalendarzu. */
 const items = computed(() => data.terms.filter((term) => term.nodeId))
@@ -140,18 +140,6 @@ function resetFilters() {
 
 <template>
   <div class="space-y-5">
-    <header class="space-y-2">
-      <div class="flex min-h-10 flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h1 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
-          Harmonogram
-        </h1>
-
-        <div class="flex flex-wrap items-center gap-1.5">
-          <Badge variant="outline">{{ semester.name }} {{ semester.code }}</Badge>
-        </div>
-      </div>
-    </header>
-
     <Card class="flex flex-col">
       <CardHeader class="gap-3 pb-4">
         <div class="flex flex-wrap items-center justify-between gap-3">

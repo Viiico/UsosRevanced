@@ -3,8 +3,6 @@ import { ChevronRight, FlaskConical } from 'lucide-vue-next'
 
 const { crumbs, select, activeSubject, semester, heroMeta } = useGrades()
 
-const heading = computed(() => (activeSubject.value ? activeSubject.value.name : 'Oceny'))
-
 useHead({
   title: () => `Oceny · ${activeSubject.value?.name ?? `semestr ${semester.code}`}`,
 })
@@ -12,11 +10,12 @@ useHead({
 
 <template>
   <div class="space-y-4 sm:space-y-5">
-    <header class="space-y-2">
+    <!-- Nagłówek tylko w przedmiocie i głębiej: na semestrze „Oceny” powtarzałyby zakładkę z navbara. -->
+    <header v-if="activeSubject" class="space-y-2">
       <div class="flex min-h-10 flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <div class="min-w-0">
           <h1 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
-            {{ heading }}
+            {{ activeSubject.name }}
           </h1>
         </div>
 
@@ -35,8 +34,7 @@ useHead({
         </div>
       </div>
 
-      <!-- Okruszki tylko głębiej niż semestr - na samym semestrze nie ma dokąd wracać. -->
-      <div v-if="activeSubject" class="flex h-6 items-center">
+      <div class="flex h-6 items-center">
         <nav
           aria-label="Ścieżka w drzewie ocen"
           class="flex w-full min-w-0 items-center gap-0.5 text-xs"

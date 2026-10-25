@@ -6,7 +6,6 @@ import {
   CalendarRange,
   ChevronRight,
   ClipboardCheck,
-  Database,
   Download,
   FileCheck2,
   Flag,
@@ -513,27 +512,6 @@ function resetData() {
 
 <template>
   <div class="space-y-5">
-    <header class="space-y-2">
-      <div class="flex min-h-10 flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <div class="flex min-w-0 items-center gap-2.5">
-          <span
-            class="grid size-9 shrink-0 place-items-center rounded-lg border border-primary/30 bg-primary/10 text-primary"
-          >
-            <Database class="size-4" />
-          </span>
-          <h1 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">Dane</h1>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-1.5">
-          <Badge variant="outline" class="tnum">v{{ state.version }}</Badge>
-          <Badge variant="secondary">
-            {{ state.subjects.length }} {{ pluralSubjects(state.subjects.length) }}
-          </Badge>
-          <Badge variant="secondary" class="tnum">{{ state.terms.length }} terminów</Badge>
-        </div>
-      </div>
-    </header>
-
     <Card>
       <CardContent class="flex flex-wrap items-center gap-3 p-4">
         <div class="flex flex-wrap items-center gap-2">
