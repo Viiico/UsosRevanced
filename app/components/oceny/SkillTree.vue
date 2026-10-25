@@ -76,7 +76,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-if="children.length" class="relative mt-5 flex flex-col pt-6 lg:h-32">
+      <div v-if="children.length" class="relative mt-3 flex flex-col sm:mt-5 sm:pt-6 lg:h-32">
         <!-- Pień startuje już pod kartą hubu (-top-5 zasypuje margines), inaczej wisiałby w powietrzu. -->
         <div
           class="absolute -top-5 left-1/2 hidden h-11 w-px -translate-x-1/2 bg-border sm:block"

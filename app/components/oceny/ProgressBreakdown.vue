@@ -32,7 +32,7 @@ const scaleRows = computed(() => {
       </div>
     </CardHeader>
 
-    <CardContent class="flex flex-1 flex-col gap-4">
+    <CardContent class="@container flex flex-1 flex-col gap-4">
       <template v-if="segments.length">
         <div class="relative">
           <div class="relative h-3.5 w-full overflow-hidden rounded-full bg-muted">
@@ -55,9 +55,10 @@ const scaleRows = computed(() => {
           </div>
         </div>
 
+        <!-- Dwie kolumny dopiero w szerokiej karcie - obok skilltree karta ma ~1/3 strony i nazwy by znikały. -->
         <ul
-          class="grid gap-x-4 gap-y-1"
-          :class="segments.length > 2 ? 'grid-cols-2' : 'grid-cols-1'"
+          class="grid grid-cols-1 gap-x-4 gap-y-1"
+          :class="segments.length > 2 ? '@[26rem]:grid-cols-2' : undefined"
         >
           <li v-for="seg in segments" :key="seg.id">
             <component
