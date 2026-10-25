@@ -128,6 +128,7 @@ const nextAfterWeek = computed(
 
 interface Slot {
   key: string
+  subjectId: string
   subjectName: string
   subjectNodeId: string
   kind: 'lecture' | 'lab'
@@ -158,6 +159,7 @@ const slots = computed<Slot[]>(() => {
       const subject = data.subjects.find((item) => item.id === term.subjectId)
       entry = {
         key,
+        subjectId: term.subjectId,
         subjectName: subject?.name ?? term.subjectId,
         subjectNodeId: subject?.tree.id ?? '',
         kind: term.kind,
@@ -493,9 +495,18 @@ function pad(hour: number) {
                   :style="positionedStyle(weekLayout.get(day)?.get(term.id), term.start, term.end)"
                   :title="term.title"
                 >
-                  <div class="tnum flex items-center gap-1 text-3xs opacity-80">
-                    <component :is="KIND_ICON[term.kind]" class="size-3 shrink-0" />
-                    {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
+                  <div class="flex items-start justify-between gap-1 text-3xs opacity-80">
+                    <span class="flex min-w-0 flex-1 items-center gap-1">
+                      <component :is="KIND_ICON[term.kind]" class="size-3 shrink-0" />
+                      <span class="tnum min-w-0 truncate">
+                        {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
+                      </span>
+                    </span>
+                    <span
+                      class="shrink-0 rounded border border-border/50 bg-background/30 px-1 text-4xs leading-4"
+                    >
+                      {{ term.subjectId }}
+                    </span>
                   </div>
                   <p class="mt-0.5 line-clamp-2 text-2xs leading-tight font-medium">
                     {{ shortTitle(term) }}
@@ -624,9 +635,16 @@ function pad(hour: number) {
                     )
                   "
                 >
-                  <div class="flex items-center gap-1 text-3xs opacity-80">
-                    <component :is="KIND_ICON[slot.kind]" class="size-3 shrink-0" />
-                    {{ TERM_KIND_LABEL[slot.kind] }}
+                  <div class="flex items-start justify-between gap-1 text-3xs opacity-80">
+                    <span class="flex min-w-0 flex-1 items-center gap-1">
+                      <component :is="KIND_ICON[slot.kind]" class="size-3 shrink-0" />
+                      <span class="min-w-0 truncate">{{ TERM_KIND_LABEL[slot.kind] }}</span>
+                    </span>
+                    <span
+                      class="shrink-0 rounded border border-border/50 bg-background/30 px-1 text-4xs leading-4"
+                    >
+                      {{ slot.subjectId }}
+                    </span>
                   </div>
                   <p class="mt-0.5 line-clamp-2 text-2xs leading-tight font-medium">
                     {{ slot.subjectName }}
