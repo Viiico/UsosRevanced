@@ -1,10 +1,36 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { ChartPie, X } from 'lucide-vue-next'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+} from 'reka-ui'
 import { formatPercent } from '~/lib/format'
 import { segmentColor, segmentWidth } from '~/lib/segments'
 
-const { progress, segments, segmentDenominator, score, select, children, scoringSubject, showScale } =
-  useGrades()
+const {
+  current,
+  progress,
+  segments,
+  segmentDenominator,
+  score,
+  select,
+  children,
+  scoringSubject,
+  showScale,
+} = useGrades()
+
+/** Koło postępu w popupie: klik w pasmo przechodzi do tej oceny w skilltree. */
+const pieOpen = ref(false)
+function openFromPie(id: string) {
+  pieOpen.value = false
+  select(id)
+}
 
 const canDrill = computed(() => children.value.length > 0)
 
@@ -20,8 +46,18 @@ const scaleRows = computed(() => {
 <template>
   <Card class="flex h-full flex-col">
     <CardHeader class="pb-3">
-      <div class="flex items-center justify-center">
+      <div class="relative flex items-center justify-center">
         <span class="text-sm font-semibold tracking-[0.14em] uppercase">Postęp</span>
+        <button
+          v-if="segments.length"
+          type="button"
+          aria-label="Koło postępu"
+          title="Koło postępu"
+          class="absolute right-0 grid size-7 place-items-center rounded-full border border-border/70 text-muted-foreground transition-colors hover:border-primary/45 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+          @click="pieOpen = true"
+        >
+          <ChartPie class="size-3.5" />
+        </button>
       </div>
     </CardHeader>
 
@@ -103,4 +139,32 @@ const scaleRows = computed(() => {
       </div>
     </CardContent>
   </Card>
+
+  <DialogRoot v-model:open="pieOpen">
+    <DialogPortal>
+      <DialogOverlay class="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px]" />
+      <DialogContent
+        class="fixed inset-x-2 top-1/2 z-50 mx-auto flex max-h-[calc(100dvh-2rem)] max-w-xl -translate-y-1/2 flex-col gap-3 overflow-y-auto rounded-xl border border-border/80 bg-card p-4 shadow-xl focus:outline-none sm:p-5"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex min-w-0 items-center gap-2">
+            <ChartPie class="size-4 shrink-0 text-primary" />
+            <DialogTitle class="truncate text-lg font-semibold tracking-tight">
+              {{ current.short || current.name }}
+            </DialogTitle>
+          </div>
+          <DialogClose
+            aria-label="Zamknij"
+            class="grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          >
+            <X class="size-4" />
+          </DialogClose>
+        </div>
+        <DialogDescription class="sr-only">
+          Koło postępu: wycinki to przedmioty i grupy ocen, pasma od środka - pojedyncze oceny.
+        </DialogDescription>
+        <ProgressPie :root="current" @select="openFromPie" />
+      </DialogContent>
+    </DialogPortal>
+  </DialogRoot>
 </template>
