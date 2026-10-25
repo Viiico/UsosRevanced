@@ -27,6 +27,8 @@ const RING = 12
  */
 const GAP = 3.5
 const BAR = 2
+/** Miejsce na pasek oceny na zewnętrznej krawędzi pasma (pasek + po trochu oddechu z obu stron). */
+const BAR_SLOT = 3
 const FULL = Math.PI * 2
 
 interface Shape {
@@ -85,6 +87,17 @@ function sector(a0: number, a1: number, r0: number, r1: number) {
     `A ${r0} ${r0} 0 ${large} 0 ${point(a0, r0)}`,
     'Z',
   ].join(' ')
+}
+
+/**
+ * Pasek postępu wzdłuż łuku: z małym wcięciem na końcach (stała szerokość, nie kąt), żeby
+ * paski sąsiednich wycinków się nie zlewały - także przy krótkich łukach blisko środka.
+ */
+function barSector(a0: number, a1: number, rIn: number, ratio: number) {
+  const inset = 0.8 / (rIn + BAR / 2)
+  const start = a0 + inset
+  const end = Math.max(start, a1 - inset)
+  return sector(start, start + (end - start) * ratio, rIn, rIn + BAR)
 }
 
 /** Podpis styczny do łuku, zawsze czytelny (na dole koła obrócony o 180°); pomijany, gdy się nie mieści. */
@@ -190,9 +203,12 @@ const drawing = computed(() => {
     const children = node.children ?? []
 
     if (!children.length) {
+      // Pasmo kończy się przed zewnętrzną krawędzią - w odstępie leży jego pasek (tor + wypełnienie),
+      // tak jak przy pierścieniach grup i przedmiotów; nie nachodzi już na sąsiednie pasmo.
+      const bandOut = r1 - BAR_SLOT
       bands.push({
         id: node.id,
-        path: sector(a0, a1, r0, r1),
+        path: sector(a0, a1, r0, bandOut),
         color: colorOf(node),
         opacity: bandOpacity(node),
         kind: 'band',
@@ -201,21 +217,17 @@ const drawing = computed(() => {
       })
       // Wąskie pasma przy środku dostają mniejszą czcionkę, zanim podpis zostanie pominięty.
       const text = [5, 4, 3.6]
-        .map((size) => bandLabel(`b-${node.id}`, bandText(node), a0, a1, r0, r1, size))
+        .map((size) => bandLabel(`b-${node.id}`, bandText(node), a0, a1, r0, bandOut, size))
         .find(Boolean)
       if (text) labels.push(text)
-      // Pasek oceny na zewnętrznej krawędzi pasma - w miejscu separatora.
-      const ratio = earnedRatio(node)
-      if (ratio)
-        bars.push({
-          id: node.id,
-          path: sector(a0, a0 + (a1 - a0) * ratio, r1 - BAR, r1),
-          color: colorOf(node),
-          opacity: 1,
-          kind: 'progress',
-          trail,
-          node,
-        })
+      if (node.points?.max) {
+        const barIn = bandOut + (BAR_SLOT - BAR) / 2
+        const shared = { id: node.id, color: colorOf(node), trail, node }
+        bars.push({ ...shared, path: barSector(a0, a1, barIn, 1), opacity: 0.18, kind: 'track' })
+        const ratio = earnedRatio(node)
+        if (ratio)
+          bars.push({ ...shared, path: barSector(a0, a1, barIn, ratio), opacity: 1, kind: 'progress' })
+      }
       return
     }
 
@@ -273,12 +285,12 @@ const drawing = computed(() => {
       )
       if (text) labels.push(text)
       const shared = { id: child.id, color: colorOf(child), trail: childTrail, node: child }
-      bars.push({ ...shared, path: sector(angle, angle + span, barIn, barIn + BAR), opacity: 0.18, kind: 'track' })
+      bars.push({ ...shared, path: barSector(angle, angle + span, barIn, 1), opacity: 0.18, kind: 'track' })
       const ratio = earnedRatio(child)
       if (ratio)
         bars.push({
           ...shared,
-          path: sector(angle, angle + span * ratio, barIn, barIn + BAR),
+          path: barSector(angle, angle + span, barIn, ratio),
           opacity: 1,
           kind: 'progress',
         })
