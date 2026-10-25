@@ -13,7 +13,7 @@ import {
 import type { Term, TermKind } from '~/types'
 import { findNode } from '~/lib/tree'
 import { TERM_KIND_LABEL } from '~/lib/node-meta'
-import { dayOfMonth, daysBetween, formatDate, formatWeekday } from '~/lib/format'
+import { dayOfMonth, daysBetween, formatDate, formatWeekday, termsLabel } from '~/lib/format'
 
 useHead({ title: 'Kalendarz' })
 
@@ -122,7 +122,6 @@ interface Slot {
   key: string
   subjectId: string
   subjectName: string
-  subjectNodeId: string
   kind: 'lecture' | 'lab'
   weekday: number
   start: string
@@ -137,7 +136,7 @@ function cadenceOf(dates: string[]): string {
   const middle = [...diffs].sort((a, b) => a - b)[Math.floor(diffs.length / 2)]
   if (middle === 7) return 'co tydzień'
   if (middle === 14) return 'co 2 tygodnie'
-  return `${dates.length} terminów`
+  return `${dates.length} ${termsLabel(dates.length)}`
 }
 
 const slots = computed<Slot[]>(() => {
@@ -153,7 +152,6 @@ const slots = computed<Slot[]>(() => {
         key,
         subjectId: term.subjectId,
         subjectName: subject?.name ?? term.subjectId,
-        subjectNodeId: subject?.tree.id ?? '',
         kind: term.kind,
         weekday: isoDay(term.date),
         start: term.start,
@@ -206,12 +204,22 @@ function shortTitle(term: Term) {
   return node?.short || term.title
 }
 
-function nodeLink(term: Term) {
-  return { path: '/oceny', query: term.nodeId ? { node: term.nodeId } : {} }
+/**
+ * Kliknięcie prowadzi do harmonogramu: termin oceniany - wprost do niego, wykład (nie ma go
+ * w harmonogramie) - do terminów tego przedmiotu.
+ */
+function termLink(term: Term) {
+  return {
+    path: '/harmonogram',
+    query: term.nodeId ? { term: term.id } : { subject: term.subjectId },
+  }
 }
 
 function slotLink(slot: Slot) {
-  return { path: '/oceny', query: slot.subjectNodeId ? { node: slot.subjectNodeId } : {} }
+  return {
+    path: '/harmonogram',
+    query: { subject: slot.subjectId, ...(slot.kind === 'lab' ? { group: 'lab' } : {}) },
+  }
 }
 
 function slotsFor(weekday: number) {
@@ -397,7 +405,7 @@ function pad(hour: number) {
                 <NuxtLink
                   v-for="term in deadlinesForDay(day)"
                   :key="term.id"
-                  :to="nodeLink(term)"
+                  :to="termLink(term)"
                   class="mb-1 block truncate rounded border border-accent/40 bg-accent/10 px-1.5 py-1 text-3xs transition-colors hover:bg-accent/15"
                   :title="term.title"
                 >
@@ -435,7 +443,7 @@ function pad(hour: number) {
                 <NuxtLink
                   v-for="term in timedForDay(day)"
                   :key="term.id"
-                  :to="nodeLink(term)"
+                  :to="termLink(term)"
                   class="absolute overflow-hidden rounded-lg border px-1.5 py-1 transition-colors"
                   :class="KIND_STYLE[term.kind].block"
                   :style="positionedStyle(weekLayout.get(day)?.get(term.id), term.start, term.end)"
@@ -494,7 +502,7 @@ function pad(hour: number) {
           <NuxtLink
             v-for="term in weekendTerms"
             :key="term.id"
-            :to="nodeLink(term)"
+            :to="termLink(term)"
             class="inline-flex items-center gap-1 rounded-md border border-border/70 px-1.5 py-1 text-3xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
             <Flag class="size-3" />

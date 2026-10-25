@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import {
   ArrowRight,
   BookOpen,
@@ -21,6 +21,7 @@ import {
   monthLabel,
   monthShort,
   relativeDays,
+  termsLabel,
 } from '~/lib/format'
 
 useHead({ title: 'Harmonogram' })
@@ -103,14 +104,6 @@ function byDate(a: Term, b: Term) {
   return `${a.date}${a.start ?? ''}`.localeCompare(`${b.date}${b.start ?? ''}`)
 }
 
-function termsLabel(count: number) {
-  const mod10 = count % 10
-  const mod100 = count % 100
-  if (count === 1) return 'termin'
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'terminy'
-  return 'terminów'
-}
-
 function subjectOf(term: Term) {
   return data.subjects.find((subject) => subject.id === term.subjectId) ?? null
 }
@@ -121,10 +114,35 @@ function isToday(term: Term) {
 
 /** Kolor ramki: „dziś” złote, „po terminie” delikatnie czerwone - jedyny stan, który wymaga reakcji. */
 function cardTone(term: Term) {
+  if (focusedTermId.value === term.id) return 'border-primary/70 ring-2 ring-primary/40'
   if (isToday(term)) return 'border-primary/40 ring-1 ring-primary/25 hover:border-primary/60'
   if (termStatus(term) === 'overdue') return 'border-danger/35 hover:border-danger/55'
   return 'border-border/70 hover:border-primary/40'
 }
+
+/**
+ * Wejście z kalendarza: `?term=` przewija do terminu i na chwilę go podświetla,
+ * `?subject=` / `?group=` ustawiają filtry.
+ */
+const route = useRoute()
+const focusedTermId = ref<string | null>(null)
+
+onMounted(async () => {
+  const { subject, group, term: termId } = route.query
+  if (typeof subject === 'string') subjectFilter.value = subject
+  if (typeof group === 'string') groupFilter.value = group
+  if (typeof termId !== 'string') return
+
+  const term = items.value.find((item) => item.id === termId)
+  if (!term) return
+  if (termStatus(term) === 'done') showDone.value = true
+  focusedTermId.value = term.id
+  await nextTick()
+  document.getElementById(`term-${term.id}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  setTimeout(() => {
+    if (focusedTermId.value === term.id) focusedTermId.value = null
+  }, 2500)
+})
 
 function nodeLink(term: Term) {
   return { path: '/oceny', query: term.nodeId ? { node: term.nodeId } : {} }
@@ -246,6 +264,7 @@ function resetFilters() {
 
               <li
                 v-for="term in group.terms"
+                :id="`term-${term.id}`"
                 :key="term.id"
                 class="relative grid grid-cols-[2.75rem_minmax(0,1fr)] items-start gap-6"
               >
