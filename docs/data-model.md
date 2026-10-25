@@ -34,6 +34,7 @@
     "id": "sem-26z", "code": "26Z", "name": "Semestr zimowy",
     "academicYear": "2026/2027",
     "startsAt": "2026-10-05", "endsAt": "2027-02-12",
+    "ectsTotal": 30,
     "weeks": [
       { "no": 1, "from": "2026-10-05", "to": "2026-10-11", "kind": "teaching" },
       { "from": "2026-12-28", "to": "2027-01-10", "kind": "break" },
@@ -89,6 +90,7 @@
 | `attempt` | `1` podstawowy, `2` poprawka; ten sam `nodeId` |
 | `progress` | tylko liście; **brak wpisu = nieocenione**, `earned: 0` = zero |
 | `progress[].earned` | nie przekracza `max`; kategorie liczone z liści |
+| `semester.ectsTotal` | pula ECTS semestru; mianownik totalnego postępu (5 ECTS = 5/30) |
 | `meta.source: "demo"` | dawne `demoData`; UI pokazuje plakietkę |
 | `policyNotes` | tekst sylabusa do wyświetlania, nie źródło progów |
 
@@ -140,7 +142,8 @@ Model mapuje się 1:1; ID z prefiksami są dobrymi kluczami tekstowymi:
 ```sql
 CREATE TABLE semester (
   id TEXT PRIMARY KEY, code TEXT, name TEXT, academic_year TEXT,
-  starts_at TEXT, ends_at TEXT, weeks_json TEXT, overrides_json TEXT
+  starts_at TEXT, ends_at TEXT, ects_total REAL,
+  weeks_json TEXT, overrides_json TEXT
 );
 
 CREATE TABLE grade_scale (id TEXT PRIMARY KEY, passing REAL);

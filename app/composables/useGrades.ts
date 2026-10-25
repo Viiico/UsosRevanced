@@ -50,7 +50,17 @@ export function useGrades() {
 
   const children = computed<GradeNode[]>(() => current.value.children ?? [])
 
-  const progress = computed<NodeProgress>(() => computeProgress(current.value))
+  const progress = computed<NodeProgress>(() => {
+    const base = computeProgress(current.value)
+    // Totalny postęp semestru: procenty przedmiotów przeskalowane przez ECTS
+    // względem puli semestru (5 ECTS z 30 = 1/6), a nie sumy wpisanych ECTS.
+    if (current.value.id !== root.value.id || !data.semester.ectsTotal) return base
+    const weighted = data.subjects.reduce(
+      (sum, subject) => sum + subject.policy.ects * computeProgress(subject.tree).ratio,
+      0,
+    )
+    return { ...base, ratio: weighted / data.semester.ectsTotal }
+  })
 
   const segments = computed<ProgressSegment[]>(() => {
     const all = children.value
@@ -86,6 +96,13 @@ export function useGrades() {
         colorIndex: index,
       }
     })
+  })
+
+  const segmentDenominator = computed(() => {
+    // W semestrze mianownikiem jest pula ECTS (30), nie suma wpisanych
+    // przedmiotów (25) - inaczej pasek pokazywałby 100% przy brakujących 5 ECTS.
+    if (current.value.id === root.value.id) return data.semester.ectsTotal || 1
+    return segments.value.reduce((sum, segment) => sum + segment.weight, 0) || 1
   })
 
   const activeSubject = computed(
@@ -172,6 +189,7 @@ export function useGrades() {
     children,
     progress,
     segments,
+    segmentDenominator,
     activeSubject,
     scoringSubject,
     requirements,

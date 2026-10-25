@@ -104,6 +104,12 @@ type V1Document = {
 const inputPath = resolve(process.argv[2] ?? '.tmp/base.v1.json')
 const outputPath = resolve(process.argv[3] ?? 'app/data/base.json')
 
+/**
+ * Pula ECTS semestru 26Z. v1 nie miał tego pola, a totalny postęp ma być
+ * liczony właśnie względem niej (przedmiot 5 ECTS = 5/30).
+ */
+const SEMESTER_ECTS_TOTAL = 30
+
 const v1 = JSON.parse(await readFile(inputPath, 'utf8')) as V1Document
 
 const DAY = 86_400_000
@@ -453,6 +459,7 @@ const document: BaseDocument = {
   },
   semester: {
     ...v1.semester,
+    ectsTotal: SEMESTER_ECTS_TOTAL,
     weeks,
     dayOverrides: [],
   },

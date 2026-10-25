@@ -109,6 +109,10 @@ węzeł z dziećmi: Σ(waga_dziecka × postęp_dziecka) / Σ(waga_dziecka)   // 
 Waga to zwykle liczba punktów, więc procent postępu = zdobyte punkty / punkty możliwe.
 Węzeł z wagą `0` (np. etap organizacyjny projektu) nie zaburza wyniku.
 
+Postęp totalny semestru nie używa sumy punktów: każdy przedmiot wnosi
+`procent × ECTS / semester.ectsTotal` (5 ECTS z puli 30 = 1/6 wagi). Dzięki temu
+pasek nie pokazuje 100%, gdy część puli ECTS nie ma jeszcze wpisanych przedmiotów.
+
 ## Dane przedmiotu „Technika Obrazowa”
 
 Źródła: `TO_00_info.pdf` (warunki zaliczenia, terminy laboratoriów, grupy) oraz

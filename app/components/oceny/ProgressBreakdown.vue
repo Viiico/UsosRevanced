@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { formatPercent } from '~/lib/format'
-import { segmentColor, segmentWidth, weightSumOf } from '~/lib/segments'
+import { segmentColor, segmentWidth } from '~/lib/segments'
 
-const { progress, segments, score, select, children, scoringSubject, showScale } = useGrades()
+const { progress, segments, segmentDenominator, score, select, children, scoringSubject, showScale } =
+  useGrades()
 
 const canDrill = computed(() => children.value.length > 0)
 const ratio = computed(() => progress.value.ratio)
-
-const weightSum = computed(() => weightSumOf(segments.value))
 
 const scaleRows = computed(() => {
   const subject = scoringSubject.value
@@ -30,10 +29,6 @@ const scaleRows = computed(() => {
         <div class="tnum text-4xl leading-none font-semibold tracking-tight">
           {{ formatPercent(ratio) }}
         </div>
-        <div class="tnum pb-1 text-base">
-          <span class="font-semibold">{{ progress.earned }}</span>
-          <span class="text-muted-foreground">/ {{ progress.max }} pkt</span>
-        </div>
       </div>
     </CardHeader>
 
@@ -47,7 +42,7 @@ const scaleRows = computed(() => {
                 :key="seg.id"
                 class="h-full shrink-0 transition-[width] duration-700 ease-out"
                 :style="{
-                  width: segmentWidth(seg, weightSum),
+                  width: segmentWidth(seg, segmentDenominator),
                   backgroundColor: segmentColor(seg.colorIndex),
                 }"
                 :title="`${seg.label}: ${formatPercent(seg.ratio)} (${seg.earned}/${seg.max} pkt)`"
