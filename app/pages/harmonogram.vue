@@ -5,7 +5,6 @@ import {
   BookOpen,
   CalendarClock,
   CalendarX2,
-  Check,
   Lock,
   RotateCcw,
 } from 'lucide-vue-next'
@@ -44,6 +43,7 @@ const STATUS_DOT: Record<TermStatus, string> = {
 const subjectFilter = ref('all')
 const groupFilter = ref('all')
 const onlyActionable = ref(false)
+const hideDone = useHideDoneTerms()
 
 const today = computed(() => nowIso.value.slice(0, 10))
 
@@ -63,6 +63,7 @@ const visible = computed(() =>
   items.value
     .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
     .filter((term) => groupFilter.value === 'all' || TERM_GROUP[term.kind] === groupFilter.value)
+    .filter((term) => !hideDone.value || termStatus(term) !== 'done')
     .filter(
       (term) => !onlyActionable.value || (term.canBeDoneBefore && termStatus(term) === 'upcoming'),
     )
@@ -124,6 +125,7 @@ function resetFilters() {
   subjectFilter.value = 'all'
   groupFilter.value = 'all'
   onlyActionable.value = false
+  hideDone.value = false
 }
 </script>
 
@@ -207,30 +209,10 @@ function resetFilters() {
             <template v-if="stats.overdue"> · {{ stats.overdue }} po terminie</template>
           </p>
 
-          <button
-            type="button"
-            role="switch"
-            :aria-checked="onlyActionable"
-            class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
-            :class="
-              onlyActionable
-                ? 'border-primary/45 bg-primary/12 text-primary'
-                : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
-            "
-            @click="onlyActionable = !onlyActionable"
-          >
-            <span
-              class="grid size-3.5 place-items-center rounded-[4px] border transition-colors"
-              :class="
-                onlyActionable
-                  ? 'border-primary/60 bg-primary/25 text-primary'
-                  : 'border-border text-transparent'
-              "
-            >
-              <Check class="size-2.5" />
-            </span>
-            Tylko do zrobienia teraz
-          </button>
+          <div class="flex flex-wrap gap-1.5">
+            <SwitchChip v-model="hideDone">Ukryj zrobione</SwitchChip>
+            <SwitchChip v-model="onlyActionable">Tylko do zrobienia teraz</SwitchChip>
+          </div>
         </div>
       </CardHeader>
 
@@ -243,7 +225,7 @@ function resetFilters() {
           <div class="space-y-1">
             <p class="text-sm font-medium">Brak terminów w tym widoku</p>
             <p class="text-2xs text-muted-foreground">
-              Zmień filtr rodzaju zajęć albo wyłącz „tylko do zrobienia teraz”.
+              Zmień filtr rodzaju zajęć albo wyłącz przełączniki „ukryj zrobione” i „tylko do zrobienia teraz”.
             </p>
           </div>
           <Button variant="outline" size="sm" class="gap-1.5" @click="resetFilters">

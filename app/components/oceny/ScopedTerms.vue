@@ -10,7 +10,8 @@ import {
 } from '~/lib/node-meta'
 import { dayOfMonth, formatWeekday, monthShort, relativeDays } from '~/lib/format'
 
-const { scopedTerms, nowIso } = useGrades()
+const { scopedTerms, termStatus, nowIso } = useGrades()
+const hideDone = useHideDoneTerms()
 
 /** Filtry wynikają z danych: pojawiają się tylko grupy obecne w zakresie. */
 const filter = ref('all')
@@ -28,9 +29,9 @@ const filters = computed(() => {
 })
 
 const visibleTerms = computed(() =>
-  filter.value === 'all'
-    ? scopedTerms.value
-    : scopedTerms.value.filter((term) => TERM_GROUP[term.kind] === filter.value),
+  scopedTerms.value
+    .filter((term) => filter.value === 'all' || TERM_GROUP[term.kind] === filter.value)
+    .filter((term) => !hideDone.value || termStatus(term) !== 'done'),
 )
 
 /** Ten sam kierunek co w głównym harmonogramie: termin -> jego węzeł ocen. */
@@ -48,7 +49,7 @@ function nodeLink(term: Term) {
         Harmonogram
       </h2>
 
-      <div class="flex flex-wrap gap-1.5">
+      <div class="flex flex-wrap items-center gap-1.5">
         <button
           v-for="item in filters"
           :key="item.id"
@@ -64,6 +65,8 @@ function nodeLink(term: Term) {
           {{ item.label }}
           <span class="tnum opacity-60">{{ item.count }}</span>
         </button>
+
+        <SwitchChip v-model="hideDone" class="ml-auto">Ukryj zrobione</SwitchChip>
       </div>
     </CardHeader>
 
