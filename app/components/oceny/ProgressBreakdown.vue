@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { formatPercent } from '~/lib/format'
 import { segmentColor, segmentWidth } from '~/lib/segments'
 
-const { segments, segmentDenominator, score, select, children, scoringSubject, showScale } =
+const { progress, segments, segmentDenominator, score, select, children, scoringSubject, showScale } =
   useGrades()
 
 const canDrill = computed(() => children.value.length > 0)
@@ -42,8 +42,11 @@ const scaleRows = computed(() => {
               />
             </div>
           </div>
-          <div class="mt-1.5 flex justify-between text-3xs text-muted-foreground">
-            <span>0%</span>
+          <div class="mt-1.5 flex items-baseline justify-between text-3xs text-muted-foreground">
+            <!-- Łączny wynik zamiast stałego „0%”; 100% zostaje jako punkt odniesienia. -->
+            <span class="tnum text-xs font-semibold text-foreground">
+              {{ formatPercent(progress.ratio) }}
+            </span>
             <span>100%</span>
           </div>
         </div>
