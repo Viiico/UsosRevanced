@@ -31,7 +31,6 @@ const HOUR_HEIGHT = 44
 const HOURS = Array.from({ length: DAY_END - DAY_START + 1 }, (_, index) => DAY_START + index)
 const GRID_HEIGHT = (DAY_END - DAY_START) * HOUR_HEIGHT
 const COMPACT_DAYS = ['pon', 'wt', 'śr', 'czw', 'pt']
-const LEGEND: TermKind[] = ['lecture', 'lab', 'colloquium', 'project-stage']
 
 const KIND_ICON: Record<TermKind, Component> = {
   lecture: BookOpen,
@@ -41,26 +40,21 @@ const KIND_ICON: Record<TermKind, Component> = {
   'project-deadline': Flag,
 }
 
-const KIND_STYLE: Record<TermKind, { block: string; dot: string }> = {
+const KIND_STYLE: Record<TermKind, { block: string }> = {
   lecture: {
     block: 'border-border/70 bg-secondary/40 hover:bg-secondary/60',
-    dot: 'bg-muted-foreground/60',
   },
   lab: {
     block: 'border-primary/35 bg-primary/10 hover:bg-primary/15',
-    dot: 'bg-primary',
   },
   colloquium: {
     block: 'border-danger/35 bg-danger/10 hover:bg-danger/15',
-    dot: 'bg-danger',
   },
   'project-stage': {
     block: 'border-accent/40 bg-accent/10 hover:bg-accent/15',
-    dot: 'bg-accent',
   },
   'project-deadline': {
     block: 'border-accent/40 bg-accent/10 hover:bg-accent/15',
-    dot: 'bg-accent',
   },
 }
 
@@ -555,15 +549,6 @@ function pad(hour: number) {
             {{ formatWeekday(term.date) }} {{ formatDate(term.date) }} · {{ shortTitle(term) }}
           </NuxtLink>
         </div>
-
-        <div
-          class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-3 text-3xs text-muted-foreground"
-        >
-          <span v-for="kind in LEGEND" :key="kind" class="inline-flex items-center gap-1">
-            <span class="size-1.5 rounded-full" :class="KIND_STYLE[kind].dot" />
-            {{ TERM_KIND_LABEL[kind] }}
-          </span>
-        </div>
       </CardContent>
     </Card>
 
@@ -659,15 +644,6 @@ function pad(hour: number) {
               </div>
             </div>
           </div>
-        </div>
-
-        <div
-          class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-3 text-3xs text-muted-foreground"
-        >
-          <span v-for="kind in LEGEND" :key="kind" class="inline-flex items-center gap-1">
-            <span class="size-1.5 rounded-full" :class="KIND_STYLE[kind].dot" />
-            {{ TERM_KIND_LABEL[kind] }}
-          </span>
         </div>
       </CardContent>
     </Card>
