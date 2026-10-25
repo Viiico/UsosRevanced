@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { ArrowLeft, ArrowUpRight } from 'lucide-vue-next'
+import { ArrowUp, ArrowUpRight } from 'lucide-vue-next'
 import { termsForNode } from '~/lib/requirements'
 import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
 import { formatDate, formatWeekday } from '~/lib/format'
@@ -70,52 +70,54 @@ const gridColumns = computed(() => {
 
 <template>
   <Card class="flex h-full flex-col">
-    <CardHeader class="min-h-[3.25rem] flex-row items-center justify-between gap-3 pb-0">
-      <div class="flex items-center gap-2">
-        <span class="eyebrow">Skilltree</span>
-        <Separator orientation="vertical" class="h-3" />
-        <span class="text-2xs text-muted-foreground">{{ kindLabel }}</span>
-      </div>
-      <Button v-if="canGoUp" variant="outline" size="sm" class="gap-1.5" @click="goUp">
-        <ArrowLeft class="size-3.5" />
-        Poziom wyżej
-      </Button>
-    </CardHeader>
+    <CardContent class="flex flex-1 flex-col pt-5">
+      <div class="relative">
+        <!-- Poziom widać w hubie, więc nagłówek karty odpadł; powrót to mały guzik na jego górnej krawędzi. -->
+        <button
+          v-if="canGoUp"
+          type="button"
+          aria-label="Poziom wyżej"
+          title="Poziom wyżej"
+          class="absolute -top-3.5 left-1/2 z-10 grid size-7 -translate-x-1/2 place-items-center rounded-full border border-primary/35 bg-card text-primary/80 shadow-sm transition-colors hover:border-primary/60 hover:bg-secondary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+          @click="goUp"
+        >
+          <ArrowUp class="size-3.5" />
+        </button>
 
-    <CardContent class="flex flex-1 flex-col pt-3">
-      <div
-        class="relative overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/12 via-primary/[0.04] to-transparent p-4"
-      >
-        <div class="flex items-start justify-between gap-4">
-          <div class="min-w-0 flex-1">
-            <div class="flex h-5 items-center gap-2">
-              <component :is="icon" class="size-4 shrink-0 text-primary" />
-              <span class="eyebrow text-primary/80">{{ kindLabel }}</span>
-              <InfoHint v-if="infoText" :text="infoText" />
+        <div
+          class="relative overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/12 via-primary/[0.04] to-transparent p-4"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0 flex-1">
+              <div class="flex h-5 items-center gap-2">
+                <component :is="icon" class="size-4 shrink-0 text-primary" />
+                <span class="eyebrow text-primary/80">{{ kindLabel }}</span>
+                <InfoHint v-if="infoText" :text="infoText" />
+              </div>
+
+              <h2
+                class="mt-1.5 h-7 truncate text-lg leading-7 font-semibold tracking-tight sm:text-xl"
+                :title="current.name"
+              >
+                {{ current.name }}
+              </h2>
+
+              <p
+                v-if="current.description"
+                class="mt-1 h-5 truncate text-sm leading-5 text-muted-foreground"
+                :title="current.description"
+              >
+                {{ current.description }}
+              </p>
             </div>
 
-            <h2
-              class="mt-1.5 h-7 truncate text-lg leading-7 font-semibold tracking-tight sm:text-xl"
-              :title="current.name"
-            >
-              {{ current.name }}
-            </h2>
-
-            <p
-              v-if="current.description"
-              class="mt-1 h-5 truncate text-sm leading-5 text-muted-foreground"
-              :title="current.description"
-            >
-              {{ current.description }}
-            </p>
-          </div>
-
-          <div v-if="hasPoints" class="shrink-0 text-right">
-            <div class="tnum text-2xl leading-none font-semibold">
-              {{ progress.earned
-              }}<span class="text-base font-normal text-muted-foreground">/{{ progress.max }}</span>
+            <div v-if="hasPoints" class="shrink-0 text-right">
+              <div class="tnum text-2xl leading-none font-semibold">
+                {{ progress.earned
+                }}<span class="text-base font-normal text-muted-foreground">/{{ progress.max }}</span>
+              </div>
+              <div class="eyebrow mt-1.5">punktów</div>
             </div>
-            <div class="eyebrow mt-1.5">punktów</div>
           </div>
         </div>
       </div>
