@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import {
   BookOpen,
   Braces,
@@ -17,7 +17,17 @@ import {
   RotateCcw,
   Trash2,
   Upload,
+  X,
 } from 'lucide-vue-next'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+} from 'reka-ui'
 import type { GradeNode, GradeScaleRow, Subject } from '~/types'
 import { useAppData, cloneData, downloadAppData } from '~/composables/useAppData'
 import { normalizeData, normalizeSubject } from '~/lib/normalize'
@@ -50,12 +60,30 @@ function clone<T>(value: T): T {
 }
 
 const state = useAppData()
-const json = computed(() => JSON.stringify(state, null, 2))
+/**
+ * Podgląd JSON: domyślnie tylko zaznaczony element (przedmiot, grupa, ocena) - cały dokument
+ * ma ~2500 linii i trudno w nim znaleźć to, co się edytuje. „Całość” zostaje na żądanie.
+ */
+const jsonScope = ref<'element' | 'all'>('element')
+const json = computed(() => {
+  if (jsonScope.value === 'all') return JSON.stringify(state, null, 2)
+  const row = selectedRow.value
+  const entity =
+    row?.kind === 'semester' ? state.semester : row?.kind === 'subject' ? row.subject : row?.node
+  return JSON.stringify(entity ?? state, null, 2)
+})
 const jsonRows = computed(() => json.value.split('\n'))
 const jsonLines = computed(() => jsonRows.value.length)
 
-/** Podgląd JSON podąża za edytowanym polem: podświetla i przewija właściwą linię. */
-const jsonScroll = ref<HTMLElement | null>(null)
+/** Panel JSON obok edytora (od lg) albo popup (telefon/tablet) - jeden guzik w pasku narzędzi. */
+const jsonPanelOpen = ref(true)
+const jsonDialogOpen = ref(false)
+function toggleJson() {
+  if (window.matchMedia('(min-width: 1024px)').matches) jsonPanelOpen.value = !jsonPanelOpen.value
+  else jsonDialogOpen.value = true
+}
+
+/** Podgląd JSON podąża za edytowanym polem: podświetla właściwą linię (JsonView sam do niej przewija). */
 const activeLine = ref(0)
 const confirmKey = ref<string | null>(null)
 
@@ -86,19 +114,8 @@ function entityStartLine() {
   return id ? locateLine(`"id": ${JSON.stringify(id)}`) : 0
 }
 
-async function scrollToLine() {
-  await nextTick()
-  const container = jsonScroll.value
-  if (!container) return
-  const target = container.querySelector<HTMLElement>(`[data-line="${activeLine.value}"]`)
-  if (!target) return
-  const top = target.offsetTop - container.clientHeight / 2 + target.clientHeight / 2
-  container.scrollTop = Math.max(0, top)
-}
-
 function focusJson(key: string, value: unknown, from = entityStartLine()) {
   activeLine.value = locateLine(needleFor(key, value), from)
-  void scrollToLine()
 }
 
 function pluralSubjects(count: number) {
@@ -174,10 +191,9 @@ const selectedRow = computed(() => findRow(tree.value, selectedKey.value) ?? tre
 const activeSubject = computed(() => selectedRow.value?.subject ?? null)
 const activeNode = computed(() => selectedRow.value?.node ?? null)
 
-watch(selectedKey, () => {
+watch([selectedKey, jsonScope], () => {
   confirmKey.value = null
   activeLine.value = entityStartLine()
-  void scrollToLine()
 })
 
 function toggle(key: string) {
@@ -527,6 +543,15 @@ function resetData() {
             <RotateCcw class="size-3.5" />
             Dane demo
           </Button>
+          <Button
+            variant="outline"
+            class="gap-1.5"
+            :class="jsonPanelOpen ? 'lg:border-primary/45 lg:text-primary' : undefined"
+            @click="toggleJson"
+          >
+            <Braces class="size-3.5" />
+            JSON
+          </Button>
         </div>
 
         <p class="min-w-0 flex-1 text-2xs text-muted-foreground">
@@ -552,33 +577,10 @@ function resetData() {
       </CardContent>
     </Card>
 
-    <div class="grid items-start gap-4 lg:grid-cols-2">
-      <Card class="flex flex-col">
-        <CardHeader class="flex-row items-center justify-between gap-3 pb-3">
-          <div class="flex items-center gap-2">
-            <Braces class="size-4 text-primary" />
-            <h2 class="text-lg font-semibold tracking-tight">JSON</h2>
-          </div>
-          <span class="tnum text-3xs text-muted-foreground">{{ jsonLines }} linii</span>
-        </CardHeader>
-
-        <CardContent class="pt-0">
-          <div
-            ref="jsonScroll"
-            class="relative max-h-[70vh] overflow-auto rounded-lg border border-border/70 bg-secondary/20 py-2"
-          >
-            <div class="font-mono text-3xs leading-relaxed whitespace-pre">
-              <div
-                v-for="(line, index) in jsonRows"
-                :key="index"
-                :data-line="index"
-                class="px-3"
-                :class="index === activeLine ? 'bg-primary/10' : undefined"
-              >{{ line || ' ' }}</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+    <div
+      class="grid grid-cols-1 items-start gap-4"
+      :class="jsonPanelOpen ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]' : undefined"
+    >
 
       <Card class="flex flex-col">
         <CardHeader class="pb-3">
@@ -989,6 +991,47 @@ function resetData() {
           </div>
         </CardContent>
       </Card>
+
+      <!-- Podgląd JSON: od lg obok edytora (chowany guzikiem JSON), niżej w popupie. -->
+      <Card v-if="jsonPanelOpen" class="sticky top-20 hidden min-w-0 flex-col lg:flex">
+        <CardHeader class="flex-row items-center justify-between gap-3 pb-3">
+          <div class="flex items-center gap-2">
+            <Braces class="size-4 text-primary" />
+            <h2 class="text-lg font-semibold tracking-tight">JSON</h2>
+            <span class="tnum text-3xs text-muted-foreground">{{ jsonLines }} linii</span>
+          </div>
+          <JsonScopeToggle v-model="jsonScope" />
+        </CardHeader>
+        <CardContent class="pt-0">
+          <JsonView :rows="jsonRows" :active-line="activeLine" class="max-h-[70vh]" />
+        </CardContent>
+      </Card>
     </div>
+
+    <DialogRoot v-model:open="jsonDialogOpen">
+      <DialogPortal>
+        <DialogOverlay class="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px]" />
+        <DialogContent
+          class="fixed inset-x-2 top-4 bottom-4 z-50 mx-auto flex max-w-3xl flex-col gap-3 rounded-xl border border-border/80 bg-card p-4 shadow-xl focus:outline-none"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <Braces class="size-4 text-primary" />
+              <DialogTitle class="text-lg font-semibold tracking-tight">JSON</DialogTitle>
+              <span class="tnum text-3xs text-muted-foreground">{{ jsonLines }} linii</span>
+            </div>
+            <DialogClose
+              aria-label="Zamknij"
+              class="grid size-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            >
+              <X class="size-4" />
+            </DialogClose>
+          </div>
+          <DialogDescription class="sr-only">Podgląd danych w formacie JSON.</DialogDescription>
+          <JsonScopeToggle v-model="jsonScope" class="self-start" />
+          <JsonView :rows="jsonRows" :active-line="activeLine" class="flex-1" />
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
   </div>
 </template>
