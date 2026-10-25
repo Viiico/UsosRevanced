@@ -5,6 +5,8 @@ import { evaluateRequirements, gradeForPoints, termsForNode } from '~/lib/requir
 export interface ProgressSegment {
   id: string
   label: string
+  /** Kod przedmiotu (np. „TO”) - zastępuje nazwę, gdy brakuje na nią miejsca. */
+  code: string | null
   ratio: number
   weight: number
   earned: number
@@ -65,6 +67,11 @@ export function useGrades() {
     return { ...base, ratio: weighted / totalEcts }
   })
 
+  /** Kod tylko dla węzła-korzenia przedmiotu; głębsze węzły mają własne `short`. */
+  function subjectCode(node: GradeNode): string | null {
+    return data.subjects.find((subject) => subject.tree.id === node.id)?.code || null
+  }
+
   const segments = computed<ProgressSegment[]>(() => {
     const all = children.value
     const kids = all
@@ -79,6 +86,7 @@ export function useGrades() {
         {
           id: current.value.id,
           label: current.value.short || current.value.name,
+          code: subjectCode(current.value),
           ratio: single.ratio,
           weight: 1,
           earned: single.earned,
@@ -92,6 +100,7 @@ export function useGrades() {
       return {
         id: child.id,
         label: child.short || child.name,
+        code: subjectCode(child),
         ratio: childProgress.ratio,
         weight,
         earned: childProgress.earned,
@@ -204,6 +213,7 @@ export function useGrades() {
     crumbs,
     nowIso,
     termStatus,
+    subjectCode,
     select,
     goUp,
   }

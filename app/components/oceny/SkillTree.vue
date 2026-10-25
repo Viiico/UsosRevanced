@@ -6,7 +6,7 @@ import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
 import { formatDate, formatWeekday } from '~/lib/format'
 
 const data = useAppData()
-const { current, children, canGoUp, goUp, select, progress } = useGrades()
+const { current, children, canGoUp, goUp, select, progress, subjectCode } = useGrades()
 
 const icon = computed(() => nodeIcon(current.value))
 const kindLabel = computed(() => NODE_KIND_LABEL[current.value.kind])
@@ -45,8 +45,18 @@ watch(
   { flush: 'post' },
 )
 
+/** Krok pośredni przed siatką: rząd zostaje, ale przedmioty pokazują kod (TO, PCYB) zamiast nazwy. */
+const MIN_COMPACT_BRANCH_WIDTH = 100
+const branchWidth = computed(() => branchesWidth.value / children.value.length)
+const compactRow = computed(
+  () =>
+    branchesWidth.value > 0 &&
+    branchWidth.value < MIN_BRANCH_WIDTH &&
+    branchWidth.value >= MIN_COMPACT_BRANCH_WIDTH &&
+    children.value.every((child) => subjectCode(child)),
+)
 const fitsRow = computed(
-  () => !branchesWidth.value || branchesWidth.value / children.value.length >= MIN_BRANCH_WIDTH,
+  () => !branchesWidth.value || branchWidth.value >= MIN_BRANCH_WIDTH || compactRow.value,
 )
 
 /** Kolumny siatki tak, żeby rzędy były równe (6 kart → 3 + 3, a nie 4 + 2). Odstęp gap-2 = 8 px. */
@@ -146,6 +156,7 @@ const gridColumns = computed(() => {
               <SkillNodeCard
                 :node="child"
                 :visual="current.visual"
+                :compact="compactRow"
                 class="h-full"
                 @select="select"
               />

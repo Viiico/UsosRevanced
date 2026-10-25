@@ -6,15 +6,20 @@ import { termsForNode } from '~/lib/requirements'
 import { nodeIcon, type NodeVisual } from '~/lib/node-meta'
 import { formatDate } from '~/lib/format'
 
-const props = defineProps<{ node: GradeNode; visual?: NodeVisual }>()
+/** `compact` - za wąsko na nazwę: przedmiot pokazuje swój kod (TO, PCYB). */
+const props = defineProps<{ node: GradeNode; visual?: NodeVisual; compact?: boolean }>()
 const emit = defineEmits<{ select: [id: string] }>()
 
 const data = useAppData()
+const { subjectCode } = useGrades()
 const hasChildren = computed(() => (props.node.children?.length ?? 0) > 0)
 const icon = computed(() => nodeIcon(props.node, props.visual))
 /** Na poziomie semestru każde dziecko to przedmiot - ikona nic nie mówi, a zjada miejsce na nazwę. */
 const showIcon = computed(() => props.node.kind !== 'subject')
 
+const label = computed(
+  () => (props.compact && subjectCode(props.node)) || props.node.short || props.node.name,
+)
 const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
 </script>
 
@@ -41,7 +46,7 @@ const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
         class="order-last line-clamp-2 min-w-0 basis-full text-sm leading-snug font-medium break-words hyphens-auto @[18rem]:order-none @[18rem]:text-lead @[18rem]:flex-1 @[18rem]:basis-0"
         :title="node.name"
       >
-        {{ node.short || node.name }}
+        {{ label }}
       </p>
 
       <span v-if="nextTerm" class="tnum shrink-0 text-3xs text-muted-foreground">

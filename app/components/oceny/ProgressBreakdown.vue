@@ -42,12 +42,8 @@ const scaleRows = computed(() => {
               />
             </div>
           </div>
-          <div class="mt-1.5 flex items-baseline justify-between text-3xs text-muted-foreground">
-            <!-- Łączny wynik zamiast stałego „0%”; 100% zostaje jako punkt odniesienia. -->
-            <span class="tnum text-xs font-semibold text-foreground">
-              {{ formatPercent(progress.ratio) }}
-            </span>
-            <span>100%</span>
+          <div class="tnum mt-1.5 text-xs font-semibold">
+            {{ formatPercent(progress.ratio) }}
           </div>
         </div>
 
@@ -70,7 +66,7 @@ const scaleRows = computed(() => {
                 class="size-3 shrink-0 rounded-sm"
                 :style="{ backgroundColor: segmentColor(seg.colorIndex) }"
               />
-              <span class="min-w-0 flex-1 truncate text-dense">{{ seg.label }}</span>
+              <FitLabel :text="seg.label" :short="seg.code" class="flex-1 text-dense" />
               <span class="tnum text-xs text-muted-foreground">{{ seg.earned }}/{{ seg.max }}</span>
               <span class="tnum w-10 text-right text-xs font-medium">
                 {{ formatPercent(seg.ratio) }}
