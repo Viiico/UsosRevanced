@@ -397,6 +397,27 @@ function pad(hour: number) {
       </CardHeader>
 
       <CardContent class="pt-0">
+        <div
+          v-if="!weekTerms.length"
+          class="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border/70 bg-card/60 px-3 py-2"
+        >
+          <CalendarX2 class="size-4 shrink-0 text-muted-foreground/70" />
+          <p class="text-sm font-medium">Brak zajęć w tym tygodniu</p>
+          <p v-if="nextAfterWeek" class="text-2xs text-muted-foreground">
+            Najbliższe: {{ formatWeekday(nextAfterWeek.date) }},
+            {{ formatDate(nextAfterWeek.date) }}
+          </p>
+          <Button
+            v-if="nextAfterWeek"
+            variant="outline"
+            size="sm"
+            class="ml-auto"
+            @click="goNextWeek"
+          >
+            Przejdź
+          </Button>
+        </div>
+
         <!-- Telefon: wybór dnia, a siatka pokazuje tylko ten dzień - pięć kolumn się nie mieściło. -->
         <DayPicker
           v-model="selectedDay"
@@ -502,29 +523,6 @@ function pad(hour: number) {
                     {{ shortTitle(term) }}
                   </p>
                 </NuxtLink>
-              </div>
-            </div>
-
-            <div
-              v-if="!weekTerms.length"
-              class="absolute inset-0 z-10 grid place-items-center bg-background/60 p-4 backdrop-blur-[1px]"
-            >
-              <div class="rounded-xl border border-border/70 bg-card px-4 py-3 text-center shadow-lg">
-                <CalendarX2 class="mx-auto size-5 text-muted-foreground/70" />
-                <p class="mt-2 text-sm font-medium">Brak zajęć w tym tygodniu</p>
-                <p v-if="nextAfterWeek" class="mt-0.5 text-2xs text-muted-foreground">
-                  Najbliższe: {{ formatWeekday(nextAfterWeek.date) }},
-                  {{ formatDate(nextAfterWeek.date) }}
-                </p>
-                <Button
-                  v-if="nextAfterWeek"
-                  variant="outline"
-                  size="sm"
-                  class="mt-2"
-                  @click="goNextWeek"
-                >
-                  Przejdź
-                </Button>
               </div>
             </div>
           </div>
