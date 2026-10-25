@@ -53,9 +53,6 @@ export function validateBaseDocument(input: unknown): string[] {
   if (!isDate(semester.startsAt) || !isDate(semester.endsAt)) {
     errors.push('semester.startsAt/endsAt muszą być datami YYYY-MM-DD')
   }
-  if (typeof semester.ectsTotal !== 'number' || semester.ectsTotal <= 0) {
-    errors.push('semester.ectsTotal musi być liczbą > 0')
-  }
 
   /* ------------------------------------------------------------------ */
   /* Tygodnie                                                            */
@@ -297,16 +294,6 @@ export function validateBaseDocument(input: unknown): string[] {
     } else if (node.max != null && entry.earned > node.max) {
       errors.push(`progress.${id}: earned ${entry.earned} > max ${node.max}`)
     }
-  }
-
-  const subjectEcts = (doc.subjects ?? []).reduce(
-    (sum, subject) => sum + (typeof subject.ects === 'number' ? subject.ects : 0),
-    0,
-  )
-  if (typeof semester.ectsTotal === 'number' && subjectEcts > semester.ectsTotal) {
-    errors.push(
-      `semester.ectsTotal (${semester.ectsTotal}) < suma ECTS przedmiotów (${subjectEcts})`,
-    )
   }
 
   return errors

@@ -110,8 +110,9 @@ Waga to zwykle liczba punktów, więc procent postępu = zdobyte punkty / punkty
 Węzeł z wagą `0` (np. etap organizacyjny projektu) nie zaburza wyniku.
 
 Postęp totalny semestru nie używa sumy punktów: każdy przedmiot wnosi
-`procent × ECTS / semester.ectsTotal` (5 ECTS z puli 30 = 1/6 wagi). Dzięki temu
-pasek nie pokazuje 100%, gdy część puli ECTS nie ma jeszcze wpisanych przedmiotów.
+`procent × ECTS / Σ ECTS przedmiotów w danych`. Studenci mogą brać przedmioty
+z wyprzedzeniem, więc mianownik to zawsze suma ECTS z aktualnego zestawu danych,
+a nie stała pula semestru.
 
 ## Dane przedmiotu „Technika Obrazowa”
 

@@ -111,8 +111,6 @@ export interface Semester {
   academicYear: string
   startsAt: string
   endsAt: string
-  /** Pula ECTS semestru; totalny postęp dzieli się przez tę wartość. */
-  ectsTotal: number
 }
 
 export interface AppData {

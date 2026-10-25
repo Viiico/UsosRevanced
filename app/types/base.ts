@@ -32,8 +32,6 @@ export interface BaseSemester {
   academicYear: string
   startsAt: string
   endsAt: string
-  /** Pula ECTS całego semestru; mianownik postępu totalnego. */
-  ectsTotal: number
   weeks: BaseWeek[]
   dayOverrides?: { date: string; follows: string }[]
 }

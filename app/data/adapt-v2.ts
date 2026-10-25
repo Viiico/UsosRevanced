@@ -234,7 +234,6 @@ export function adaptBase(doc: BaseDocument): AppData {
     academicYear: doc.semester.academicYear,
     startsAt: doc.semester.startsAt,
     endsAt: doc.semester.endsAt,
-    ectsTotal: doc.semester.ectsTotal,
   }
 
   return { version: 2, semester, subjects, terms }
