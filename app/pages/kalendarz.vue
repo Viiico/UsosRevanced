@@ -239,6 +239,98 @@ function blockStyle(start?: string | null, end?: string | null) {
   }
 }
 
+interface IntervalBox {
+  left: number
+  width: number
+}
+
+/**
+ * Układa nakładające się terminy w kolumny. Klastry to grupy przedziałów
+ * połączonych nakładaniem; w każdym z nich wydarzenia dzielą szerokość
+ * po równo, więc dwa zajęcia o 16:00 stoją obok siebie, a nie jedno na drugim.
+ */
+function layoutIntervals(items: { id: string; start: number; end: number }[]) {
+  const boxes = new Map<string, IntervalBox>()
+  const sorted = [...items].sort((a, b) => a.start - b.start || a.end - b.end)
+  let cluster: typeof sorted = []
+  let clusterEnd = -Infinity
+
+  const flush = () => {
+    if (!cluster.length) return
+    const columnEnds: number[] = []
+    const columns = new Map<string, number>()
+    for (const item of cluster) {
+      let column = columnEnds.findIndex((end) => end <= item.start)
+      if (column === -1) {
+        column = columnEnds.length
+        columnEnds.push(item.end)
+      } else {
+        columnEnds[column] = item.end
+      }
+      columns.set(item.id, column)
+    }
+    const count = columnEnds.length
+    for (const item of cluster) {
+      const column = columns.get(item.id) ?? 0
+      boxes.set(item.id, {
+        left: (column / count) * 100,
+        width: (1 / count) * 100,
+      })
+    }
+    cluster = []
+    clusterEnd = -Infinity
+  }
+
+  for (const item of sorted) {
+    if (cluster.length && item.start >= clusterEnd) flush()
+    cluster.push(item)
+    clusterEnd = Math.max(clusterEnd, item.end)
+  }
+  flush()
+  return boxes
+}
+
+const weekLayout = computed(() => {
+  const byDay = new Map<string, Map<string, IntervalBox>>()
+  for (const day of weekDays.value) {
+    const items = timedForDay(day).map((term) => {
+      const start = toMinutes(term.start) ?? DAY_START * 60
+      const end = toMinutes(term.end) ?? start + 90
+      return { id: term.id, start, end }
+    })
+    byDay.set(day, layoutIntervals(items))
+  }
+  return byDay
+})
+
+const compactLayout = computed(() => {
+  const byDay = new Map<number, Map<string, IntervalBox>>()
+  for (const weekday of [1, 2, 3, 4, 5]) {
+    const items = slotsFor(weekday).map((slot) => {
+      const start = toMinutes(slot.start) ?? DAY_START * 60
+      const end = toMinutes(slot.end) ?? start + 90
+      return { id: slot.key, start, end }
+    })
+    byDay.set(weekday, layoutIntervals(items))
+  }
+  return byDay
+})
+
+function positionedStyle(
+  box: IntervalBox | undefined,
+  start?: string | null,
+  end?: string | null,
+) {
+  const base = blockStyle(start, end)
+  if (!box) return base
+  return {
+    ...base,
+    left: `calc(${box.left}% + 1px)`,
+    width: `calc(${box.width}% - 2px)`,
+    right: 'auto',
+  }
+}
+
 function hourTop(hour: number) {
   return `${(hour - DAY_START) * HOUR_HEIGHT}px`
 }
@@ -396,9 +488,9 @@ function pad(hour: number) {
                   v-for="term in timedForDay(day)"
                   :key="term.id"
                   :to="nodeLink(term)"
-                  class="absolute inset-x-1 overflow-hidden rounded-lg border px-1.5 py-1 transition-colors"
+                  class="absolute overflow-hidden rounded-lg border px-1.5 py-1 transition-colors"
                   :class="KIND_STYLE[term.kind].block"
-                  :style="blockStyle(term.start, term.end)"
+                  :style="positionedStyle(weekLayout.get(day)?.get(term.id), term.start, term.end)"
                   :title="term.title"
                 >
                   <div class="tnum flex items-center gap-1 text-3xs opacity-80">
@@ -522,9 +614,15 @@ function pad(hour: number) {
                   v-for="slot in slotsFor(index + 1)"
                   :key="slot.key"
                   :to="slotLink(slot)"
-                  class="absolute inset-x-1 overflow-hidden rounded-lg border px-1.5 py-1 transition-colors"
+                  class="absolute overflow-hidden rounded-lg border px-1.5 py-1 transition-colors"
                   :class="KIND_STYLE[slot.kind].block"
-                  :style="blockStyle(slot.start, slot.end)"
+                  :style="
+                    positionedStyle(
+                      compactLayout.get(index + 1)?.get(slot.key),
+                      slot.start,
+                      slot.end,
+                    )
+                  "
                 >
                   <div class="flex items-center gap-1 text-3xs opacity-80">
                     <component :is="KIND_ICON[slot.kind]" class="size-3 shrink-0" />
