@@ -58,7 +58,7 @@ const scaleRows = computed(() => {
         <!-- Dwie kolumny dopiero w szerokiej karcie - obok skilltree karta ma ~1/3 strony i nazwy by znikały. -->
         <ul
           class="grid grid-cols-1 gap-x-4 gap-y-1"
-          :class="segments.length > 2 ? '@[26rem]:grid-cols-2' : undefined"
+          :class="segments.length > 2 ? '@[36rem]:grid-cols-2' : undefined"
         >
           <li v-for="seg in segments" :key="seg.id">
             <component

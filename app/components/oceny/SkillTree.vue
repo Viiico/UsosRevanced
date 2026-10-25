@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ArrowLeft, ArrowUpRight } from 'lucide-vue-next'
 import { termsForNode } from '~/lib/requirements'
 import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
@@ -22,6 +22,40 @@ const infoText = computed(() =>
 
 /** Wcięcie szyny łączącej rodzic → dzieci: środek pierwszej i ostatniej kolumny. */
 const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
+
+/**
+ * Gałęzie w jednym rzędzie tylko wtedy, gdy każda karta ma miejsce na nazwę.
+ * Inaczej (np. 6 przedmiotów przy 1024-1440 px) przechodzimy na siatkę kart bez linii drzewa.
+ * Szerokość zależy od liczby dzieci, więc mierzymy ją zamiast zgadywać breakpointem.
+ */
+const MIN_BRANCH_WIDTH = 180
+const branchesEl = ref<HTMLElement | null>(null)
+const branchesWidth = ref(0)
+
+watch(
+  branchesEl,
+  (el, _, onCleanup) => {
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => {
+      branchesWidth.value = entry?.contentRect.width ?? 0
+    })
+    observer.observe(el)
+    onCleanup(() => observer.disconnect())
+  },
+  { flush: 'post' },
+)
+
+const fitsRow = computed(
+  () => !branchesWidth.value || branchesWidth.value / children.value.length >= MIN_BRANCH_WIDTH,
+)
+
+/** Kolumny siatki tak, żeby rzędy były równe (6 kart → 3 + 3, a nie 4 + 2). Odstęp gap-2 = 8 px. */
+const gridColumns = computed(() => {
+  const count = children.value.length
+  const maxColumns = Math.max(1, Math.floor((branchesWidth.value + 8) / (MIN_BRANCH_WIDTH + 8)))
+  const rows = Math.ceil(count / maxColumns)
+  return `repeat(${Math.ceil(count / rows)}, minmax(0, 1fr))`
+})
 </script>
 
 <template>
@@ -76,26 +110,39 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-if="children.length" class="relative mt-3 flex flex-col sm:mt-5 sm:pt-6 lg:h-32">
-        <!-- Pień startuje już pod kartą hubu (-top-5 zasypuje margines), inaczej wisiałby w powietrzu. -->
-        <div
-          class="absolute -top-5 left-1/2 hidden h-11 w-px -translate-x-1/2 bg-border sm:block"
-        />
-        <div
-          class="absolute top-6 hidden h-px bg-border sm:block"
-          :style="{ left: railInset, right: railInset }"
-        />
+      <div
+        v-if="children.length"
+        ref="branchesEl"
+        class="relative mt-3 flex flex-col sm:mt-5"
+        :class="fitsRow ? 'sm:pt-6 lg:h-32' : undefined"
+      >
+        <template v-if="fitsRow">
+          <!-- Pień startuje już pod kartą hubu (-top-5 zasypuje margines), inaczej wisiałby w powietrzu. -->
+          <div
+            class="absolute -top-5 left-1/2 hidden h-11 w-px -translate-x-1/2 bg-border sm:block"
+          />
+          <div
+            class="absolute top-6 hidden h-px bg-border sm:block"
+            :style="{ left: railInset, right: railInset }"
+          />
+        </template>
 
-        <div class="flex flex-1 flex-col gap-2 sm:flex-row sm:gap-0">
+        <div
+          class="flex flex-1 flex-col gap-2"
+          :class="fitsRow ? 'sm:flex-row sm:gap-0' : 'sm:grid'"
+          :style="fitsRow ? undefined : { gridTemplateColumns: gridColumns }"
+        >
           <div
             v-for="child in children"
             :key="child.id"
-            class="group/branch relative flex min-w-0 flex-1 sm:px-1.5"
+            class="group/branch relative flex min-w-0 flex-1"
+            :class="fitsRow ? 'sm:px-1.5' : undefined"
           >
             <div
+              v-if="fitsRow"
               class="absolute top-0 left-1/2 hidden h-3 w-px -translate-x-1/2 bg-border sm:block"
             />
-            <div class="flex min-w-0 flex-1 flex-col sm:pt-3">
+            <div class="flex min-w-0 flex-1 flex-col" :class="fitsRow ? 'sm:pt-3' : undefined">
               <SkillNodeCard
                 :node="child"
                 :visual="current.visual"

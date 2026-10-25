@@ -61,18 +61,25 @@ useHead({
         <nav
           v-else
           aria-label="Ścieżka w drzewie ocen"
-          class="flex w-full flex-wrap items-center gap-0.5 text-xs"
+          class="flex w-full min-w-0 items-center gap-0.5 text-xs"
         >
+          <!-- Jedna linia: wiersz ma stałą wysokość, więc długie nazwy ucinamy zamiast zawijać. -->
           <template v-for="(crumb, index) in crumbs" :key="crumb.id">
             <button
               v-if="index < crumbs.length - 1"
               type="button"
-              class="rounded px-1 py-0.5 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
+              class="min-w-0 truncate rounded px-1 py-0.5 text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
+              :title="crumb.name"
               @click="select(crumb.id)"
             >
               {{ crumb.name }}
             </button>
-            <span v-else class="px-1 py-0.5 font-medium text-foreground">{{ crumb.name }}</span>
+            <span
+              v-else
+              class="min-w-0 shrink-0 truncate px-1 py-0.5 font-medium text-foreground max-sm:max-w-[60%]"
+              :title="crumb.name"
+              >{{ crumb.name }}</span
+            >
             <ChevronRight
               v-if="index < crumbs.length - 1"
               class="size-3 shrink-0 text-muted-foreground/40"
@@ -82,7 +89,7 @@ useHead({
       </div>
     </header>
 
-    <div class="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
       <SkillTree />
       <ProgressBreakdown />
     </div>

@@ -38,7 +38,7 @@ const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
       </span>
 
       <p
-        class="order-last line-clamp-2 min-w-0 basis-full text-sm leading-snug font-medium break-words hyphens-auto @[11rem]:order-none @[11rem]:text-lead @[11rem]:line-clamp-1 @[11rem]:flex-1 @[11rem]:basis-0"
+        class="order-last line-clamp-2 min-w-0 basis-full text-sm leading-snug font-medium break-words hyphens-auto @[18rem]:order-none @[18rem]:text-lead @[18rem]:flex-1 @[18rem]:basis-0"
         :title="node.name"
       >
         {{ node.short || node.name }}
