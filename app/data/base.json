@@ -954,7 +954,7 @@
       ],
       "policyNotes": [
         "Wykład: czwartki 12:15–14:00, tygodnie 1–8; obecność nieobowiązkowa.",
-        "Sprawdzian 1: 20 pkt (tydzień 4); sprawdzian 2: 50 pkt (tydzień 8); po 90 min, podczas wykładu.",
+        "Sprawdzian 1: 20 pkt (15.10, tydzień 2); sprawdzian 2: 50 pkt (tydzień 8); po 90 min, podczas wykładu.",
         "Laboratoria: tygodnie 9–15; 3 ćwiczenia (sprawozdania) po 10 pkt + sprawdzian wiedzy; obecność obowiązkowa, limit 1 nieobecności.",
         "Sprawozdania składane na zajęciach; nie ma możliwości oddania po terminie.",
         "Zaliczenie: min. 50/100 pkt; brak poprawek poza oceną niedostateczną.",
@@ -996,7 +996,7 @@
                 "max": 50
               }
             ],
-            "info": "Dwa sprawdziany podczas wykładu, 20 pkt (tydzień 4) i 50 pkt (tydzień 8)."
+            "info": "Dwa sprawdziany podczas wykładu, 20 pkt (15.10, tydzień 2) i 50 pkt (tydzień 8)."
           },
           {
             "id": "n:trap-lab",
@@ -2422,11 +2422,11 @@
       "end": "14:00"
     },
     {
-      "id": "t:trap-w2",
+      "id": "t:trap-w4",
       "subjectId": "trap",
       "kind": "lecture",
-      "title": "Wykład W2",
-      "date": "2026-10-15",
+      "title": "Wykład W4",
+      "date": "2026-10-29",
       "start": "12:15",
       "end": "14:00"
     },
@@ -2471,8 +2471,8 @@
       "subjectId": "trap",
       "nodeId": "n:trap-test-1",
       "kind": "colloquium",
-      "title": "Sprawdzian 1 (wykład 4)",
-      "date": "2026-10-29",
+      "title": "Sprawdzian 1 (wykład 2)",
+      "date": "2026-10-15",
       "start": "12:15",
       "end": "14:00",
       "graded": true,
@@ -2778,6 +2778,9 @@
     }
   ],
   "progress": {
+    "n:trap-test-1": {
+      "earned": 13
+    },
     "n:to-lab-1": {
       "earned": 0
     },
