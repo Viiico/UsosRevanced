@@ -85,7 +85,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-if="children.length" class="relative mt-5 flex flex-col pt-6 lg:h-32">
+      <div v-if="children.length" class="relative mt-5 flex flex-col pt-6 lg:h-36">
         <!-- Pień startuje już pod kartą hubu (-top-5 zasypuje margines), inaczej wisiałby w powietrzu. -->
         <div
           class="absolute -top-5 left-1/2 hidden h-11 w-px -translate-x-1/2 bg-border sm:block"
@@ -116,7 +116,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-else class="mt-5 flex flex-col gap-2 lg:h-32">
+      <div v-else class="mt-5 flex flex-col gap-2 lg:h-36">
         <div
           v-if="nextTerm"
           class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/70 bg-secondary/25 px-4 py-3"

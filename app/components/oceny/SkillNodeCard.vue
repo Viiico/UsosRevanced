@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-vue-next'
 import type { GradeNode } from '~/types'
 import { computeProgress } from '~/lib/tree'
 import { termsForNode } from '~/lib/requirements'
-import { childSummary, nodeIcon, type NodeVisual } from '~/lib/node-meta'
+import { nodeIcon, type NodeVisual } from '~/lib/node-meta'
 import { formatDate, formatPercent } from '~/lib/format'
 
 const props = defineProps<{ node: GradeNode; visual?: NodeVisual }>()
@@ -17,7 +17,6 @@ const hasPoints = computed(() => progress.value.max > 0)
 const icon = computed(() => nodeIcon(props.node, props.visual))
 
 const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
-const summary = computed(() => childSummary(props.node))
 </script>
 
 <template>
@@ -69,7 +68,6 @@ const summary = computed(() => childSummary(props.node))
         />
       </div>
 
-      <div v-if="summary" class="truncate text-2xs text-muted-foreground">{{ summary }}</div>
     </div>
   </div>
 </template>
