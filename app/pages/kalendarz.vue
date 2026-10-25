@@ -23,20 +23,21 @@ const { root, nowIso } = useGrades()
 const today = computed(() => nowIso.value.slice(0, 10))
 
 /**
- * Zakres godzin z danych całego semestru (najwcześniejszy start, najpóźniejszy koniec),
- * żeby nie pokazywać pustych porannych godzin - ale wspólny dla wszystkich tygodni
- * i obu widoków, więc siatka nie skacze przy przełączaniu.
+ * Siatka 06:00-20:00 - poranek przed zajęciami też jest używany (praca, własne wpisy).
+ * Rozszerza się tylko, gdy coś z godziną startu wychodzi poza ten zakres; wspólna dla
+ * wszystkich tygodni i obu widoków, więc nie skacze przy przełączaniu.
  */
 const HOUR_HEIGHT = 44
+const BASE_START = 6
+const BASE_END = 20
 const hourRange = computed(() => {
-  // Tylko zajęcia z godziną startu - deadline'y trzymają w `end` godzinę oddania i rozciągały siatkę.
+  // Tylko wpisy z godziną startu - deadline'y trzymają w `end` godzinę oddania.
   const timed = data.terms.filter((term) => term.start)
   const starts = timed.map((term) => toMinutes(term.start)!)
   const ends = timed.map((term) => toMinutes(term.end)).filter((m): m is number => m != null)
-  if (!starts.length) return { start: 8, end: 18 }
   return {
-    start: Math.floor(Math.min(...starts) / 60),
-    end: Math.max(Math.ceil(Math.max(...ends, ...starts) / 60), Math.floor(Math.min(...starts) / 60) + 1),
+    start: Math.min(BASE_START, ...starts.map((m) => Math.floor(m / 60))),
+    end: Math.max(BASE_END, ...ends.map((m) => Math.ceil(m / 60))),
   }
 })
 const DAY_START = computed(() => hourRange.value.start)
