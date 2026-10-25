@@ -37,6 +37,17 @@ export function collectNodeIds(node: GradeNode): string[] {
 }
 
 /**
+ * Waga dziecka w średniej. Jeśli rodzeństwo nie ma żadnej wagi (dane tworzone
+ * w edytorze), bierzemy maksimum punktów, tak jak w danych demo. Gdy inne
+ * dzieci mają wagi, 0 oznacza świadome wyłączenie z wyniku.
+ */
+export function effectiveWeight(node: GradeNode, siblings: GradeNode[] = []): number {
+  if (node.weight > 0) return node.weight
+  if (siblings.some((sibling) => sibling.weight > 0)) return 0
+  return node.points && node.points.max > 0 ? node.points.max : 0
+}
+
+/**
  * Liść: earned / max. Węzeł z dziećmi: średnia ważona, więc dziecko z wagą 0
  * (np. etap organizacyjny) nie zaniża wyniku.
  */
@@ -46,15 +57,19 @@ export function computeProgress(node: GradeNode): NodeProgress {
   const max = leaves.reduce((sum, leaf) => sum + (leaf.points?.max ?? 0), 0)
   const gradedLeaves = leaves.filter((leaf) => leaf.points?.earned != null).length
 
-  const children = (node.children ?? []).filter((child) => child.weight > 0)
+  const allChildren = node.children ?? []
+  const children = allChildren.filter((child) => effectiveWeight(child, allChildren) > 0)
   let ratio: number
 
   if (children.length) {
-    const weightSum = children.reduce((sum, child) => sum + child.weight, 0)
+    const weightSum = children.reduce((sum, child) => sum + effectiveWeight(child, allChildren), 0)
     ratio =
       weightSum > 0
-        ? children.reduce((sum, child) => sum + child.weight * computeProgress(child).ratio, 0) /
-          weightSum
+        ? children.reduce(
+            (sum, child) =>
+              sum + effectiveWeight(child, allChildren) * computeProgress(child).ratio,
+            0,
+          ) / weightSum
         : 0
   } else if (node.points && node.points.max > 0) {
     ratio = (node.points.earned ?? 0) / node.points.max

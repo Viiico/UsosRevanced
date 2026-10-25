@@ -1,0 +1,1853 @@
+{
+  "schemaVersion": 2,
+  "meta": {
+    "updatedAt": "2026-10-25T11:24:25.234Z",
+    "source": "demo",
+    "timeZone": "Europe/Warsaw"
+  },
+  "semester": {
+    "id": "sem-26z",
+    "code": "26Z",
+    "name": "Semestr zimowy",
+    "academicYear": "2026/2027",
+    "startsAt": "2026-10-05",
+    "endsAt": "2027-02-12",
+    "weeks": [
+      {
+        "no": 1,
+        "from": "2026-10-05",
+        "to": "2026-10-11",
+        "kind": "teaching"
+      },
+      {
+        "no": 2,
+        "from": "2026-10-12",
+        "to": "2026-10-18",
+        "kind": "teaching"
+      },
+      {
+        "no": 3,
+        "from": "2026-10-19",
+        "to": "2026-10-25",
+        "kind": "teaching"
+      },
+      {
+        "no": 4,
+        "from": "2026-10-26",
+        "to": "2026-11-01",
+        "kind": "teaching"
+      },
+      {
+        "no": 5,
+        "from": "2026-11-02",
+        "to": "2026-11-08",
+        "kind": "teaching"
+      },
+      {
+        "no": 6,
+        "from": "2026-11-09",
+        "to": "2026-11-15",
+        "kind": "teaching"
+      },
+      {
+        "no": 7,
+        "from": "2026-11-16",
+        "to": "2026-11-22",
+        "kind": "teaching"
+      },
+      {
+        "no": 8,
+        "from": "2026-11-23",
+        "to": "2026-11-29",
+        "kind": "teaching"
+      },
+      {
+        "no": 9,
+        "from": "2026-11-30",
+        "to": "2026-12-06",
+        "kind": "teaching"
+      },
+      {
+        "no": 10,
+        "from": "2026-12-07",
+        "to": "2026-12-13",
+        "kind": "teaching"
+      },
+      {
+        "no": 11,
+        "from": "2026-12-14",
+        "to": "2026-12-20",
+        "kind": "teaching"
+      },
+      {
+        "no": 12,
+        "from": "2026-12-21",
+        "to": "2026-12-27",
+        "kind": "teaching"
+      },
+      {
+        "from": "2026-12-28",
+        "to": "2027-01-10",
+        "kind": "break"
+      },
+      {
+        "no": 13,
+        "from": "2027-01-11",
+        "to": "2027-01-17",
+        "kind": "teaching"
+      },
+      {
+        "no": 14,
+        "from": "2027-01-18",
+        "to": "2027-01-24",
+        "kind": "teaching"
+      },
+      {
+        "no": 15,
+        "from": "2027-01-25",
+        "to": "2027-01-31",
+        "kind": "teaching"
+      },
+      {
+        "from": "2027-02-01",
+        "to": "2027-02-12",
+        "kind": "exam"
+      }
+    ],
+    "dayOverrides": []
+  },
+  "gradeScales": {
+    "standard": {
+      "passing": 50,
+      "rows": [
+        {
+          "min": 90,
+          "grade": "5"
+        },
+        {
+          "min": 80,
+          "grade": "4,5"
+        },
+        {
+          "min": 70,
+          "grade": "4"
+        },
+        {
+          "min": 60,
+          "grade": "3,5"
+        },
+        {
+          "min": 50,
+          "grade": "3"
+        },
+        {
+          "min": 0,
+          "grade": "2"
+        }
+      ]
+    },
+    "psir": {
+      "passing": 51,
+      "rows": [
+        {
+          "min": 91,
+          "grade": "5"
+        },
+        {
+          "min": 81,
+          "grade": "4,5"
+        },
+        {
+          "min": 71,
+          "grade": "4"
+        },
+        {
+          "min": 61,
+          "grade": "3,5"
+        },
+        {
+          "min": 51,
+          "grade": "3"
+        },
+        {
+          "min": 0,
+          "grade": "2"
+        }
+      ]
+    },
+    "td": {
+      "passing": 25,
+      "rows": [
+        {
+          "min": 45,
+          "grade": "5"
+        },
+        {
+          "min": 40,
+          "grade": "4,5"
+        },
+        {
+          "min": 35,
+          "grade": "4"
+        },
+        {
+          "min": 30,
+          "grade": "3,5"
+        },
+        {
+          "min": 25,
+          "grade": "3"
+        },
+        {
+          "min": 0,
+          "grade": "2"
+        }
+      ]
+    }
+  },
+  "subjects": [
+    {
+      "id": "to",
+      "code": "TO",
+      "name": "Technika Obrazowa",
+      "ects": 5,
+      "gradeScaleId": "standard",
+      "group": {
+        "code": "104",
+        "label": "Lab 104 · poniedziałek parzysty, 16:00-19:00"
+      },
+      "teachers": [
+        {
+          "id": "buchowicz",
+          "role": "teacher"
+        },
+        {
+          "id": "galinski",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "Zaliczenie na podstawie sumy punktów uzyskanych w ramach poszczególnych zajęć.",
+        "Wymagane przedstawienie własnych, oryginalnych dzieł do oceny.",
+        "Obecność na laboratoriach obowiązkowa - nieusprawiedliwiona nieobecność skutkuje niezaliczeniem przedmiotu.",
+        "Sprawozdanie należy oddać do końca zajęć; po oddaniu sprawozdania nie ma możliwości poprawiania zadań.",
+        "Nieoddanie etapów projektu w terminie obniża ocenę, w skrajnym przypadku może skutkować niezaliczeniem przedmiotu.",
+        "Oceny dostępne w systemie USOS."
+      ],
+      "tree": {
+        "id": "n:to",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "to-req-total",
+            "kind": "min-total",
+            "label": "Łącznie co najmniej 50 pkt"
+          },
+          {
+            "id": "to-req-own",
+            "kind": "manual",
+            "label": "Własne, oryginalne dzieła",
+            "note": "Prace muszą być autorskie - weryfikacja przez prowadzącego."
+          },
+          {
+            "id": "to-req-att",
+            "kind": "manual",
+            "label": "Obecność na laboratoriach",
+            "note": "Każde zajęcia należy zaliczyć; nieobecność trzeba usprawiedliwić."
+          }
+        ],
+        "children": [
+          {
+            "id": "n:to-lab",
+            "type": "group",
+            "name": "Laboratorium",
+            "activityKind": "lab",
+            "requirements": [
+              {
+                "id": "to-lab-req-each",
+                "kind": "min-each",
+                "label": "Każde zajęcia na min. 2 pkt",
+                "note": "w tym min. 1 pkt za realizację zadań laboratoryjnych",
+                "threshold": 2
+              },
+              {
+                "id": "to-lab-req-report",
+                "kind": "manual",
+                "label": "Sprawozdanie do końca zajęć",
+                "note": "Nieoddanie w terminie obniża ocenę."
+              }
+            ],
+            "children": [
+              {
+                "id": "n:to-lab-1",
+                "type": "activity",
+                "name": "Rozdzielczość bitowa i zanurzanie informacji w obrazie",
+                "short": "Lab 1",
+                "max": 6,
+                "info": "Sprawozdanie oddawane na koniec zajęć. Krótki sprawdzian z wiedzy teoretycznej w trakcie zajęć."
+              },
+              {
+                "id": "n:to-lab-2",
+                "type": "activity",
+                "name": "Badanie właściwości statystycznych danych obrazowych",
+                "short": "Lab 2",
+                "max": 6
+              },
+              {
+                "id": "n:to-lab-3",
+                "type": "activity",
+                "name": "Badanie koderów obrazu",
+                "short": "Lab 3",
+                "max": 6
+              },
+              {
+                "id": "n:to-lab-4",
+                "type": "activity",
+                "name": "Badanie koderów sekwencji wizyjnych",
+                "short": "Lab 4",
+                "max": 6
+              },
+              {
+                "id": "n:to-lab-5",
+                "type": "activity",
+                "name": "Rozpoznawanie obiektów z wykorzystaniem sieci neuronowych",
+                "short": "Lab 5",
+                "max": 6
+              }
+            ],
+            "info": "Pięć spotkań po 3 godziny. Obecność obowiązkowa, sprawozdanie oddawane do końca zajęć, na starcie krótki sprawdzian z teorii."
+          },
+          {
+            "id": "n:to-kol",
+            "type": "group",
+            "name": "Kolokwia",
+            "activityKind": "colloquium",
+            "requirements": [
+              {
+                "id": "to-kol-req-each",
+                "kind": "min-each",
+                "label": "Min. 7 pkt z każdego sprawdzianu",
+                "threshold": 7
+              }
+            ],
+            "children": [
+              {
+                "id": "n:to-kol-1",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Sprawdzian wykładowy 1",
+                "short": "Kolokwium 1",
+                "max": 20,
+                "info": "Sprawdzian na wykładzie 9. Zakres: tematy wykładów 1-8."
+              },
+              {
+                "id": "n:to-kol-2",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Sprawdzian wykładowy 2",
+                "short": "Kolokwium 2",
+                "max": 20,
+                "info": "Sprawdzian na wykładzie 15. Zakres: tematy wykładów 10-14."
+              }
+            ],
+            "info": "Dwa sprawdziany wykładowe po 20 pkt - na wykładzie 9 i na wykładzie 15."
+          },
+          {
+            "id": "n:to-proj",
+            "type": "group",
+            "name": "Projekt",
+            "activityKind": "project",
+            "requirements": [
+              {
+                "id": "to-proj-req-min",
+                "kind": "min-node",
+                "label": "Min. 10 pkt z projektu",
+                "threshold": 10
+              },
+              {
+                "id": "to-proj-req-deadline",
+                "kind": "manual",
+                "label": "Oddanie etapów w terminie",
+                "note": "Opóźnienie obniża ocenę; skrajny przypadek - brak zaliczenia."
+              }
+            ],
+            "children": [
+              {
+                "id": "n:to-proj-e1",
+                "type": "milestone",
+                "name": "Zapis do grup projektowych",
+                "short": "Etap 1",
+                "info": "Zespoły czteroosobowe. Zapis do 18 X - etap niepunktowany, ale warunkuje udział w projekcie."
+              },
+              {
+                "id": "n:to-proj-e2",
+                "type": "stage",
+                "activityKind": "project",
+                "name": "Wstępne wyniki implementacji i testowania",
+                "short": "Etap 2",
+                "max": 10,
+                "info": "Wymagany kontakt z prowadzącym."
+              },
+              {
+                "id": "n:to-proj-e3",
+                "type": "stage",
+                "activityKind": "project",
+                "name": "Zakończenie projektu",
+                "short": "Etap 3",
+                "max": 20,
+                "info": "Sprawozdanie, wyniki testów, wnioski i kody źródłowe. Wymagane spotkanie z prowadzącym."
+              }
+            ],
+            "info": "Projekt realizowany w zespołach czteroosobowych. Udział obowiązkowy, nie ma możliwości poprawiania po końcowym oddaniu.",
+            "assumptionNote": "Podział 30 pkt na etapy (10 + 20) przyjęty roboczo - prowadzący może go zmienić."
+          }
+        ],
+        "description": "Wykład z ćwiczeniami, laboratorium i projekt"
+      }
+    },
+    {
+      "id": "pcyb",
+      "code": "PCYB",
+      "name": "Podstawy cyberbezpieczeństwa",
+      "ects": 4,
+      "gradeScaleId": "standard",
+      "group": {
+        "code": "",
+        "label": "wykład wt 18:15-20:00, s. 105-AR · projekt czw 8:15-10:00"
+      },
+      "teachers": [
+        {
+          "id": "kaminska",
+          "role": "teacher"
+        },
+        {
+          "id": "sepczuk",
+          "role": "teacher"
+        },
+        {
+          "id": "bieniasz",
+          "role": "teacher"
+        },
+        {
+          "id": "janicki",
+          "role": "teacher"
+        },
+        {
+          "id": "kuklinski",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "Egzamin (kolokwium końcowe na prawach egzaminu): do 40 pkt, minimum 20 pkt.",
+        "Projekt: do 60 pkt, minimum 30 pkt; każda faza minimum 15 pkt.",
+        "Zaliczenie: łącznie minimum 50 pkt (20 z egzaminu + 30 z projektu).",
+        "Egzamin: jeden termin, po ostatnim wykładzie (26.01.2027, 18:15), min. 20 pkt.",
+        "Projekt zespołowy (2-3 osoby) w dwóch fazach po 30 pkt; raporty do 17.11 i 15.12.2026.",
+        "Projekt tematyczny: 60 pkt, min. połowa punktów za każdą fazę, oddanie do 15.12.2026.",
+        "Punkty premium za terminowość, jakość raportów, komunikację i zaangażowanie."
+      ],
+      "tree": {
+        "id": "n:pcyb",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "pcyb-req-total",
+            "kind": "min-total",
+            "label": "Łącznie min. 50 pkt (20 egzamin + 30 projekt)"
+          }
+        ],
+        "children": [
+          {
+            "id": "n:pcyb-exam",
+            "type": "group",
+            "name": "Egzamin",
+            "activityKind": "colloquium",
+            "requirements": [
+              {
+                "id": "pcyb-req-exam",
+                "kind": "min-node",
+                "label": "Min. 20 pkt z egzaminu",
+                "threshold": 20
+              }
+            ],
+            "children": [
+              {
+                "id": "n:pcyb-exam-0",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Egzamin (kolokwium końcowe)",
+                "short": "Egzamin",
+                "max": 40
+              }
+            ],
+            "info": "Jeden egzamin, po ostatnim wykładzie (26.01.2027, 18:15, s. 105-AR). Pytania P/F, ABCD, otwarte i case study."
+          },
+          {
+            "id": "n:pcyb-project",
+            "type": "group",
+            "name": "Projekt",
+            "activityKind": "project",
+            "requirements": [
+              {
+                "id": "pcyb-req-project",
+                "kind": "min-node",
+                "label": "Min. 30 pkt z projektu (min. 15 za fazę)",
+                "threshold": 30
+              }
+            ],
+            "children": [
+              {
+                "id": "n:pcyb-project-1",
+                "type": "stage",
+                "activityKind": "project",
+                "name": "Faza 1: ofensywna (proof of concept)",
+                "short": "Faza 1",
+                "max": 30
+              },
+              {
+                "id": "n:pcyb-project-2",
+                "type": "stage",
+                "activityKind": "project",
+                "name": "Faza 2: defensywna",
+                "short": "Faza 2",
+                "max": 30
+              }
+            ],
+            "info": "Gra projektowa: faza ofensywna i defensywna, zespoły 2-3 osoby."
+          }
+        ],
+        "description": "Wykład i projekt: ofensywne i defensywne aspekty cyberbezpieczeństwa",
+        "assumptionNote": "ECTS 4 (podane przez użytkownika); skala ocen standardowa, brak w materiale."
+      }
+    },
+    {
+      "id": "psir",
+      "code": "PSIR",
+      "name": "Programowanie Systemów Internetu Rzeczy i Aplikacji Sieciowych",
+      "ects": 4,
+      "gradeScaleId": "psir",
+      "group": {
+        "code": "",
+        "label": "wykład wt 12:15-14:00, s. 105-AR · lab śr 8:15-12:00/12:15-16:00, s. CS304 · projekt wt 16:15-18:00, s. 133"
+      },
+      "teachers": [
+        {
+          "id": "domaszewicz",
+          "role": "teacher"
+        },
+        {
+          "id": "pruszkowski",
+          "role": "teacher"
+        },
+        {
+          "id": "pachowicz",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "Kolokwium: 45 pkt (3 pytania otwarte po 7 pkt + 12 zamkniętych po 2 pkt), próg 23 pkt; dwa podejścia, poprawkowe po ostatnim wykładzie (02.02.2027).",
+        "Laboratorium: 3 × 5 pkt, próg 7 pkt; sprawozdanie do końca soboty tygodnia ćwiczenia.",
+        "Projekt: 40 pkt, próg 21 pkt; zespoły 3-osobowe, odbiór w slotach laboratoryjnych.",
+        "Ocena: przy wszystkich progach 91/81/71/61/51 → 5/4,5/4/3,5/3; inaczej przy sumie ≥51 → 3; else 2.",
+        "Zespoły i sloty lab: zapisy do 14.10.2026 w pliku PSIR_alokacja_26Z.docx na MS Teams.",
+        "Odrabianie lab: zgłoszenia do 2027.01.11 12:00; spóźnienie >15 min = nieobecność; brak osoby na odbiorze projektu = 0 pkt.",
+        "Projekt: własny protokół warstwy aplikacji i oszczędna binarna reprezentacja danych; dwa pierwsze laby to wstęp do projektu."
+      ],
+      "tree": {
+        "id": "n:psir",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "psir-req-total",
+            "kind": "min-total",
+            "label": "Łącznie min. 51 pkt"
+          }
+        ],
+        "children": [
+          {
+            "id": "n:psir-colloquium",
+            "type": "group",
+            "name": "Kolokwium",
+            "activityKind": "colloquium",
+            "requirements": [
+              {
+                "id": "psir-req-colloquium",
+                "kind": "min-node",
+                "label": "Próg 23 pkt",
+                "threshold": 23
+              }
+            ],
+            "children": [
+              {
+                "id": "n:psir-colloquium-1",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Kolokwium",
+                "short": "Kolokwium",
+                "max": 45
+              }
+            ],
+            "info": "3 pytania otwarte po 7 pkt + 12 zamkniętych po 2 pkt; dwa podejścia, liczy się ostatnie."
+          },
+          {
+            "id": "n:psir-lab",
+            "type": "group",
+            "name": "Laboratorium",
+            "activityKind": "lab",
+            "requirements": [
+              {
+                "id": "psir-req-lab",
+                "kind": "min-node",
+                "label": "Próg 7 pkt",
+                "threshold": 7
+              }
+            ],
+            "children": [
+              {
+                "id": "n:psir-lab-1",
+                "type": "activity",
+                "name": "Ćwiczenie 1: klient/serwer POSIX",
+                "short": "Lab 1",
+                "max": 5
+              },
+              {
+                "id": "n:psir-lab-2",
+                "type": "activity",
+                "name": "Ćwiczenie 2: węzeł IoT (Arduino, UDP)",
+                "short": "Lab 2",
+                "max": 5
+              },
+              {
+                "id": "n:psir-lab-3",
+                "type": "activity",
+                "name": "Ćwiczenie 3: FreeRTOS",
+                "short": "Lab 3",
+                "max": 5
+              }
+            ],
+            "info": "Gniazda POSIX, węzeł IoT (Arduino/UDP), FreeRTOS, po 5 pkt."
+          },
+          {
+            "id": "n:psir-project",
+            "type": "group",
+            "name": "Projekt",
+            "activityKind": "project",
+            "requirements": [
+              {
+                "id": "psir-req-project",
+                "kind": "min-node",
+                "label": "Próg 21 pkt",
+                "threshold": 21
+              }
+            ],
+            "children": [
+              {
+                "id": "n:psir-project-1",
+                "type": "activity",
+                "activityKind": "project",
+                "name": "Projekt zespołowy",
+                "short": "Projekt",
+                "max": 40
+              }
+            ],
+            "info": "Rozproszona aplikacja sieciowa, własny protokół i binarna reprezentacja danych; odbiory w slotach lab."
+          }
+        ],
+        "description": "Programowanie sieciowe (gniazda) i węzły IoT (bare metal, FreeRTOS) + projekt zespołowy",
+        "assumptionNote": "ECTS 4 (podane przez użytkownika)."
+      }
+    },
+    {
+      "id": "td",
+      "code": "TD",
+      "name": "Technika Dźwiękowa",
+      "ects": 4,
+      "gradeScaleId": "td",
+      "group": {
+        "code": "",
+        "label": "wykład + ćwiczenia (plan USOS) · laboratoria, terminy TBD"
+      },
+      "teachers": [
+        {
+          "id": "bobinski",
+          "role": "teacher"
+        },
+        {
+          "id": "jasinski",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "5 laboratoriów ocenianych 2,0–5,0 (łącznie 25 pkt); wymagane min. 3 z każdego laboratorium.",
+        "2 sprawdziany: 10 pkt i 15 pkt (łącznie 25 pkt); dokładna data podana min. 2 tygodnie wcześniej.",
+        "Zaliczenie: min. 25 pkt łącznie i min. 3 z każdego laboratorium.",
+        "Obecność: wykłady nieobowiązkowe, ćwiczenia i laboratoria obowiązkowe; nieobecność usprawiedliwić w ciągu tygodnia.",
+        "Laboratoria: sprawdzian wstępny, aktywność, ocena sprawozdania; grupy 6-osobowe, podział i terminy TBD.",
+        "Skala: 45–50 → 5; 40–44 → 4,5; 35–39 → 4; 30–34 → 3,5; 25–29 → 3; 0–24 → 2."
+      ],
+      "tree": {
+        "id": "n:td",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "td-req-total",
+            "kind": "min-total",
+            "label": "Min. 25 pkt łącznie"
+          }
+        ],
+        "children": [
+          {
+            "id": "n:td-tests",
+            "type": "group",
+            "name": "Sprawdziany",
+            "activityKind": "colloquium",
+            "children": [
+              {
+                "id": "n:td-test-1",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Sprawdzian 1",
+                "short": "Sprawdzian 1",
+                "max": 10
+              },
+              {
+                "id": "n:td-test-2",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Sprawdzian 2",
+                "short": "Sprawdzian 2",
+                "max": 15
+              }
+            ],
+            "info": "Dwa sprawdziany pisemne w trakcie ćwiczeń, 10 i 15 pkt; daty podane min. 2 tygodnie wcześniej."
+          },
+          {
+            "id": "n:td-labs",
+            "type": "group",
+            "name": "Laboratoria",
+            "activityKind": "lab",
+            "children": [
+              {
+                "id": "n:td-lab-1",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 1: właściwości sygnałów fonicznych",
+                "short": "Lab 1",
+                "max": 5
+              },
+              {
+                "id": "n:td-lab-2",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 2: właściwości psychoakustyczne",
+                "short": "Lab 2",
+                "max": 5
+              },
+              {
+                "id": "n:td-lab-3",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 3: akustyka wnętrz",
+                "short": "Lab 3",
+                "max": 5
+              },
+              {
+                "id": "n:td-lab-4",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 4: symulacje akustyki wnętrz",
+                "short": "Lab 4",
+                "max": 5
+              },
+              {
+                "id": "n:td-lab-5",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 5: przetworniki elektroakustyczne",
+                "short": "Lab 5",
+                "max": 5
+              }
+            ],
+            "info": "Pięć laboratoriów po 5 pkt (ocena 2,0–5,0); wymagane min. 3 z każdego."
+          }
+        ],
+        "description": "Akustyka, psychoakustyka, przetworniki, systemy foniczne i technika studyjna",
+        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiałach; daty zajęć i labów poza planem USOS."
+      }
+    },
+    {
+      "id": "tmt",
+      "code": "TMT",
+      "name": "Technika Mikrofalowa w Telekomunikacji",
+      "ects": 4,
+      "gradeScaleId": "standard",
+      "group": {
+        "code": "",
+        "label": "wykład pon. 11:15-14:00 · lab. s. 531 (pon. 8:15-11:00 / wt. 9:15-12:00 / czw. 14:15-17:00, tyg. nieparzyste)"
+      },
+      "teachers": [
+        {
+          "id": "wojtasiak",
+          "role": "teacher"
+        },
+        {
+          "id": "kazubski",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "Wykład: 10 spotkań po 3 h, poniedziałki 11:15–14:00.",
+        "Laboratorium: 5 ćwiczeń po 6 pkt (max 30 pkt); s. 531, pon. 8:15–11:00, wt. 9:15–12:00, czw. 14:15–17:00 (tygodnie nieparzyste); obecność obowiązkowa.",
+        "Warunki zaliczenia: min. 50% punktów z egzaminu (35/70) i min. 3/6 z każdego ćwiczenia; laboratorium zaliczone po wszystkich ćwiczeniach.",
+        "Egzamin: max 70 pkt; laboratorium: max 30 pkt; razem max 100 pkt.",
+        "Ocena: <50% → 2; 50–59% → 3; 60–69% → 3,5; 70–79% → 4; 80–89% → 4,5; ≥90% → 5.",
+        "Przed każdym ćwiczeniem wejściówka (min. 3/6); możliwe zaliczenie wejściówki w innym terminie za zgodą prowadzącego.",
+        "Zakres: front-end, prowadnice falowe, wykres Smitha, symulatory i pomiary mikrofalowe, podzespoły front-endu."
+      ],
+      "tree": {
+        "id": "n:tmt",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "tmt-req-total",
+            "kind": "min-total",
+            "label": "Min. 50/100 pkt (50%)"
+          }
+        ],
+        "children": [
+          {
+            "id": "n:tmt-exam",
+            "type": "group",
+            "name": "Egzamin",
+            "activityKind": "colloquium",
+            "requirements": [
+              {
+                "id": "tmt-req-exam",
+                "kind": "min-node",
+                "label": "Min. 35/70 pkt (50%)",
+                "threshold": 35
+              }
+            ],
+            "children": [
+              {
+                "id": "n:tmt-exam-1",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Egzamin",
+                "short": "Egzamin",
+                "max": 70
+              }
+            ],
+            "info": "Egzamin pisemny, max 70 pkt; wymagane min. 35 pkt (50%)."
+          },
+          {
+            "id": "n:tmt-lab",
+            "type": "group",
+            "name": "Laboratorium",
+            "activityKind": "lab",
+            "requirements": [
+              {
+                "id": "tmt-req-lab",
+                "kind": "manual",
+                "label": "Min. 3/6 z każdego ćwiczenia"
+              }
+            ],
+            "children": [
+              {
+                "id": "n:tmt-lab-1",
+                "type": "activity",
+                "name": "Ćwiczenie 1",
+                "short": "Lab 1",
+                "max": 6
+              },
+              {
+                "id": "n:tmt-lab-2",
+                "type": "activity",
+                "name": "Ćwiczenie 2",
+                "short": "Lab 2",
+                "max": 6
+              },
+              {
+                "id": "n:tmt-lab-3",
+                "type": "activity",
+                "name": "Ćwiczenie 3",
+                "short": "Lab 3",
+                "max": 6
+              },
+              {
+                "id": "n:tmt-lab-4",
+                "type": "activity",
+                "name": "Ćwiczenie 4",
+                "short": "Lab 4",
+                "max": 6
+              },
+              {
+                "id": "n:tmt-lab-5",
+                "type": "activity",
+                "name": "Ćwiczenie 5",
+                "short": "Lab 5",
+                "max": 6
+              }
+            ],
+            "info": "5 ćwiczeń po 6 pkt; zaliczenie każdego na min. 3/6; wejściówka przed ćwiczeniem."
+          }
+        ],
+        "description": "Front-end systemów łączności bezprzewodowej, teoria, symulacje i pomiary mikrofalowe",
+        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiale; daty wykładów i labów do potwierdzenia."
+      }
+    },
+    {
+      "id": "trap",
+      "code": "TRAP",
+      "name": "Transmisja Przewodowa",
+      "ects": 4,
+      "gradeScaleId": "standard",
+      "group": {
+        "code": "",
+        "label": "wykład (tyg. 1-8) · laboratoria (tyg. 9-15; grupy 101-108: L1/L2 pt. 10-14, L3 pon. 8-12, L4 pon. 12-16)"
+      },
+      "teachers": [
+        {
+          "id": "turkiewicz",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "Wykład: tygodnie 1–8; obecność nieobowiązkowa.",
+        "Sprawdzian 1: 20 pkt (tydzień 4); sprawdzian 2: 50 pkt (tydzień 8); po 90 min, podczas wykładu.",
+        "Laboratoria: tygodnie 9–15; 3 ćwiczenia (sprawozdania) po 10 pkt + sprawdzian wiedzy; obecność obowiązkowa, limit 1 nieobecności.",
+        "Sprawozdania składane na zajęciach; nie ma możliwości oddania po terminie.",
+        "Zaliczenie: min. 50/100 pkt; brak poprawek poza oceną niedostateczną.",
+        "Skala: 90–100 → 5; 80–89 → 4,5; 70–79 → 4; 60–69 → 3,5; 50–59 → 3; 0–49 → 2.",
+        "Laboratoria w grupach 2-osobowych: L1 101&102 (pt. 10–14), L2 103&104 (pt. 10–14), L3 105&106 (pon. 8–12), L4 107&108 (pon. 12–16).",
+        "Tematy labów: estymacja bitowej stopy błędów, właściwości linii transmisyjnej, technika światłowodowa."
+      ],
+      "tree": {
+        "id": "n:trap",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "trap-req-total",
+            "kind": "min-total",
+            "label": "Min. 50/100 pkt"
+          }
+        ],
+        "children": [
+          {
+            "id": "n:trap-tests",
+            "type": "group",
+            "name": "Sprawdziany",
+            "activityKind": "colloquium",
+            "children": [
+              {
+                "id": "n:trap-test-1",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Sprawdzian 1",
+                "short": "Sprawdzian 1",
+                "max": 20
+              },
+              {
+                "id": "n:trap-test-2",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Sprawdzian 2",
+                "short": "Sprawdzian 2",
+                "max": 50
+              }
+            ],
+            "info": "Dwa sprawdziany podczas wykładu, 20 pkt (tydzień 4) i 50 pkt (tydzień 8)."
+          },
+          {
+            "id": "n:trap-lab",
+            "type": "group",
+            "name": "Laboratorium",
+            "activityKind": "lab",
+            "children": [
+              {
+                "id": "n:trap-lab-1",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 1: estymacja bitowej stopy błędów",
+                "short": "Lab 1",
+                "max": 10
+              },
+              {
+                "id": "n:trap-lab-2",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 2: właściwości linii transmisyjnej",
+                "short": "Lab 2",
+                "max": 10
+              },
+              {
+                "id": "n:trap-lab-3",
+                "type": "activity",
+                "activityKind": "lab",
+                "name": "Lab 3: technika światłowodowa",
+                "short": "Lab 3",
+                "max": 10
+              }
+            ],
+            "info": "3 ćwiczenia po 10 pkt (sprawozdania) + sprawdzian wiedzy; grupy 2-osobowe."
+          }
+        ],
+        "description": "Transmisja miedziana i światłowodowa, teoria, pomiary BER, linie transmisyjne, światłowody",
+        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiale; daty wykładów i labów do potwierdzenia."
+      }
+    }
+  ],
+  "teachers": [
+    {
+      "id": "buchowicz",
+      "name": "dr inż. Andrzej Buchowicz",
+      "email": "andrzej.buchowicz@pw.edu.pl",
+      "room": "pok. 451"
+    },
+    {
+      "id": "galinski",
+      "name": "dr inż. Grzegorz Galiński",
+      "email": "grzegorz.galinski@pw.edu.pl",
+      "room": "pok. 451"
+    },
+    {
+      "id": "kaminska",
+      "name": "dr Katarzyna Kamińska",
+      "email": "katarzyna.kaminska@pw.edu.pl",
+      "room": "406, skrzydło A"
+    },
+    {
+      "id": "sepczuk",
+      "name": "Mariusz Sepczuk"
+    },
+    {
+      "id": "bieniasz",
+      "name": "Jędrzej Bieniasz"
+    },
+    {
+      "id": "janicki",
+      "name": "Artur Janicki"
+    },
+    {
+      "id": "kuklinski",
+      "name": "Sławomir Kukliński"
+    },
+    {
+      "id": "domaszewicz",
+      "name": "Jarosław Domaszewicz",
+      "email": "jaroslaw.domaszewicz@pw.edu.pl"
+    },
+    {
+      "id": "pruszkowski",
+      "name": "Aleksander Pruszkowski",
+      "email": "aleksander.pruszkowski@pw.edu.pl"
+    },
+    {
+      "id": "pachowicz",
+      "name": "Krzysztof Pachowicz",
+      "email": "krzysztof.pachowicz@pw.edu.pl"
+    },
+    {
+      "id": "bobinski",
+      "name": "dr inż. Piotr Bobiński",
+      "email": "piotr.bobinski@pw.edu.pl",
+      "room": "125"
+    },
+    {
+      "id": "jasinski",
+      "name": "dr inż. Maciej Jasiński"
+    },
+    {
+      "id": "wojtasiak",
+      "name": "dr hab. inż. Wojciech Wojtasiak",
+      "email": "wojciech.wojtasiak@pw.edu.pl",
+      "room": "549"
+    },
+    {
+      "id": "kazubski",
+      "name": "dr inż. Wojciech Kazubski",
+      "email": "wojciech.kazubski@pw.edu.pl"
+    },
+    {
+      "id": "turkiewicz",
+      "name": "Jarosław Turkiewicz",
+      "email": "jaroslaw.turkiewicz@pw.edu.pl",
+      "room": "515"
+    }
+  ],
+  "terms": [
+    {
+      "id": "t:to-w1",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W1",
+      "date": "2026-10-06",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w2",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W2",
+      "date": "2026-10-13",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w3",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W3",
+      "date": "2026-10-20",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w4",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W4",
+      "date": "2026-10-27",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w5",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W5",
+      "date": "2026-11-03",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w6",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W6",
+      "date": "2026-11-10",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w7",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W7",
+      "date": "2026-11-17",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w8",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W8",
+      "date": "2026-11-24",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w10",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W10",
+      "date": "2026-12-08",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w11",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W11",
+      "date": "2026-12-15",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w12",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W12",
+      "date": "2026-12-22",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w13",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W13",
+      "date": "2027-01-12",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-w14",
+      "subjectId": "to",
+      "kind": "lecture",
+      "title": "Wykład W14",
+      "date": "2027-01-19",
+      "start": "16:00",
+      "end": "18:00",
+      "location": "wg planu",
+      "notes": "Obecność nieobowiązkowa, ale zalecana."
+    },
+    {
+      "id": "t:to-lab-1",
+      "subjectId": "to",
+      "nodeId": "n:to-lab-1",
+      "kind": "lab",
+      "title": "Lab 1 - Rozdzielczość bitowa i zanurzanie informacji w obrazie",
+      "date": "2026-11-02",
+      "start": "16:00",
+      "end": "19:00",
+      "group": "104 (PnP)",
+      "graded": true,
+      "requirementNote": "Obecność obowiązkowa · sprawozdanie do końca zajęć"
+    },
+    {
+      "id": "t:to-lab-2",
+      "subjectId": "to",
+      "nodeId": "n:to-lab-2",
+      "kind": "lab",
+      "title": "Lab 2 - Badanie właściwości statystycznych danych obrazowych",
+      "date": "2026-11-16",
+      "start": "16:00",
+      "end": "19:00",
+      "group": "104 (PnP)",
+      "graded": true,
+      "requirementNote": "Obecność obowiązkowa · sprawozdanie do końca zajęć"
+    },
+    {
+      "id": "t:to-lab-3",
+      "subjectId": "to",
+      "nodeId": "n:to-lab-3",
+      "kind": "lab",
+      "title": "Lab 3 - Badanie koderów obrazu",
+      "date": "2026-11-30",
+      "start": "16:00",
+      "end": "19:00",
+      "group": "104 (PnP)",
+      "graded": true,
+      "requirementNote": "Obecność obowiązkowa · sprawozdanie do końca zajęć"
+    },
+    {
+      "id": "t:to-lab-4",
+      "subjectId": "to",
+      "nodeId": "n:to-lab-4",
+      "kind": "lab",
+      "title": "Lab 4 - Badanie koderów sekwencji wizyjnych",
+      "date": "2026-12-14",
+      "start": "16:00",
+      "end": "19:00",
+      "group": "104 (PnP)",
+      "graded": true,
+      "requirementNote": "Obecność obowiązkowa · sprawozdanie do końca zajęć"
+    },
+    {
+      "id": "t:to-lab-5",
+      "subjectId": "to",
+      "nodeId": "n:to-lab-5",
+      "kind": "lab",
+      "title": "Lab 5 - Rozpoznawanie obiektów z wykorzystaniem sieci neuronowych",
+      "date": "2027-01-11",
+      "start": "16:00",
+      "end": "19:00",
+      "group": "104 (PnP)",
+      "graded": true,
+      "requirementNote": "Obecność obowiązkowa · sprawozdanie do końca zajęć"
+    },
+    {
+      "id": "t:to-kol-1",
+      "subjectId": "to",
+      "nodeId": "n:to-kol-1",
+      "kind": "colloquium",
+      "title": "Sprawdzian wykładowy 1 (wykład 9)",
+      "date": "2026-12-01",
+      "start": "16:00",
+      "end": "18:00",
+      "graded": true,
+      "requirementNote": "Min. 7 pkt",
+      "notes": "Zakres: tematy wykładów 1-8."
+    },
+    {
+      "id": "t:to-kol-2",
+      "subjectId": "to",
+      "nodeId": "n:to-kol-2",
+      "kind": "colloquium",
+      "title": "Sprawdzian wykładowy 2 (wykład 15)",
+      "date": "2027-01-26",
+      "start": "16:00",
+      "end": "18:00",
+      "graded": true,
+      "requirementNote": "Min. 7 pkt",
+      "notes": "Zakres: tematy wykładów 10-14."
+    },
+    {
+      "id": "t:to-proj-e1",
+      "subjectId": "to",
+      "nodeId": "n:to-proj-e1",
+      "kind": "project-deadline",
+      "title": "Zapis do grup projektowych (zespoły czteroosobowe)",
+      "date": "2026-10-18",
+      "due": "23:59",
+      "requirementNote": "Zespoły 4-osobowe",
+      "notes": "Etap niepunktowany - warunkuje udział w projekcie."
+    },
+    {
+      "id": "t:to-proj-e2",
+      "subjectId": "to",
+      "nodeId": "n:to-proj-e2",
+      "kind": "project-stage",
+      "title": "Wstępne wyniki implementacji i testowania",
+      "date": "2026-12-13",
+      "due": "23:59",
+      "graded": true,
+      "requirementNote": "Wymagany kontakt z prowadzącym",
+      "notes": "Podział punktów na etapy przyjęty roboczo."
+    },
+    {
+      "id": "t:to-proj-e3",
+      "subjectId": "to",
+      "nodeId": "n:to-proj-e3",
+      "kind": "project-stage",
+      "title": "Zakończenie projektu - sprawozdanie, wyniki testów, wnioski, kody źródłowe",
+      "date": "2027-01-29",
+      "due": "23:59",
+      "graded": true,
+      "requirementNote": "Wymagane spotkanie z prowadzącym",
+      "notes": "Podział punktów na etapy przyjęty roboczo."
+    },
+    {
+      "id": "t:pcyb-w1",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 1: Podstawy cyberbezpieczeństwa: wprowadzenie",
+      "date": "2026-10-06",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: dr Katarzyna Kamińska."
+    },
+    {
+      "id": "t:pcyb-w2",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 2: Audyt bezpieczeństwa i testy penetracyjne",
+      "date": "2026-10-13",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Mariusz Sepczuk."
+    },
+    {
+      "id": "t:pcyb-w3",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 3: Cyberbezpieczeństwo ofensywne",
+      "date": "2026-10-20",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Mariusz Sepczuk."
+    },
+    {
+      "id": "t:pcyb-w4",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 4: Bezpieczeństwo systemów i oprogramowania",
+      "date": "2026-10-27",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Mariusz Sepczuk."
+    },
+    {
+      "id": "t:pcyb-w5",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 5: Modelowanie zagrożeń i złośliwe oprogramowanie (1)",
+      "date": "2026-11-03",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Jędrzej Bieniasz."
+    },
+    {
+      "id": "t:pcyb-w6",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 6: Modelowanie zagrożeń i złośliwe oprogramowanie (2)",
+      "date": "2026-11-10",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Jędrzej Bieniasz."
+    },
+    {
+      "id": "t:pcyb-w7",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 7: Wprowadzenie do kryminalistyki cyfrowej",
+      "date": "2026-11-17",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Jędrzej Bieniasz."
+    },
+    {
+      "id": "t:pcyb-w8",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 8: Bezpieczeństwo komunikacji",
+      "date": "2026-11-24",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Artur Janicki."
+    },
+    {
+      "id": "t:pcyb-w9",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 9: Bezpieczeństwo w telekomunikacji (1)",
+      "date": "2026-12-01",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Sławomir Kukliński."
+    },
+    {
+      "id": "t:pcyb-w10",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 10: Bezpieczeństwo w telekomunikacji (2)",
+      "date": "2026-12-08",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Sławomir Kukliński."
+    },
+    {
+      "id": "t:pcyb-w11",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 11: Bezpieczeństwo w telekomunikacji (3)",
+      "date": "2026-12-15",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Sławomir Kukliński."
+    },
+    {
+      "id": "t:pcyb-w12",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 12: Ataki na użytkownika",
+      "date": "2026-12-22",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Jędrzej Bieniasz."
+    },
+    {
+      "id": "t:pcyb-w13",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 13: Bezpieczeństwo IoT",
+      "date": "2027-01-12",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: Jędrzej Bieniasz."
+    },
+    {
+      "id": "t:pcyb-w14",
+      "subjectId": "pcyb",
+      "kind": "lecture",
+      "title": "Wykład 14: Bezpieczeństwo środowisk wirtualnych",
+      "date": "2027-01-19",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "notes": "Prowadzący: dr Katarzyna Kamińska."
+    },
+    {
+      "id": "t:pcyb-exam-0",
+      "subjectId": "pcyb",
+      "nodeId": "n:pcyb-exam-0",
+      "kind": "colloquium",
+      "title": "Egzamin: po ostatnim wykładzie",
+      "date": "2027-01-26",
+      "start": "18:15",
+      "end": "20:00",
+      "location": "105-AR",
+      "graded": true,
+      "requirementNote": "Min. 20 pkt",
+      "notes": "Jeden egzamin; pytania P/F, ABCD, otwarte i case study."
+    },
+    {
+      "id": "t:pcyb-signup",
+      "subjectId": "pcyb",
+      "nodeId": "n:pcyb-project",
+      "kind": "project-deadline",
+      "title": "Zapisy zespołów projektowych (MS Forms)",
+      "date": "2026-10-13",
+      "due": "23:59",
+      "requirementNote": "Zespoły 2-3 osoby",
+      "notes": "Formularz MS Forms; prowadzący tworzy dedykowane kanały Discord."
+    },
+    {
+      "id": "t:pcyb-pitstop",
+      "subjectId": "pcyb",
+      "nodeId": "n:pcyb-project",
+      "kind": "project-deadline",
+      "title": "Pit stop: tematyka i zarys planu projektu",
+      "date": "2026-10-20",
+      "due": "23:59",
+      "requirementNote": "Tematyka + plan realizacji",
+      "notes": "Checklista wymagań, koło ratunkowe."
+    },
+    {
+      "id": "t:pcyb-phase-1",
+      "subjectId": "pcyb",
+      "nodeId": "n:pcyb-project-1",
+      "kind": "project-stage",
+      "title": "Oddanie Fazy 1: ofensywna (proof of concept)",
+      "date": "2026-11-17",
+      "due": "23:59",
+      "graded": true,
+      "requirementNote": "Raport + dokumentacja PoC",
+      "notes": "Checklista wymagań."
+    },
+    {
+      "id": "t:pcyb-phase-2",
+      "subjectId": "pcyb",
+      "nodeId": "n:pcyb-project-2",
+      "kind": "project-stage",
+      "title": "Oddanie Fazy 2: defensywna",
+      "date": "2026-12-15",
+      "due": "23:59",
+      "graded": true,
+      "requirementNote": "Raport + dokumentacja",
+      "notes": "Checklista wymagań."
+    },
+    {
+      "id": "t:psir-w1",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 1: Wprowadzenie: mapa drogowa, organizacja przedmiotu",
+      "date": "2026-10-06",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w2",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 2: Linux NET API 1/3: gniazda BSD, TCP/UDP",
+      "date": "2026-10-13",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w3",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 3: Linux NET API 2/3: klient/serwer TCP i UDP",
+      "date": "2026-10-20",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w4",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 4: Linux NET API 3/3: protokół warstwy aplikacji",
+      "date": "2026-10-27",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w5",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 5: Węzły IoT 1/2: mikrokontrolery i peryferia",
+      "date": "2026-11-03",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w6",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 6: Węzły IoT 2/2: sensory i elementy wykonawcze",
+      "date": "2026-11-10",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w7",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 7: Sensory i elementy wykonawcze: praktyka",
+      "date": "2026-11-17",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w8",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 8: Oszczędna reprezentacja danych",
+      "date": "2026-11-24",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w9",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 9: Praktyczne aspekty sieciowe IoT",
+      "date": "2026-12-01",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w10",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 10: FreeRTOS 1/5: super-pętla i zdarzenia",
+      "date": "2026-12-08",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w11",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 11: FreeRTOS 2/5: wątki i priorytety",
+      "date": "2026-12-15",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w13",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 13: FreeRTOS 3/5: komunikacja wątków",
+      "date": "2027-01-12",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-w14",
+      "subjectId": "psir",
+      "kind": "lecture",
+      "title": "Wykład 14: FreeRTOS 4/5: przerwania, ISR, mutex",
+      "date": "2027-01-19",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR"
+    },
+    {
+      "id": "t:psir-lab-1",
+      "subjectId": "psir",
+      "nodeId": "n:psir-lab-1",
+      "kind": "lab",
+      "title": "Lab 1: klient/serwer POSIX (gniazda)",
+      "date": "2026-10-21",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "graded": true,
+      "requirementNote": "Sprawozdanie do końca soboty",
+      "notes": "Slot 8:15-12:00 lub 12:15-16:00; odrabianie do 11.01.2027."
+    },
+    {
+      "id": "t:psir-lab-2",
+      "subjectId": "psir",
+      "nodeId": "n:psir-lab-2",
+      "kind": "lab",
+      "title": "Lab 2: węzeł IoT (Arduino, UDP)",
+      "date": "2026-11-18",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "graded": true,
+      "requirementNote": "Sprawozdanie do końca soboty",
+      "notes": "Laby: 21.10, 18.11, 09.12; slot 8:15-12:00 lub 12:15-16:00."
+    },
+    {
+      "id": "t:psir-lab-3",
+      "subjectId": "psir",
+      "nodeId": "n:psir-lab-3",
+      "kind": "lab",
+      "title": "Lab 3: FreeRTOS",
+      "date": "2026-12-09",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "graded": true,
+      "requirementNote": "Sprawozdanie do końca soboty"
+    },
+    {
+      "id": "t:psir-project-intro",
+      "subjectId": "psir",
+      "nodeId": "n:psir-project-1",
+      "kind": "project-stage",
+      "title": "Zajęcia wprowadzające do projektu",
+      "date": "2026-10-20",
+      "start": "16:15",
+      "end": "18:00",
+      "location": "133",
+      "requirementNote": "Obecność obowiązkowa",
+      "notes": "Szczegóły projektu; obowiązkowa obecność."
+    },
+    {
+      "id": "t:psir-project-review-1",
+      "subjectId": "psir",
+      "nodeId": "n:psir-project-1",
+      "kind": "project-stage",
+      "title": "Odbiór projektu (1/4)",
+      "date": "2026-12-16",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "notes": "Slot laboratoryjny; obecność całego zespołu obowiązkowa."
+    },
+    {
+      "id": "t:psir-project-review-2",
+      "subjectId": "psir",
+      "nodeId": "n:psir-project-1",
+      "kind": "project-stage",
+      "title": "Odbiór projektu (2/4)",
+      "date": "2026-12-23",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "notes": "Slot laboratoryjny; obecność całego zespołu obowiązkowa."
+    },
+    {
+      "id": "t:psir-project-review-3",
+      "subjectId": "psir",
+      "nodeId": "n:psir-project-1",
+      "kind": "project-stage",
+      "title": "Odbiór projektu (3/4)",
+      "date": "2027-01-13",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "notes": "Slot laboratoryjny; obecność całego zespołu obowiązkowa."
+    },
+    {
+      "id": "t:psir-project-review-4",
+      "subjectId": "psir",
+      "nodeId": "n:psir-project-1",
+      "kind": "project-stage",
+      "title": "Odbiór projektu (4/4)",
+      "date": "2027-01-20",
+      "start": "08:15",
+      "end": "12:00",
+      "location": "CS304",
+      "notes": "Slot laboratoryjny; obecność całego zespołu obowiązkowa."
+    },
+    {
+      "id": "t:psir-colloquium",
+      "subjectId": "psir",
+      "nodeId": "n:psir-colloquium-1",
+      "kind": "colloquium",
+      "title": "Kolokwium",
+      "date": "2027-01-26",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR",
+      "graded": true,
+      "requirementNote": "Próg 23 pkt",
+      "notes": "3 pytania otwarte po 7 pkt + 12 zamkniętych po 2 pkt; drugi termin 02.02.2027."
+    },
+    {
+      "id": "t:psir-colloquium-retake",
+      "subjectId": "psir",
+      "nodeId": "n:psir-colloquium-1",
+      "kind": "colloquium",
+      "title": "Kolokwium: termin poprawkowy",
+      "date": "2027-02-02",
+      "start": "12:15",
+      "end": "14:00",
+      "location": "105-AR",
+      "graded": true,
+      "attempt": 2,
+      "requirementNote": "Próg 23 pkt",
+      "notes": "Drugi termin po ostatnim wykładzie; liczy się ostatni wynik."
+    }
+  ],
+  "progress": {
+    "n:to-lab-1": {
+      "earned": 0
+    },
+    "n:to-lab-2": {
+      "earned": 0
+    },
+    "n:to-lab-3": {
+      "earned": 0
+    },
+    "n:to-lab-4": {
+      "earned": 0
+    },
+    "n:to-lab-5": {
+      "earned": 0
+    },
+    "n:to-kol-1": {
+      "earned": 0
+    },
+    "n:to-kol-2": {
+      "earned": 0
+    },
+    "n:to-proj-e2": {
+      "earned": 0
+    },
+    "n:to-proj-e3": {
+      "earned": 0
+    }
+  }
+}

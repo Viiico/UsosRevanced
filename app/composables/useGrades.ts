@@ -1,11 +1,6 @@
 import type { GradeNode, NodeProgress, Term } from '~/types'
-import { subjects, terms as allTerms, semester } from '~/data/subjects'
-import { collectNodeIds, computeProgress, findNode, findPath } from '~/lib/tree'
-import {
-  evaluateRequirements,
-  gradeForPoints,
-  termsForNode,
-} from '~/lib/requirements'
+import { collectNodeIds, computeProgress, effectiveWeight, findNode, findPath } from '~/lib/tree'
+import { evaluateRequirements, gradeForPoints, termsForNode } from '~/lib/requirements'
 
 export interface ProgressSegment {
   id: string
@@ -24,27 +19,28 @@ export interface ProgressSegment {
 export function useGrades() {
   const route = useRoute()
   const router = useRouter()
+  const data = useAppData()
 
-  const root: GradeNode = {
-    id: semester.id,
+  const root = computed<GradeNode>(() => ({
+    id: data.semester.id,
     kind: 'semester',
-    name: `${semester.name} ${semester.code}`,
+    name: `${data.semester.name} ${data.semester.code}`,
     weight: 1,
-    children: subjects.map((subject) => subject.tree),
-  }
+    children: data.subjects.map((subject) => subject.tree),
+  }))
 
   const currentId = computed(() => {
     const raw = route.query.node
     const value = Array.isArray(raw) ? raw[0] : raw
-    return value && findNode(root, value) ? value : root.id
+    return value && findNode(root.value, value) ? value : root.value.id
   })
 
   const path = computed<GradeNode[]>(() => {
-    const found = findPath(root, currentId.value)
-    return found.length ? found : [root]
+    const found = findPath(root.value, currentId.value)
+    return found.length ? found : [root.value]
   })
 
-  const current = computed<GradeNode>(() => path.value[path.value.length - 1] ?? root)
+  const current = computed<GradeNode>(() => path.value[path.value.length - 1] ?? root.value)
 
   const parent = computed<GradeNode | null>(() =>
     path.value.length > 1 ? path.value[path.value.length - 2]! : null,
@@ -57,13 +53,19 @@ export function useGrades() {
   const progress = computed<NodeProgress>(() => computeProgress(current.value))
 
   const segments = computed<ProgressSegment[]>(() => {
-    const kids = children.value.filter((child) => child.weight > 0)
+    const all = children.value
+    const kids = all
+      .map((child) => ({ child, weight: effectiveWeight(child, all) }))
+      .filter((entry) => entry.weight > 0)
     if (!kids.length) {
+      // Liść z punktami ma sens jako jeden segment; pusty kontener (np. nowy
+      // przedmiot bez grup) nie powinien pokazywać sam siebie.
+      if (!current.value.points || current.value.points.max === 0) return []
       const single = computeProgress(current.value)
       return [
         {
           id: current.value.id,
-          label: current.value.short ?? current.value.name,
+          label: current.value.short || current.value.name,
           ratio: single.ratio,
           weight: 1,
           earned: single.earned,
@@ -72,13 +74,13 @@ export function useGrades() {
         },
       ]
     }
-    return kids.map((child, index) => {
+    return kids.map(({ child, weight }, index) => {
       const childProgress = computeProgress(child)
       return {
         id: child.id,
-        label: child.short ?? child.name,
+        label: child.short || child.name,
         ratio: childProgress.ratio,
-        weight: child.weight,
+        weight,
         earned: childProgress.earned,
         max: childProgress.max,
         colorIndex: index,
@@ -87,15 +89,17 @@ export function useGrades() {
   })
 
   const activeSubject = computed(
-    () => subjects.find((subject) => collectNodeIds(subject.tree).includes(current.value.id)) ?? null,
+    () =>
+      data.subjects.find((subject) => collectNodeIds(subject.tree).includes(current.value.id)) ??
+      null,
   )
 
   /** W widoku semestru skala pochodzi z jedynego przedmiotu. */
   const scoringSubject = computed(
-    () => activeSubject.value ?? (subjects.length === 1 ? subjects[0]! : null),
+    () => activeSubject.value ?? (data.subjects.length === 1 ? data.subjects[0]! : null),
   )
 
-  const requirements = computed(() => evaluateRequirements(current.value, root))
+  const requirements = computed(() => evaluateRequirements(current.value, root.value))
 
   /** Skala ocen dotyczy przedmiotu, nie jego poddrzewa. */
   const showScale = computed(() => {
@@ -103,12 +107,12 @@ export function useGrades() {
     return !subject || current.value.id === subject.tree.id
   })
 
-  const scopedTerms = computed<Term[]>(() => termsForNode(current.value, allTerms))
+  const scopedTerms = computed<Term[]>(() => termsForNode(current.value, data.terms))
 
   const nowIso = useState('now-iso', () => new Date().toISOString())
 
   function termStatus(term: Term): 'graded' | 'overdue' | 'pending' {
-    const node = term.nodeId ? findNode(root, term.nodeId) : null
+    const node = term.nodeId ? findNode(root.value, term.nodeId) : null
     if (node?.points && node.points.earned != null) return 'graded'
     if (term.date < nowIso.value.slice(0, 10)) return 'overdue'
     return 'pending'
@@ -131,7 +135,7 @@ export function useGrades() {
     const subject = activeSubject.value
     if (!subject) return []
     return [
-      { id: 'group', text: `grupa ${subject.group ?? '-'}`, icon: 'group' as const },
+      { id: 'group', text: `grupa ${subject.group || '-'}`, icon: 'group' as const },
       ...subject.teachers.map((teacher) => ({
         id: `teacher-${teacher.name}`,
         text: teacher.name,
@@ -146,7 +150,7 @@ export function useGrades() {
   )
 
   function select(id: string) {
-    if (id === root.id) {
+    if (id === root.value.id) {
       router.push({ query: {} })
       return
     }
@@ -159,7 +163,7 @@ export function useGrades() {
 
   return {
     root,
-    semester,
+    semester: data.semester,
     currentId,
     path,
     current,

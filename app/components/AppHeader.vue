@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CalendarDays, GraduationCap, Table2 } from 'lucide-vue-next'
+import { CalendarDays, Database, GraduationCap, Table2 } from 'lucide-vue-next'
 
 const route = useRoute()
 
@@ -7,6 +7,7 @@ const items = [
   { to: '/harmonogram', label: 'Harmonogram', icon: Table2 },
   { to: '/oceny', label: 'Oceny', icon: GraduationCap },
   { to: '/kalendarz', label: 'Kalendarz', icon: CalendarDays },
+  { to: '/dane', label: 'Dane', icon: Database },
 ]
 </script>
 

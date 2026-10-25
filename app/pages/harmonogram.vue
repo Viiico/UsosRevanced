@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { ArrowRight, CalendarClock, CalendarX2, Check, Lock, RotateCcw } from 'lucide-vue-next'
+import {
+  ArrowRight,
+  BookOpen,
+  CalendarClock,
+  CalendarX2,
+  Check,
+  Lock,
+  RotateCcw,
+} from 'lucide-vue-next'
 import type { Term } from '~/types'
-import { subjects, terms } from '~/data/subjects'
 import {
   TERM_GROUP,
   TERM_GROUP_LABEL,
@@ -21,10 +28,11 @@ import {
 
 useHead({ title: 'Harmonogram' })
 
+const data = useAppData()
 const { semester, termStatus, nowIso } = useGrades()
 
 /** Harmonogram zbiera terminy oceniane - wykłady zostają w kalendarzu. */
-const items = terms.filter((term) => term.nodeId)
+const items = computed(() => data.terms.filter((term) => term.nodeId))
 
 /** Kropka na osi czasu: kolor zależy od stanu terminu. */
 const STATUS_DOT = {
@@ -41,18 +49,18 @@ const today = computed(() => nowIso.value.slice(0, 10))
 
 const filters = computed(() => {
   const counts = new Map<string, number>()
-  for (const term of items) {
+  for (const term of items.value) {
     const group = TERM_GROUP[term.kind]
     counts.set(group, (counts.get(group) ?? 0) + 1)
   }
   return [
-    { id: 'all', label: 'Wszystko', count: items.length },
+    { id: 'all', label: 'Wszystko', count: items.value.length },
     ...[...counts].map(([id, count]) => ({ id, label: TERM_GROUP_LABEL[id] ?? id, count })),
   ]
 })
 
 const visible = computed(() =>
-  items
+  items.value
     .filter((term) => subjectFilter.value === 'all' || term.subjectId === subjectFilter.value)
     .filter((term) => groupFilter.value === 'all' || TERM_GROUP[term.kind] === groupFilter.value)
     .filter(
@@ -83,8 +91,8 @@ const stats = computed(() => ({
 }))
 
 const range = computed(() => {
-  if (!items.length) return ''
-  const dates = items.map((term) => term.date).sort()
+  if (!items.value.length) return ''
+  const dates = items.value.map((term) => term.date).sort()
   return `${formatDate(dates[0]!)} - ${formatDate(dates[dates.length - 1]!)}`
 })
 
@@ -102,6 +110,10 @@ function termsLabel(count: number) {
 
 function statusOf(term: Term) {
   return TERM_STATUS[termStatus(term)]
+}
+
+function subjectOf(term: Term) {
+  return data.subjects.find((subject) => subject.id === term.subjectId) ?? null
 }
 
 function isToday(term: Term) {
@@ -142,7 +154,7 @@ function resetFilters() {
     <Card class="flex flex-col">
       <CardHeader class="gap-3 pb-4">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <div v-if="subjects.length > 1" class="flex flex-wrap gap-1.5">
+          <div v-if="data.subjects.length > 1" class="flex flex-wrap gap-1.5">
             <button
               type="button"
               class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
@@ -157,7 +169,7 @@ function resetFilters() {
               Wszystkie przedmioty
             </button>
             <button
-              v-for="subject in subjects"
+              v-for="subject in data.subjects"
               :key="subject.id"
               type="button"
               class="inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-2xs font-medium transition-colors"
@@ -302,6 +314,14 @@ function resetFilters() {
                       <span class="text-2xs text-muted-foreground">
                         {{ TERM_KIND_LABEL[term.kind] }}
                       </span>
+                      <Badge
+                        v-if="data.subjects.length > 1 && subjectOf(term)"
+                        variant="outline"
+                        class="gap-1"
+                      >
+                        <BookOpen class="size-3" />
+                        {{ subjectOf(term)?.name }}
+                      </Badge>
                       <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
                         · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
                       </span>

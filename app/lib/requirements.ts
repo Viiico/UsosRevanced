@@ -9,7 +9,10 @@ import { collectPointLeaves, computeProgress, findNode } from '~/lib/tree'
 
 export function gradeForPoints(points: number, scale: GradeScaleRow[]): GradeScaleRow {
   const sorted = [...scale].sort((a, b) => b.min - a.min)
-  return sorted.find((row) => points >= row.min) ?? sorted[sorted.length - 1]!
+  return (
+    sorted.find((row) => points >= row.min) ??
+    sorted[sorted.length - 1] ?? { min: 0, grade: '–' }
+  )
 }
 
 
@@ -43,7 +46,7 @@ function evaluateOne(
       : null
 
     if (failing.length) {
-      const names = failing.map((leaf) => leaf.short ?? leaf.name).join(', ')
+      const names = failing.map((leaf) => leaf.short || leaf.name).join(', ')
       return {
         ...requirement,
         status: 'failed',

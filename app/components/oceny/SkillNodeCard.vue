@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import type { GradeNode } from '~/types'
-import { terms } from '~/data/subjects'
 import { computeProgress } from '~/lib/tree'
 import { termsForNode } from '~/lib/requirements'
 import { childSummary, nodeIcon, type NodeVisual } from '~/lib/node-meta'
@@ -11,12 +10,13 @@ import { formatDate, formatPercent } from '~/lib/format'
 const props = defineProps<{ node: GradeNode; visual?: NodeVisual }>()
 const emit = defineEmits<{ select: [id: string] }>()
 
+const data = useAppData()
 const progress = computed(() => computeProgress(props.node))
 const hasChildren = computed(() => (props.node.children?.length ?? 0) > 0)
 const hasPoints = computed(() => progress.value.max > 0)
 const icon = computed(() => nodeIcon(props.node, props.visual))
 
-const nextTerm = computed(() => termsForNode(props.node, terms)[0] ?? null)
+const nextTerm = computed(() => termsForNode(props.node, data.terms)[0] ?? null)
 const summary = computed(() => childSummary(props.node))
 </script>
 
@@ -38,7 +38,7 @@ const summary = computed(() => childSummary(props.node))
       </span>
 
       <p class="min-w-0 flex-1 truncate text-lead leading-snug font-medium" :title="node.name">
-        {{ node.short ?? node.name }}
+        {{ node.short || node.name }}
       </p>
 
       <span v-if="nextTerm" class="tnum shrink-0 text-3xs text-muted-foreground">

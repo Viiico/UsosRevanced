@@ -9,7 +9,8 @@
     "build:node": "nuxt build",
     "preview": "bun --bun ./node_modules/nuxt/bin/nuxt.mjs preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "validate": "bun scripts/validate-data.ts"
   },
   "dependencies": {
     "nuxt": "^4.6.2",

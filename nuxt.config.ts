@@ -33,7 +33,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'USOS Revanced — dziennik studiów',
+      title: 'USOS Revanced: dziennik studiów',
       htmlAttrs: { lang: 'pl' },
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -50,7 +50,7 @@ export default defineNuxtConfig({
     strict: true,
     typeCheck: false,
     tsConfig: {
-      // vue-router 4.6 nie eksportuje już pluginu volar, który dopisuje Nuxt —
+      // vue-router 4.6 nie eksportuje już pluginu volar, który dopisuje Nuxt,
       // bez tego `nuxt typecheck` kończy się błędem mimo braku błędów typów.
       vueCompilerOptions: {
         plugins: [],

@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import { ChevronRight, FlaskConical } from 'lucide-vue-next'
 
-const { crumbs, select, activeSubject, scoringSubject, semester, heroMeta } = useGrades()
+const data = useAppData()
+const { crumbs, select, activeSubject, semester, heroMeta } = useGrades()
+
+function subjectCount(count: number) {
+  if (!count) return 'brak przedmiotów'
+  const mod10 = count % 10
+  const mod100 = count % 100
+  const label =
+    count === 1
+      ? 'przedmiot'
+      : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)
+        ? 'przedmioty'
+        : 'przedmiotów'
+  return `${count} ${label}`
+}
 
 const heading = computed(() => (activeSubject.value ? activeSubject.value.name : 'Oceny'))
 const subtitle = computed(() =>
   activeSubject.value
     ? null
-    : `${semester.name} ${semester.code} · ${scoringSubject.value ? '1 przedmiot' : 'brak przedmiotów'}`,
+    : `${semester.name} ${semester.code} · ${subjectCount(data.subjects.length)}`,
 )
 
 useHead({

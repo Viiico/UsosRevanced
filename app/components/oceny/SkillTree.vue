@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { ArrowLeft, ArrowUpRight } from 'lucide-vue-next'
-import { terms } from '~/data/subjects'
 import { termsForNode } from '~/lib/requirements'
 import { NODE_KIND_LABEL, childSummary, nodeIcon } from '~/lib/node-meta'
 import { formatDate, formatWeekday } from '~/lib/format'
 
+const data = useAppData()
 const { current, children, canGoUp, goUp, select, progress } = useGrades()
 
 const icon = computed(() => nodeIcon(current.value))
 const kindLabel = computed(() => NODE_KIND_LABEL[current.value.kind])
 const summary = computed(() => childSummary(current.value))
-const nextTerm = computed(() => termsForNode(current.value, terms)[0] ?? null)
+const nextTerm = computed(() => termsForNode(current.value, data.terms)[0] ?? null)
 const hasPoints = computed(() => progress.value.max > 0)
 
 /** Opis i założenia idą do dymka, żeby hub miał zawsze tę samą wysokość. */

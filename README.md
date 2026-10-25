@@ -9,8 +9,8 @@ zawężony do wybranego poziomu.
   (`app/components/ui/*`, reka-ui, cva, `cn()`)
 - **Ikony:** `lucide-vue-next`
 - **Runtime:** [Bun](https://bun.sh/) (instalacja i uruchamianie)
-- **Dane:** statyczne, w pełni serializowalne (`app/data/subjects.ts`) - gotowe pod JSON/SQLite
-  i przyszłą migrację do Tauri
+- **Dane:** jeden dokument JSON (`app/data/base.json`) rzutowany na typowany model przez
+  `app/data/index.ts` - gotowe pod SQLite i przyszłą migrację do Tauri
 
 ## Uruchomienie
 
@@ -42,8 +42,9 @@ Tokeny: `app/assets/css/main.css` (`--background`, `--primary`, `--seg-1…5`, `
 app/
   pages/
     oceny.vue              # trzy bloki: skilltree, postęp, harmonogram szczegółowy
-    harmonogram.vue        # placeholder (wkrótce)
-    kalendarz.vue          # placeholder (wkrótce)
+    harmonogram.vue        # filtry i os czasu terminów
+    kalendarz.vue          # siatka tygodniowa
+    dane.vue               # edytor JSON i import/eksport
   components/
     oceny/SkillTree.vue        # jedno piętro drzewa + okruszki + „poziom wyżej”
     oceny/SkillNodeCard.vue    # kafelek dziecka
@@ -57,11 +58,35 @@ app/
   lib/
     tree.ts                # nawigacja po drzewie i liczenie postępu
     requirements.ts        # ewaluacja warunków zaliczenia + terminy w zasięgu
+    base-validate.ts       # walidator dokumentu v2 (wspólny z `bun run validate`)
     format.ts              # daty, punkty, procenty po polsku
-  data/subjects.ts         # semestr, przedmiot, drzewo ocen, terminy
-  types/index.ts           # kontrakt danych (JSON/SQLite)
+  data/base.json           # ground truth v2: semestr, przedmioty, drzewo, terminy, progress
+  data/index.ts            # walidacja + adaptacja v2 → runtime AppData
+  data/adapt-v2.ts         # adapter zgodności dla widoków (do usunięcia po migracji UI)
+  types/base.ts            # kontrakt base.json v2
+  types/index.ts           # kontrakt runtime (widoki/edytor)
+scripts/
+  migrate-v1-to-v2.ts      # jednorazowa migracja danych
+  validate-data.ts         # `bun run validate`
 docs/data-model.md
 ```
+
+## Dane
+
+`app/data/base.json` to jedyne źródło treści (semestr, przedmioty, drzewo ocen, terminy,
+prowadzący, skale i postęp). Ma `schemaVersion: 2`; kształt opisuje `app/types/base.ts`,
+a `bun run validate` sprawdza referencje, sumy, kalendarz i zakresy punktów.
+
+`app/data/index.ts` waliduje dokument i buduje runtime `AppData` przez `app/data/adapt-v2.ts`.
+Adapter istnieje tylko dlatego, że widoki i edytor nadal mówią wersją v1 - po migracji UI
+zniknie. Zmiana źródła (Tauri `appDataDir`, SQLite) dotyczy loadera, nie widoków.
+
+Edycja w zakładce „Dane” zapisuje **runtime v1** w `localStorage` (`usos-revanced:data`),
+który po reloadzie ma pierwszeństwo nad plikiem; „Reset danych” przywraca zawartość
+`base.json`. Eksport z edytora to nadal v1 - to dług do spłaty razem z adapterem.
+
+Migracja: `bun scripts/migrate-v1-to-v2.ts <wejście> <wyjście>` (domyślnie czyta
+`.tmp/base.v1.json`).
 
 ## Jak działa widok Oceny
 
@@ -100,8 +125,8 @@ Węzeł z wagą `0` (np. etap organizacyjny projektu) nie zaburza wyniku.
 
 Uwagi:
 
-- Punkty w drzewie są **danymi przykładowymi** (`demoData: true` w `app/data/subjects.ts`),
-  żeby pokazać działanie paska i warunków - podmień `points.earned` na realne oceny.
+- Punkty w drzewie są **danymi przykładowymi** (`meta.source: "demo"` w `app/data/base.json`),
+  żeby pokazać działanie paska i warunków - podmień wpisy w `progress` na realne oceny.
 - Podział 30 pkt projektu na etapy (10 + 20) jest przyjęty roboczo; w UI widać to jako
   „Założenie”.
 - Dokument podaje laboratorium 16:00-19:00 (użytkownik wspominał o 16:00-20:00) - w danych
@@ -110,7 +135,7 @@ Uwagi:
 
 ## Co dalej
 
-- Harmonogram: filtry po przedmiocie i fladze `canBeDoneBefore` (dane już są w modelu).
-- Kalendarz: siatka pon-pt + widok skompaktowany.
-- Zapis lokalny: JSON → SQLite (patrz `docs/data-model.md`), eksport/import między urządzeniami.
-- Ikona „i” przy terminach: dziś tooltip, docelowo panel szczegółów.
+- Migracja UI i edytora na v2 - usunięcie `app/data/adapt-v2.ts` i eksportu v1 z „Danych”.
+- Rozdzielenie katalogu od stanu: `progress` poza `base.json` (plik/`appDataDir`).
+- SQLite dopiero po powyższym (patrz `docs/data-model.md`); Tauri jako runtime docelowy.
+- Historia prób i poprawki jako `attempt` zamiast osobnych węzłów.

@@ -17,7 +17,7 @@ const visible = computed(() => requirements.value)
           Warunki zaliczenia
         </h2>
         <span class="text-2xs text-muted-foreground">
-          poziom: {{ current.short ?? current.name }}
+          poziom: {{ current.short || current.name }}
         </span>
       </div>
     </CardHeader>
