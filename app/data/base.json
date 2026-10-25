@@ -944,7 +944,7 @@
       "gradeScaleId": "standard",
       "group": {
         "code": "",
-        "label": "wykład czw. 12:15-14:00 (tyg. 1-8) · laboratoria tyg. 9-15, grupa do ustalenia (L1/L2 pt. 10-14, L3 pon. 8-12, L4 pon. 12-16)"
+        "label": "wykład czw. i pt. 12:00-14:00 (tyg. 1-8) · laboratoria tyg. 9-15, grupa do ustalenia (L1/L2 pt. 10-14, L3 pon. 8-12, L4 pon. 12-16)"
       },
       "teachers": [
         {
@@ -953,7 +953,7 @@
         }
       ],
       "policyNotes": [
-        "Wykład: czwartki 12:15–14:00, tygodnie 1–8; obecność nieobowiązkowa.",
+        "Wykład: czwartki i piątki 12:00–14:00, tygodnie 1–8; obecność nieobowiązkowa.",
         "Sprawdzian 1: 20 pkt (15.10, tydzień 2); sprawdzian 2: 50 pkt (tydzień 8); po 90 min, podczas wykładu.",
         "Laboratoria: tygodnie 9–15; 3 ćwiczenia (sprawozdania) po 10 pkt + sprawdzian wiedzy; obecność obowiązkowa, limit 1 nieobecności.",
         "Sprawozdania składane na zajęciach; nie ma możliwości oddania po terminie.",
@@ -2418,7 +2418,7 @@
       "kind": "lecture",
       "title": "Wykład W1",
       "date": "2026-10-08",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00"
     },
     {
@@ -2427,7 +2427,7 @@
       "kind": "lecture",
       "title": "Wykład W4",
       "date": "2026-10-29",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00"
     },
     {
@@ -2436,7 +2436,7 @@
       "kind": "lecture",
       "title": "Wykład W3",
       "date": "2026-10-22",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00"
     },
     {
@@ -2445,7 +2445,7 @@
       "kind": "lecture",
       "title": "Wykład W5",
       "date": "2026-11-05",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00"
     },
     {
@@ -2454,7 +2454,7 @@
       "kind": "lecture",
       "title": "Wykład W6",
       "date": "2026-11-12",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00"
     },
     {
@@ -2463,7 +2463,7 @@
       "kind": "lecture",
       "title": "Wykład W7",
       "date": "2026-11-19",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00"
     },
     {
@@ -2473,7 +2473,7 @@
       "kind": "colloquium",
       "title": "Sprawdzian 1 (wykład 2)",
       "date": "2026-10-15",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00",
       "graded": true,
       "notes": "90 minut, podczas wykładu."
@@ -2485,10 +2485,82 @@
       "kind": "colloquium",
       "title": "Sprawdzian 2 (wykład 8)",
       "date": "2026-11-26",
-      "start": "12:15",
+      "start": "12:00",
       "end": "14:00",
       "graded": true,
       "notes": "90 minut, podczas wykładu."
+    },
+    {
+      "id": "t:trap-f1",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W1",
+      "date": "2026-10-09",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f2",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W2",
+      "date": "2026-10-16",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f3",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W3",
+      "date": "2026-10-23",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f4",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W4",
+      "date": "2026-10-30",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f5",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W5",
+      "date": "2026-11-06",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f6",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W6",
+      "date": "2026-11-13",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f7",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W7",
+      "date": "2026-11-20",
+      "start": "12:00",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-f8",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W8",
+      "date": "2026-11-27",
+      "start": "12:00",
+      "end": "14:00"
     },
     {
       "id": "t:trra-w1",
