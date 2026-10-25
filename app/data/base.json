@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "meta": {
-    "updatedAt": "2026-10-25T11:41:41.606Z",
+    "updatedAt": "2026-10-25T18:24:30.550Z",
     "source": "demo",
     "timeZone": "Europe/Warsaw"
   },
@@ -203,6 +203,35 @@
           "grade": "2"
         }
       ]
+    },
+    "trra": {
+      "passing": 50,
+      "rows": [
+        {
+          "min": 88,
+          "grade": "5"
+        },
+        {
+          "min": 78,
+          "grade": "4,5"
+        },
+        {
+          "min": 69,
+          "grade": "4"
+        },
+        {
+          "min": 60,
+          "grade": "3,5"
+        },
+        {
+          "min": 50,
+          "grade": "3"
+        },
+        {
+          "min": 0,
+          "grade": "2"
+        }
+      ]
     }
   },
   "subjects": [
@@ -214,7 +243,7 @@
       "gradeScaleId": "standard",
       "group": {
         "code": "104",
-        "label": "Lab 104 · poniedziałek parzysty, 16:00-19:00"
+        "label": "Lab 104 · poniedziałek parzysty, 16:00-19:00 (ostatni 11.01) · wykład wt 16:00-18:00"
       },
       "teachers": [
         {
@@ -232,7 +261,9 @@
         "Obecność na laboratoriach obowiązkowa - nieusprawiedliwiona nieobecność skutkuje niezaliczeniem przedmiotu.",
         "Sprawozdanie należy oddać do końca zajęć; po oddaniu sprawozdania nie ma możliwości poprawiania zadań.",
         "Nieoddanie etapów projektu w terminie obniża ocenę, w skrajnym przypadku może skutkować niezaliczeniem przedmiotu.",
-        "Oceny dostępne w systemie USOS."
+        "Oceny dostępne w systemie USOS.",
+        "Projekt w trybie konsultacyjnym; zespół przypisany do prowadzącego (Buchowicz albo Galiński) po ustaleniu wszystkich zespołów.",
+        "Do zaliczenia projektu: sprawozdanie (z podziałem zadań w zespole), kod źródłowy w repozytorium git i zbiór danych testowych."
       ],
       "tree": {
         "id": "n:to",
@@ -395,10 +426,10 @@
                 "name": "Zakończenie projektu",
                 "short": "Etap 3",
                 "max": 20,
-                "info": "Sprawozdanie, wyniki testów, wnioski i kody źródłowe. Wymagane spotkanie z prowadzącym."
+                "info": "Sprawozdanie (opis, wyniki testów, wnioski, podział zadań), kod w repozytorium git i zbiór danych testowych. Wymagane spotkanie z prowadzącym."
               }
             ],
-            "info": "Projekt realizowany w zespołach czteroosobowych. Udział obowiązkowy, nie ma możliwości poprawiania po końcowym oddaniu.",
+            "info": "Projekt w trybie konsultacyjnym, zespoły 4-osobowe; etapy obowiązkowe - kontakt z prowadzącym i krótkie sprawozdanie. Brak poprawy po końcowym oddaniu.",
             "assumptionNote": "Podział 30 pkt na etapy (10 + 20) przyjęty roboczo - prowadzący może go zmienić."
           }
         ],
@@ -528,7 +559,7 @@
       "gradeScaleId": "psir",
       "group": {
         "code": "",
-        "label": "wykład wt 12:15-14:00, s. 105-AR · lab śr 8:15-12:00/12:15-16:00, s. CS304 · projekt wt 16:15-18:00, s. 133"
+        "label": "wykład wt 12:15-14:00, s. 105-AR · lab śr 8:15-12:00/12:15-16:00, s. CS304 · projekt: 2 zajęcia wprowadzające wt 16:15-18:00, s. 133 (20.10, 27.10)"
       },
       "teachers": [
         {
@@ -665,7 +696,7 @@
       "gradeScaleId": "td",
       "group": {
         "code": "",
-        "label": "wykład + ćwiczenia (plan USOS) · laboratoria, terminy TBD"
+        "label": "wykład wt 14:15-16:00 · lab 1-3 śr 8:15-11:00 · lab 4-5 symulacje z oddaniem"
       },
       "teachers": [
         {
@@ -678,11 +709,12 @@
         }
       ],
       "policyNotes": [
-        "5 laboratoriów ocenianych 2,0–5,0 (łącznie 25 pkt); wymagane min. 3 z każdego laboratorium.",
-        "2 sprawdziany: 10 pkt i 15 pkt (łącznie 25 pkt); dokładna data podana min. 2 tygodnie wcześniej.",
-        "Zaliczenie: min. 25 pkt łącznie i min. 3 z każdego laboratorium.",
+        "5 laboratoriów po max 5 pkt (łącznie 25 pkt); każde trzeba zaliczyć na min. 2 pkt.",
+        "2 sprawdziany: 10 pkt i 15 pkt (łącznie 25 pkt), na 9. i 13. spotkaniu (01.12.2026 i 12.01.2027).",
+        "Zaliczenie: min. 25 pkt łącznie i min. 2 pkt z każdego laboratorium.",
         "Obecność: wykłady nieobowiązkowe, ćwiczenia i laboratoria obowiązkowe; nieobecność usprawiedliwić w ciągu tygodnia.",
-        "Laboratoria: sprawdzian wstępny, aktywność, ocena sprawozdania; grupy 6-osobowe, podział i terminy TBD.",
+        "Laboratoria: sprawdzian wstępny, aktywność, ocena sprawozdania; grupy 6-osobowe.",
+        "Lab 4 i 5 to symulacje: lab 4 - dane 11.01, oddanie do 15.01; lab 5 - dane 18.01, oddanie do 22.01.",
         "Skala: 45–50 → 5; 40–44 → 4,5; 35–39 → 4; 30–34 → 3,5; 25–29 → 3; 0–24 → 2."
       ],
       "tree": {
@@ -719,7 +751,7 @@
                 "max": 15
               }
             ],
-            "info": "Dwa sprawdziany pisemne w trakcie ćwiczeń, 10 i 15 pkt; daty podane min. 2 tygodnie wcześniej."
+            "info": "Dwa sprawdziany pisemne: 10 pkt na 9. spotkaniu (01.12) i 15 pkt na 13. spotkaniu (12.01)."
           },
           {
             "id": "n:td-labs",
@@ -731,7 +763,7 @@
                 "id": "n:td-lab-1",
                 "type": "activity",
                 "activityKind": "lab",
-                "name": "Lab 1: właściwości sygnałów fonicznych",
+                "name": "Badanie właściwości sygnałów fonicznych",
                 "short": "Lab 1",
                 "max": 5
               },
@@ -739,7 +771,7 @@
                 "id": "n:td-lab-2",
                 "type": "activity",
                 "activityKind": "lab",
-                "name": "Lab 2: właściwości psychoakustyczne",
+                "name": "Badanie właściwości psychoakustycznych",
                 "short": "Lab 2",
                 "max": 5
               },
@@ -747,7 +779,7 @@
                 "id": "n:td-lab-3",
                 "type": "activity",
                 "activityKind": "lab",
-                "name": "Lab 3: akustyka wnętrz",
+                "name": "Badanie właściwości akustycznych wnętrz",
                 "short": "Lab 3",
                 "max": 5
               },
@@ -755,7 +787,7 @@
                 "id": "n:td-lab-4",
                 "type": "activity",
                 "activityKind": "lab",
-                "name": "Lab 4: symulacje akustyki wnętrz",
+                "name": "Symulacje właściwości akustycznych wnętrz",
                 "short": "Lab 4",
                 "max": 5
               },
@@ -763,16 +795,24 @@
                 "id": "n:td-lab-5",
                 "type": "activity",
                 "activityKind": "lab",
-                "name": "Lab 5: przetworniki elektroakustyczne",
+                "name": "Badanie właściwości przetworników elektroakustycznych",
                 "short": "Lab 5",
                 "max": 5
               }
             ],
-            "info": "Pięć laboratoriów po 5 pkt (ocena 2,0–5,0); wymagane min. 3 z każdego."
+            "info": "Pięć laboratoriów po max 5 pkt; każde trzeba zaliczyć na min. 2 pkt. Lab 4 i 5 to symulacje z oddaniem w ciągu tygodnia.",
+            "requirements": [
+              {
+                "id": "td-lab-req-each",
+                "kind": "min-each",
+                "label": "Każde laboratorium na min. 2 pkt",
+                "threshold": 2
+              }
+            ]
           }
         ],
         "description": "Akustyka, psychoakustyka, przetworniki, systemy foniczne i technika studyjna",
-        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiałach; daty zajęć i labów poza planem USOS."
+        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiałach; sale zajęć do uzupełnienia."
       }
     },
     {
@@ -783,7 +823,7 @@
       "gradeScaleId": "standard",
       "group": {
         "code": "",
-        "label": "wykład pon. 11:15-14:00 · lab. s. 531 (pon. 8:15-11:00 / wt. 9:15-12:00 / czw. 14:15-17:00, tyg. nieparzyste)"
+        "label": "wykład pon. 11:15-14:00 · lab czw. 14:15-17:00, s. 531, co 2 tygodnie od 29.10"
       },
       "teachers": [
         {
@@ -796,8 +836,8 @@
         }
       ],
       "policyNotes": [
-        "Wykład: 10 spotkań po 3 h, poniedziałki 11:15–14:00.",
-        "Laboratorium: 5 ćwiczeń po 6 pkt (max 30 pkt); s. 531, pon. 8:15–11:00, wt. 9:15–12:00, czw. 14:15–17:00 (tygodnie nieparzyste); obecność obowiązkowa.",
+        "Wykład: 10 spotkań po 3 h, poniedziałki 11:15–14:00 (05.10–07.12).",
+        "Laboratorium: 5 ćwiczeń po 6 pkt (max 30 pkt); czwartki 14:15–17:00, s. 531, co dwa tygodnie od 29.10; obecność obowiązkowa.",
         "Warunki zaliczenia: min. 50% punktów z egzaminu (35/70) i min. 3/6 z każdego ćwiczenia; laboratorium zaliczone po wszystkich ćwiczeniach.",
         "Egzamin: max 70 pkt; laboratorium: max 30 pkt; razem max 100 pkt.",
         "Ocena: <50% → 2; 50–59% → 3; 60–69% → 3,5; 70–79% → 4; 80–89% → 4,5; ≥90% → 5.",
@@ -893,7 +933,7 @@
           }
         ],
         "description": "Front-end systemów łączności bezprzewodowej, teoria, symulacje i pomiary mikrofalowe",
-        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiale; daty wykładów i labów do potwierdzenia."
+        "assumptionNote": "ECTS przyjęty roboczo jako 4; wykłady przyjęte jako 10 pierwszych poniedziałków; lab 5 przesunięty z 24.12 (wolne) na 07.01 - do potwierdzenia; termin egzaminu nieznany."
       }
     },
     {
@@ -904,7 +944,7 @@
       "gradeScaleId": "standard",
       "group": {
         "code": "",
-        "label": "wykład (tyg. 1-8) · laboratoria (tyg. 9-15; grupy 101-108: L1/L2 pt. 10-14, L3 pon. 8-12, L4 pon. 12-16)"
+        "label": "wykład czw. 12:15-14:00 (tyg. 1-8) · laboratoria tyg. 9-15, grupa do ustalenia (L1/L2 pt. 10-14, L3 pon. 8-12, L4 pon. 12-16)"
       },
       "teachers": [
         {
@@ -913,7 +953,7 @@
         }
       ],
       "policyNotes": [
-        "Wykład: tygodnie 1–8; obecność nieobowiązkowa.",
+        "Wykład: czwartki 12:15–14:00, tygodnie 1–8; obecność nieobowiązkowa.",
         "Sprawdzian 1: 20 pkt (tydzień 4); sprawdzian 2: 50 pkt (tydzień 8); po 90 min, podczas wykładu.",
         "Laboratoria: tygodnie 9–15; 3 ćwiczenia (sprawozdania) po 10 pkt + sprawdzian wiedzy; obecność obowiązkowa, limit 1 nieobecności.",
         "Sprawozdania składane na zajęciach; nie ma możliwości oddania po terminie.",
@@ -993,7 +1033,152 @@
           }
         ],
         "description": "Transmisja miedziana i światłowodowa, teoria, pomiary BER, linie transmisyjne, światłowody",
-        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiale; daty wykładów i labów do potwierdzenia."
+        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiale; terminy labów zależą od grupy - do uzupełnienia."
+      }
+    },
+    {
+      "id": "trra",
+      "code": "TRRA",
+      "name": "Transmisja Radiowa",
+      "ects": 4,
+      "gradeScaleId": "trra",
+      "group": {
+        "code": "104",
+        "label": "Lab 104 · pt 14:15-17:00, DS402 · wykład pon 14:15-16:00, s. 108 · ćw. pt 8:15-10:00, s. 122"
+      },
+      "teachers": [
+        {
+          "id": "godziszewski",
+          "role": "teacher"
+        },
+        {
+          "id": "bajurko",
+          "role": "teacher"
+        },
+        {
+          "id": "kozlowski",
+          "role": "teacher"
+        }
+      ],
+      "policyNotes": [
+        "Kolokwium 1 i 2 po 25 pkt (min. 8 pkt z każdego), laboratoria 5 × 10 pkt (min. 25 pkt); zaliczenie od 50 pkt łącznie.",
+        "Skala: <50 → 2; 50–59 → 3; 60–68 → 3,5; 69–77 → 4; 78–87 → 4,5; ≥88 → 5.",
+        "Kolokwia: 09.11 i 21.12, uzupełniające 11.01 (poprawa jednego lub obu, chęć zgłosić wcześniej); 100 min, kalkulator i materiały papierowe bez rozwiązań zadań.",
+        "Laboratorium: 5 ćwiczeń po 3 h, grupy 8-osobowe, zespoły 2-3 os.; L1 w s. 601, pozostałe w DS402; obecność obowiązkowa, brak terminów zapasowych.",
+        "Na każdym labie ok. 15-min kolokwium (L1: 4 pkt, L2-L5: 3 pkt) i sprawozdanie (L1: 6 pkt, L2-L5: 7 pkt).",
+        "Sprawozdanie z domu: 5 dni akademickich, do LeOn (pdf/docx, wgrywa jedna osoba z zespołu); -1 pkt za każdy rozpoczęty tydzień spóźnienia.",
+        "Ćwiczenia: piątki 8:15-10:00, s. 122 (C1-C7); konsultacje: piątki 10-12, pok. 35."
+      ],
+      "tree": {
+        "id": "n:trra",
+        "type": "subject",
+        "requirements": [
+          {
+            "id": "trra-req-total",
+            "kind": "min-total",
+            "label": "Łącznie min. 50 pkt"
+          }
+        ],
+        "children": [
+          {
+            "id": "n:trra-kol",
+            "type": "group",
+            "name": "Kolokwia",
+            "activityKind": "colloquium",
+            "requirements": [
+              {
+                "id": "trra-kol-req-each",
+                "kind": "min-each",
+                "label": "Min. 8 pkt z każdego kolokwium",
+                "threshold": 8
+              }
+            ],
+            "children": [
+              {
+                "id": "n:trra-kol-1",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Kolokwium 1",
+                "short": "Kolokwium 1",
+                "max": 25
+              },
+              {
+                "id": "n:trra-kol-2",
+                "type": "activity",
+                "activityKind": "colloquium",
+                "name": "Kolokwium 2",
+                "short": "Kolokwium 2",
+                "max": 25
+              }
+            ],
+            "info": "Dwa kolokwia po 25 pkt (100 min); poprawa jednego lub obu na kolokwium uzupełniającym 11.01."
+          },
+          {
+            "id": "n:trra-lab",
+            "type": "group",
+            "name": "Laboratorium",
+            "activityKind": "lab",
+            "requirements": [
+              {
+                "id": "trra-lab-req-min",
+                "kind": "min-node",
+                "label": "Min. 25 pkt z laboratoriów",
+                "threshold": 25
+              },
+              {
+                "id": "trra-lab-req-att",
+                "kind": "manual",
+                "label": "Obecność obowiązkowa",
+                "note": "Brak terminów zapasowych; przypadki losowe zgłaszać kierownikowi lab."
+              }
+            ],
+            "children": [
+              {
+                "id": "n:trra-lab-1",
+                "type": "activity",
+                "name": "Odpowiedź impulsowa i transmitancja kanału radiowego",
+                "short": "Lab 1",
+                "max": 10,
+                "info": "Prowadzi dr inż. Paweł Bajurko. Sala 601. Kolokwium 4 pkt + sprawozdanie 6 pkt."
+              },
+              {
+                "id": "n:trra-lab-2",
+                "type": "activity",
+                "name": "Badania wpływu propagacji wielodrogowej na odbierane sygnały",
+                "short": "Lab 2",
+                "max": 10,
+                "info": "Prowadzi dr inż. Sebastian Kozłowski. Kolokwium 3 pkt + sprawozdanie 7 pkt."
+              },
+              {
+                "id": "n:trra-lab-3",
+                "type": "activity",
+                "name": "Właściwości sygnałów różnych systemów radiokomunikacyjnych",
+                "short": "Lab 3",
+                "max": 10,
+                "info": "Prowadzi dr inż. Konrad Godziszewski. Kolokwium 3 pkt + sprawozdanie 7 pkt."
+              },
+              {
+                "id": "n:trra-lab-4",
+                "type": "activity",
+                "name": "Badanie algorytmów korekcji kanału radiowego",
+                "short": "Lab 4",
+                "max": 10,
+                "info": "Prowadzi dr inż. Konrad Godziszewski. Kolokwium 3 pkt + sprawozdanie 7 pkt."
+              },
+              {
+                "id": "n:trra-lab-5",
+                "type": "activity",
+                "name": "Propagacja fal radiowych w środowiskach na zewnątrz budynków",
+                "short": "Lab 5",
+                "max": 10,
+                "info": "Prowadzi dr inż. Konrad Godziszewski. Kolokwium 3 pkt + sprawozdanie 7 pkt."
+              }
+            ],
+            "info": "5 ćwiczeń po 10 pkt: kolokwium wstępne (~15 min) i sprawozdanie."
+          }
+        ],
+        "description": "Propagacja fal radiowych, kanał radiowy, modulacje cyfrowe i OFDM, estymacja i korekcja kanału",
+        "assumptionNote": "ECTS przyjęty roboczo jako 4, brak w materiale."
       }
     }
   ],
@@ -1073,6 +1258,20 @@
       "name": "Jarosław Turkiewicz",
       "email": "jaroslaw.turkiewicz@pw.edu.pl",
       "room": "515"
+    },
+    {
+      "id": "godziszewski",
+      "name": "dr inż. Konrad Godziszewski",
+      "email": "konrad.godziszewski@pw.edu.pl",
+      "room": "pok. 35 (ew. 020)"
+    },
+    {
+      "id": "bajurko",
+      "name": "dr inż. Paweł Bajurko"
+    },
+    {
+      "id": "kozlowski",
+      "name": "dr inż. Sebastian Kozłowski"
     }
   ],
   "terms": [
@@ -1522,7 +1721,8 @@
       "date": "2026-10-13",
       "due": "23:59",
       "requirementNote": "Zespoły 2-3 osoby",
-      "notes": "Formularz MS Forms; prowadzący tworzy dedykowane kanały Discord."
+      "notes": "Formularz MS Forms; prowadzący tworzy dedykowane kanały Discord.",
+      "submitted": true
     },
     {
       "id": "t:pcyb-pitstop",
@@ -1533,7 +1733,8 @@
       "date": "2026-10-20",
       "due": "23:59",
       "requirementNote": "Tematyka + plan realizacji",
-      "notes": "Checklista wymagań, koło ratunkowe."
+      "notes": "Checklista wymagań, koło ratunkowe.",
+      "submitted": true
     },
     {
       "id": "t:pcyb-phase-1",
@@ -1701,7 +1902,8 @@
       "location": "CS304",
       "graded": true,
       "requirementNote": "Sprawozdanie do końca soboty",
-      "notes": "Slot 8:15-12:00 lub 12:15-16:00; odrabianie do 11.01.2027."
+      "notes": "Slot 8:15-12:00 lub 12:15-16:00; odrabianie do 11.01.2027.",
+      "submitted": true
     },
     {
       "id": "t:psir-lab-2",
@@ -1735,8 +1937,21 @@
       "subjectId": "psir",
       "nodeId": "n:psir-project-1",
       "kind": "project-stage",
-      "title": "Zajęcia wprowadzające do projektu",
+      "title": "Zajęcia wprowadzające do projektu (1/2)",
       "date": "2026-10-20",
+      "start": "16:15",
+      "end": "18:00",
+      "location": "133",
+      "requirementNote": "Obecność obowiązkowa",
+      "notes": "Szczegóły projektu; obowiązkowa obecność."
+    },
+    {
+      "id": "t:psir-project-intro-2",
+      "subjectId": "psir",
+      "nodeId": "n:psir-project-1",
+      "kind": "project-stage",
+      "title": "Zajęcia wprowadzające do projektu (2/2)",
+      "date": "2026-10-27",
       "start": "16:15",
       "end": "18:00",
       "location": "133",
@@ -1819,6 +2034,745 @@
       "attempt": 2,
       "requirementNote": "Próg 23 pkt",
       "notes": "Drugi termin po ostatnim wykładzie; liczy się ostatni wynik."
+    },
+    {
+      "id": "t:td-w1",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W1",
+      "date": "2026-10-06",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w2",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W2",
+      "date": "2026-10-13",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w3",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W3",
+      "date": "2026-10-20",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w4",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W4",
+      "date": "2026-10-27",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w5",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W5",
+      "date": "2026-11-03",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w6",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W6",
+      "date": "2026-11-10",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w7",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W7",
+      "date": "2026-11-17",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w8",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W8",
+      "date": "2026-11-24",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w10",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W10",
+      "date": "2026-12-08",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w11",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W11",
+      "date": "2026-12-15",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w12",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W12",
+      "date": "2026-12-22",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w14",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W14",
+      "date": "2027-01-19",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-w15",
+      "subjectId": "td",
+      "kind": "lecture",
+      "title": "Wykład W15",
+      "date": "2027-01-26",
+      "start": "14:15",
+      "end": "16:00"
+    },
+    {
+      "id": "t:td-test-1",
+      "subjectId": "td",
+      "nodeId": "n:td-test-1",
+      "kind": "colloquium",
+      "title": "Sprawdzian 1 (9. spotkanie)",
+      "date": "2026-12-01",
+      "start": "14:15",
+      "end": "16:00",
+      "graded": true
+    },
+    {
+      "id": "t:td-test-2",
+      "subjectId": "td",
+      "nodeId": "n:td-test-2",
+      "kind": "colloquium",
+      "title": "Sprawdzian 2 (13. spotkanie)",
+      "date": "2027-01-12",
+      "start": "14:15",
+      "end": "16:00",
+      "graded": true
+    },
+    {
+      "id": "t:td-lab-1",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-1",
+      "kind": "lab",
+      "title": "Lab 1 - Badanie właściwości sygnałów fonicznych",
+      "date": "2026-11-18",
+      "start": "08:15",
+      "end": "11:00",
+      "graded": true,
+      "requirementNote": "Min. 2 pkt · obecność obowiązkowa"
+    },
+    {
+      "id": "t:td-lab-2",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-2",
+      "kind": "lab",
+      "title": "Lab 2 - Badanie właściwości psychoakustycznych",
+      "date": "2026-11-25",
+      "start": "08:15",
+      "end": "11:00",
+      "graded": true,
+      "requirementNote": "Min. 2 pkt · obecność obowiązkowa"
+    },
+    {
+      "id": "t:td-lab-3",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-3",
+      "kind": "lab",
+      "title": "Lab 3 - Badanie właściwości akustycznych wnętrz",
+      "date": "2026-12-02",
+      "start": "08:15",
+      "end": "11:00",
+      "graded": true,
+      "requirementNote": "Min. 2 pkt · obecność obowiązkowa"
+    },
+    {
+      "id": "t:td-lab-4-data",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-4",
+      "kind": "other",
+      "title": "Lab 4 - otrzymanie danych do symulacji",
+      "date": "2027-01-11",
+      "due": "23:59",
+      "notes": "Początek okna 11.01-15.01; oddanie do 15.01."
+    },
+    {
+      "id": "t:td-lab-4",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-4",
+      "kind": "lab",
+      "title": "Lab 4 - Symulacje właściwości akustycznych wnętrz (oddanie)",
+      "date": "2027-01-15",
+      "due": "23:59",
+      "graded": true,
+      "requirementNote": "Min. 2 pkt",
+      "notes": "Dane od 11.01."
+    },
+    {
+      "id": "t:td-lab-5-data",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-5",
+      "kind": "other",
+      "title": "Lab 5 - otrzymanie danych do symulacji",
+      "date": "2027-01-18",
+      "due": "23:59",
+      "notes": "Początek okna 18.01-22.01; oddanie do 22.01."
+    },
+    {
+      "id": "t:td-lab-5",
+      "subjectId": "td",
+      "nodeId": "n:td-lab-5",
+      "kind": "lab",
+      "title": "Lab 5 - Badanie właściwości przetworników elektroakustycznych (oddanie)",
+      "date": "2027-01-22",
+      "due": "23:59",
+      "graded": true,
+      "requirementNote": "Min. 2 pkt",
+      "notes": "Dane od 18.01."
+    },
+    {
+      "id": "t:tmt-w1",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W1",
+      "date": "2026-10-05",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w2",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W2",
+      "date": "2026-10-12",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w3",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W3",
+      "date": "2026-10-19",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w4",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W4",
+      "date": "2026-10-26",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w5",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W5",
+      "date": "2026-11-02",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w6",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W6",
+      "date": "2026-11-09",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w7",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W7",
+      "date": "2026-11-16",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w8",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W8",
+      "date": "2026-11-23",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w9",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W9",
+      "date": "2026-11-30",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-w10",
+      "subjectId": "tmt",
+      "kind": "lecture",
+      "title": "Wykład W10",
+      "date": "2026-12-07",
+      "start": "11:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:tmt-lab-1",
+      "subjectId": "tmt",
+      "nodeId": "n:tmt-lab-1",
+      "kind": "lab",
+      "title": "Lab 1 - Ćwiczenie 1",
+      "date": "2026-10-29",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "531",
+      "graded": true,
+      "requirementNote": "Wejściówka min. 3/6 · obecność obowiązkowa"
+    },
+    {
+      "id": "t:tmt-lab-2",
+      "subjectId": "tmt",
+      "nodeId": "n:tmt-lab-2",
+      "kind": "lab",
+      "title": "Lab 2 - Ćwiczenie 2",
+      "date": "2026-11-12",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "531",
+      "graded": true,
+      "requirementNote": "Wejściówka min. 3/6 · obecność obowiązkowa"
+    },
+    {
+      "id": "t:tmt-lab-3",
+      "subjectId": "tmt",
+      "nodeId": "n:tmt-lab-3",
+      "kind": "lab",
+      "title": "Lab 3 - Ćwiczenie 3",
+      "date": "2026-11-26",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "531",
+      "graded": true,
+      "requirementNote": "Wejściówka min. 3/6 · obecność obowiązkowa"
+    },
+    {
+      "id": "t:tmt-lab-4",
+      "subjectId": "tmt",
+      "nodeId": "n:tmt-lab-4",
+      "kind": "lab",
+      "title": "Lab 4 - Ćwiczenie 4",
+      "date": "2026-12-10",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "531",
+      "graded": true,
+      "requirementNote": "Wejściówka min. 3/6 · obecność obowiązkowa"
+    },
+    {
+      "id": "t:tmt-lab-5",
+      "subjectId": "tmt",
+      "nodeId": "n:tmt-lab-5",
+      "kind": "lab",
+      "title": "Lab 5 - Ćwiczenie 5",
+      "date": "2027-01-07",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "531",
+      "graded": true,
+      "requirementNote": "Wejściówka min. 3/6 · obecność obowiązkowa",
+      "notes": "24.12 wolne - przyjęto następny czwartek zajęciowy (07.01), do potwierdzenia."
+    },
+    {
+      "id": "t:trap-w1",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W1",
+      "date": "2026-10-08",
+      "start": "12:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-w2",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W2",
+      "date": "2026-10-15",
+      "start": "12:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-w3",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W3",
+      "date": "2026-10-22",
+      "start": "12:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-w5",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W5",
+      "date": "2026-11-05",
+      "start": "12:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-w6",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W6",
+      "date": "2026-11-12",
+      "start": "12:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-w7",
+      "subjectId": "trap",
+      "kind": "lecture",
+      "title": "Wykład W7",
+      "date": "2026-11-19",
+      "start": "12:15",
+      "end": "14:00"
+    },
+    {
+      "id": "t:trap-test-1",
+      "subjectId": "trap",
+      "nodeId": "n:trap-test-1",
+      "kind": "colloquium",
+      "title": "Sprawdzian 1 (wykład 4)",
+      "date": "2026-10-29",
+      "start": "12:15",
+      "end": "14:00",
+      "graded": true,
+      "notes": "90 minut, podczas wykładu."
+    },
+    {
+      "id": "t:trap-test-2",
+      "subjectId": "trap",
+      "nodeId": "n:trap-test-2",
+      "kind": "colloquium",
+      "title": "Sprawdzian 2 (wykład 8)",
+      "date": "2026-11-26",
+      "start": "12:15",
+      "end": "14:00",
+      "graded": true,
+      "notes": "90 minut, podczas wykładu."
+    },
+    {
+      "id": "t:trra-w1",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W1",
+      "date": "2026-10-05",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w2",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W2",
+      "date": "2026-10-12",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w3",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W3",
+      "date": "2026-10-19",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w4",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W4",
+      "date": "2026-10-26",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w5",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W5",
+      "date": "2026-11-02",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w6",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W6",
+      "date": "2026-11-16",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w7",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W7",
+      "date": "2026-11-23",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w8",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W8",
+      "date": "2026-11-30",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "id": "t:trra-w9",
+      "subjectId": "trra",
+      "kind": "lecture",
+      "title": "Wykład W9",
+      "date": "2026-12-07",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108"
+    },
+    {
+      "subjectId": "trra",
+      "kind": "colloquium",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108",
+      "graded": true,
+      "requirementNote": "Min. 8 pkt",
+      "id": "t:trra-kol-1",
+      "nodeId": "n:trra-kol-1",
+      "title": "Kolokwium 1",
+      "date": "2026-11-09"
+    },
+    {
+      "subjectId": "trra",
+      "kind": "colloquium",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108",
+      "graded": true,
+      "requirementNote": "Min. 8 pkt",
+      "id": "t:trra-kol-2",
+      "nodeId": "n:trra-kol-2",
+      "title": "Kolokwium 2",
+      "date": "2026-12-21"
+    },
+    {
+      "subjectId": "trra",
+      "kind": "colloquium",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108",
+      "graded": true,
+      "requirementNote": "Min. 8 pkt",
+      "id": "t:trra-kol-1-retake",
+      "nodeId": "n:trra-kol-1",
+      "title": "Kolokwium uzupełniające (kol. 1)",
+      "date": "2027-01-11",
+      "attempt": 2,
+      "notes": "Chęć poprawy zgłosić wcześniej."
+    },
+    {
+      "subjectId": "trra",
+      "kind": "colloquium",
+      "start": "14:15",
+      "end": "16:00",
+      "location": "108",
+      "graded": true,
+      "requirementNote": "Min. 8 pkt",
+      "id": "t:trra-kol-2-retake",
+      "nodeId": "n:trra-kol-2",
+      "title": "Kolokwium uzupełniające (kol. 2)",
+      "date": "2027-01-11",
+      "attempt": 2,
+      "notes": "Chęć poprawy zgłosić wcześniej."
+    },
+    {
+      "id": "t:trra-c1",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C1",
+      "date": "2026-10-16",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-c2",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C2",
+      "date": "2026-10-30",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-c3",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C3",
+      "date": "2026-11-06",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-c4",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C4",
+      "date": "2026-11-20",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-c5",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C5",
+      "date": "2026-11-27",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-c6",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C6",
+      "date": "2026-12-11",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-c7",
+      "subjectId": "trra",
+      "kind": "other",
+      "title": "Ćwiczenia C7",
+      "date": "2027-01-08",
+      "start": "08:15",
+      "end": "10:00",
+      "location": "122"
+    },
+    {
+      "id": "t:trra-lab-5",
+      "subjectId": "trra",
+      "nodeId": "n:trra-lab-5",
+      "kind": "lab",
+      "title": "Lab 5 - Propagacja fal radiowych w środowiskach na zewnątrz budynków",
+      "date": "2026-11-06",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "DS402",
+      "group": "104",
+      "graded": true,
+      "requirementNote": "Kolokwium wstępne ~15 min · sprawozdanie do 5 dni akad."
+    },
+    {
+      "id": "t:trra-lab-1",
+      "subjectId": "trra",
+      "nodeId": "n:trra-lab-1",
+      "kind": "lab",
+      "title": "Lab 1 - Odpowiedź impulsowa i transmitancja kanału radiowego",
+      "date": "2026-11-20",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "601",
+      "group": "104",
+      "graded": true,
+      "requirementNote": "Kolokwium wstępne ~15 min · sprawozdanie do 5 dni akad."
+    },
+    {
+      "id": "t:trra-lab-2",
+      "subjectId": "trra",
+      "nodeId": "n:trra-lab-2",
+      "kind": "lab",
+      "title": "Lab 2 - Badania wpływu propagacji wielodrogowej na odbierane sygnały",
+      "date": "2026-12-04",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "DS402",
+      "group": "104",
+      "graded": true,
+      "requirementNote": "Kolokwium wstępne ~15 min · sprawozdanie do 5 dni akad."
+    },
+    {
+      "id": "t:trra-lab-3",
+      "subjectId": "trra",
+      "nodeId": "n:trra-lab-3",
+      "kind": "lab",
+      "title": "Lab 3 - Właściwości sygnałów różnych systemów radiokomunikacyjnych",
+      "date": "2026-12-18",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "DS402",
+      "group": "104",
+      "graded": true,
+      "requirementNote": "Kolokwium wstępne ~15 min · sprawozdanie do 5 dni akad."
+    },
+    {
+      "id": "t:trra-lab-4",
+      "subjectId": "trra",
+      "nodeId": "n:trra-lab-4",
+      "kind": "lab",
+      "title": "Lab 4 - Badanie algorytmów korekcji kanału radiowego",
+      "date": "2027-01-15",
+      "start": "14:15",
+      "end": "17:00",
+      "location": "DS402",
+      "group": "104",
+      "graded": true,
+      "requirementNote": "Kolokwium wstępne ~15 min · sprawozdanie do 5 dni akad."
     }
   ],
   "progress": {

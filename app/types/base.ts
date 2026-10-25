@@ -141,6 +141,8 @@ export interface BaseTerm {
   /** Tekst informacyjny terminu (obecność, raport); nie próg punktowy. */
   requirementNote?: string
   notes?: string
+  /** Ręczne „zrobione” (zapisy, oddane sprawozdanie); termin z punktami czeka potem na ocenę. */
+  submitted?: boolean
 }
 
 export interface BaseProgress {

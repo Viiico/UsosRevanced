@@ -221,6 +221,7 @@ export function adaptBase(doc: BaseDocument): AppData {
       canBeDoneBefore: !term.start,
       ...(term.requirementNote ? { requirement: term.requirementNote } : {}),
       ...(term.notes ? { notes: term.notes } : {}),
+      ...(term.submitted ? { submitted: true } : {}),
       ...(weekNoFor(doc.semester.weeks, term.date) != null
         ? { weekNo: weekNoFor(doc.semester.weeks, term.date) }
         : {}),

@@ -87,6 +87,7 @@
 | `requirements[].targetId` | brak = węzeł, w którym warunek leży; nigdy „sam siebie” |
 | `graded` | termin, który niesie punkty węzła; przeglądy projektu mają `false` |
 | `attempt` | `1` podstawowy, `2` poprawka; ten sam `nodeId` |
+| `submitted` | ręczne „zrobione”; termin z punktami czeka potem na ocenę |
 | `progress` | tylko liście; **brak wpisu = nieocenione**, `earned: 0` = zero |
 | `progress[].earned` | nie przekracza `max`; kategorie liczone z liści |
 | `meta.source: "demo"` | dawne `demoData`; UI pokazuje plakietkę |
