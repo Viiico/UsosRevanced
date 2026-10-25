@@ -3,11 +3,10 @@ import { computed } from 'vue'
 import { formatPercent } from '~/lib/format'
 import { segmentColor, segmentWidth } from '~/lib/segments'
 
-const { progress, segments, segmentDenominator, score, select, children, scoringSubject, showScale } =
+const { segments, segmentDenominator, score, select, children, scoringSubject, showScale } =
   useGrades()
 
 const canDrill = computed(() => children.value.length > 0)
-const ratio = computed(() => progress.value.ratio)
 
 const scaleRows = computed(() => {
   const subject = scoringSubject.value
@@ -23,12 +22,6 @@ const scaleRows = computed(() => {
     <CardHeader class="pb-3">
       <div class="flex items-center justify-center">
         <span class="text-sm font-semibold tracking-[0.14em] uppercase">Postęp</span>
-      </div>
-
-      <div class="mt-2 flex items-end justify-between gap-3">
-        <div class="tnum text-4xl leading-none font-semibold tracking-tight">
-          {{ formatPercent(ratio) }}
-        </div>
       </div>
     </CardHeader>
 
