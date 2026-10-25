@@ -1,24 +1,24 @@
 import type { AppData } from '~/types'
 import { cloneData, useAppDataSaveState } from '~/composables/useAppData'
 import { normalizeData } from '~/lib/normalize'
+import { readValue, writeValue } from '~/lib/storage'
 
 const STORAGE_KEY = 'usos-revanced:data'
 
 /**
- * Trwała kopia robocza danych (localStorage) - edycje z zakładki „Dane" i punkty
- * przeżywają reload. Po hydracji ma pierwszeństwo nad bazowym JSON-em
- * (`app/data/base.json`); zastępuje ją tylko import w zakładce „Dane”.
- *
- * Wczytujemy po hydracji (`app:mounted`), żeby nie rozjechać SSR z klientem.
+ * Trwała kopia robocza danych (lib/storage: Tauri store albo localStorage) - edycje
+ * z zakładki „Dane" i punkty przeżywają restart. Po wczytaniu ma pierwszeństwo nad
+ * bazowym JSON-em (`app/data/base.json`); zastępuje ją tylko import w zakładce „Dane”.
  */
 export default defineNuxtPlugin((nuxtApp) => {
   const state = useState<AppData>('app-data', cloneData)
   const loaded = useState<boolean>('app-data-loaded', () => false)
   const { savedAt, failed } = useAppDataSaveState()
 
-  nuxtApp.hook('app:mounted', () => {
+  nuxtApp.hook('app:mounted', async () => {
+    // Zapis przez lib/storage: w Tauri plugin store, w przeglądarce localStorage.
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
+      const raw = await readValue(STORAGE_KEY)
       if (raw) {
         const parsed: unknown = JSON.parse(raw)
         if (parsed && typeof parsed === 'object' && 'subjects' in parsed && 'semester' in parsed) {
@@ -36,9 +36,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       () => {
         if (!loaded.value) return
         clearTimeout(timer)
-        timer = setTimeout(() => {
+        timer = setTimeout(async () => {
           try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state.value))
+            await writeValue(STORAGE_KEY, JSON.stringify(state.value))
             savedAt.value = new Date().toISOString()
             failed.value = false
           } catch {

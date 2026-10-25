@@ -1,17 +1,22 @@
 export type ThemeMode = 'dark' | 'light'
 
+import { readValue, writeValue } from '~/lib/storage'
+
+const THEME_KEY = 'usos-revanced:theme'
+
 /**
- * Motyw trzymany w cookie, żeby SSR od razu renderował właściwą paletę
- * (bez mignięcia jasnego tła). Domyślnie ciemny - schemat #3.
+ * Motyw w trwałym zapisie aplikacji (Tauri store / localStorage) - aplikacja jest SPA,
+ * więc cookie dla SSR nie ma sensu. Domyślnie ciemny - schemat #3.
  */
 export function useAppTheme() {
-  const cookie = useCookie<ThemeMode>('theme', {
-    default: () => 'dark',
-    maxAge: 60 * 60 * 24 * 365,
-    sameSite: 'lax',
-  })
-
-  const theme = useState<ThemeMode>('theme', () => cookie.value ?? 'dark')
+  const theme = useState<ThemeMode>('theme', () => 'dark')
+  const restored = useState('theme-restored', () => false)
+  if (import.meta.client && !restored.value) {
+    restored.value = true
+    readValue(THEME_KEY).then((value) => {
+      if (value === 'light' || value === 'dark') theme.value = value
+    })
+  }
   const isDark = computed(() => theme.value === 'dark')
 
   useHead({
@@ -22,8 +27,8 @@ export function useAppTheme() {
   })
 
   watch(theme, (value) => {
-    cookie.value = value
     if (import.meta.client) {
+      void writeValue(THEME_KEY, value)
       document.documentElement.classList.toggle('dark', value === 'dark')
     }
   })

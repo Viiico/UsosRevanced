@@ -6,9 +6,9 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  routeRules: {
-    '/': { redirect: '/oceny' },
-  },
+  // SPA bez serwera: `nuxi generate` daje statyczne pliki w .output/public - tego potrzebuje
+  // Tauri (frontendDist). Wszystkie dane i tak żyją po stronie klienta.
+  ssr: false,
 
   vite: {
     plugins: [tailwindcss()],
