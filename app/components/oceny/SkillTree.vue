@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { ArrowLeft, ArrowUpRight } from 'lucide-vue-next'
 import { termsForNode } from '~/lib/requirements'
-import { NODE_KIND_LABEL, childSummary, nodeIcon } from '~/lib/node-meta'
+import { NODE_KIND_LABEL, nodeIcon } from '~/lib/node-meta'
 import { formatDate, formatWeekday } from '~/lib/format'
 
 const data = useAppData()
@@ -10,7 +10,6 @@ const { current, children, canGoUp, goUp, select, progress } = useGrades()
 
 const icon = computed(() => nodeIcon(current.value))
 const kindLabel = computed(() => NODE_KIND_LABEL[current.value.kind])
-const summary = computed(() => childSummary(current.value))
 const nextTerm = computed(() => termsForNode(current.value, data.terms)[0] ?? null)
 const hasPoints = computed(() => progress.value.max > 0)
 
@@ -20,15 +19,6 @@ const infoText = computed(() =>
     .filter(Boolean)
     .join(' · '),
 )
-
-/** Zawsze jedna linia: opis, a jak go nie ma - podsumowanie i najbliższy termin. */
-const subline = computed(() => {
-  if (current.value.description) return current.value.description
-  const parts: string[] = []
-  if (summary.value) parts.push(summary.value)
-  if (nextTerm.value) parts.push(`najbliższy termin ${formatDate(nextTerm.value.date)}`)
-  return parts.join(' · ')
-})
 
 /** Wcięcie szyny łączącej rodzic → dzieci: środek pierwszej i ostatniej kolumny. */
 const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
@@ -68,10 +58,11 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
             </h2>
 
             <p
+              v-if="current.description"
               class="mt-1 h-5 truncate text-sm leading-5 text-muted-foreground"
-              :title="subline"
+              :title="current.description"
             >
-              {{ subline }}
+              {{ current.description }}
             </p>
           </div>
 
@@ -85,7 +76,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-if="children.length" class="relative mt-5 flex flex-col pt-6 lg:h-36">
+      <div v-if="children.length" class="relative mt-5 flex flex-col pt-6 lg:h-32">
         <!-- Pień startuje już pod kartą hubu (-top-5 zasypuje margines), inaczej wisiałby w powietrzu. -->
         <div
           class="absolute -top-5 left-1/2 hidden h-11 w-px -translate-x-1/2 bg-border sm:block"
@@ -116,7 +107,7 @@ const railInset = computed(() => `${50 / Math.max(children.value.length, 1)}%`)
         </div>
       </div>
 
-      <div v-else class="mt-5 flex flex-col gap-2 lg:h-36">
+      <div v-else class="mt-5 flex flex-col gap-2 lg:h-32">
         <div
           v-if="nextTerm"
           class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/70 bg-secondary/25 px-4 py-3"
