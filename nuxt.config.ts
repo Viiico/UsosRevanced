@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     envPrefix: ['VITE_', 'TAURI_'],
     server: {
       strictPort: true,
-      watch: { ignored: ['**/src-tauri/**'] },
+      watch: { ignored: ['**/src-tauri/**', '**/.tmp/**'] },
     },
     optimizeDeps: {
       include: [
