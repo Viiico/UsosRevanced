@@ -6,8 +6,8 @@ import { formatPercent } from '~/lib/format'
 import { segmentColor } from '~/lib/segments'
 
 /**
- * Koło postępu bieżącego węzła (maksymalnie semestr). Poziomy, które mają jeszcze dzieci,
- * dzielą koło kątowo według wagi (przedmioty → grupy), a ostatni poziom - promieniście,
+ * Koło postępu bieżącego węzła (maksymalnie semestr). Całe koło to ten węzeł, wycinki - jego
+ * dzieci według wagi. Tylko w widoku semestru czwarty poziom (oceny) układa się promieniście,
  * od środka do krawędzi (lab 1/2/3, etapy projektu). Wypełnienie pasma = zdobyte punkty.
  * Na zewnątrz pierścienie z podpisami poziomów kątowych - zamiast legendy.
  */
@@ -29,6 +29,8 @@ const GAP = 3.5
 const BAR = 2
 /** Miejsce na pasek oceny na zewnętrznej krawędzi pasma (pasek + po trochu oddechu z obu stron). */
 const BAR_SLOT = 3
+/** Od której głębokości (licząc od korzenia koła) oceny układają się promieniście: semestr → przedmiot → grupa → ocena. */
+const RADIAL_DEPTH = 2
 const FULL = Math.PI * 2
 
 interface Shape {
@@ -215,8 +217,10 @@ const drawing = computed(() => {
         trail,
         node,
       })
-      // Wąskie pasma przy środku dostają mniejszą czcionkę, zanim podpis zostanie pominięty.
-      const text = [5, 4, 3.6]
+      // Wąskie pasma przy środku dostają mniejszą czcionkę, zanim podpis zostanie pominięty;
+      // w przedmiocie/grupie wycinki są duże, więc podpisy startują od większego rozmiaru.
+      const sizes = levels.value >= RADIAL_DEPTH ? [5, 4, 3.6] : [8, 7, 6, 5, 4]
+      const text = sizes
         .map((size) => bandLabel(`b-${node.id}`, bandText(node), a0, a1, r0, bandOut, size))
         .find(Boolean)
       if (text) labels.push(text)
@@ -231,8 +235,10 @@ const drawing = computed(() => {
       return
     }
 
-    // Ostatni poziom (same liście) dzielimy od środka do krawędzi, wyższe - kątowo wg wagi.
-    if (!children.some((child) => child.children?.length)) {
+    // Promieniście (od środka do krawędzi) tylko czwarty poziom, czyli oceny w widoku semestru.
+    // W przedmiocie czy grupie oceny są zwykłymi wycinkami - całe koło to ten przedmiot/grupa.
+    const allLeaves = !children.some((child) => child.children?.length)
+    if (allLeaves && depth >= RADIAL_DEPTH) {
       const step = (r1 - r0) / children.length
       children.forEach((child, index) =>
         layout(
@@ -265,6 +271,12 @@ const drawing = computed(() => {
         const shared = { id: child.id, path, color: colorOf(child), trail: childTrail, node: child }
         tints.push({ ...shared, opacity: 0.08, kind: 'tint' })
         outlines.push({ ...shared, opacity: 1, kind: 'outline' })
+      }
+      // Same oceny jako wycinki: podpis i pasek mają w paśmie, pierścień byłby powtórzeniem.
+      if (allLeaves) {
+        layout(child, angle, angle + span, r0, r1, childTrail, depth + 1)
+        angle += span
+        return
       }
       rings.push({
         id: child.id,
