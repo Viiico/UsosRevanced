@@ -17,7 +17,6 @@ import {
 } from '~/lib/node-meta'
 import {
   dayOfMonth,
-  formatDate,
   formatWeekday,
   monthLabel,
   monthShort,
@@ -100,12 +99,6 @@ const stats = computed(() => ({
   points: visible.value.reduce((sum, term) => sum + (term.pointsMax ?? 0), 0),
 }))
 
-const range = computed(() => {
-  if (!items.value.length) return ''
-  const dates = items.value.map((term) => term.date).sort()
-  return `${formatDate(dates[0]!)} - ${formatDate(dates[dates.length - 1]!)}`
-})
-
 function byDate(a: Term, b: Term) {
   return `${a.date}${a.start ?? ''}`.localeCompare(`${b.date}${b.start ?? ''}`)
 }
@@ -156,12 +149,6 @@ function resetFilters() {
         <div class="flex flex-wrap items-center gap-1.5">
           <Badge variant="outline">{{ semester.name }} {{ semester.code }}</Badge>
         </div>
-      </div>
-
-      <div class="flex h-6 items-center">
-        <p class="truncate text-sm text-muted-foreground">
-          Oceniane terminy całego semestru · {{ range }}
-        </p>
       </div>
     </header>
 
@@ -316,9 +303,9 @@ function resetFilters() {
                         :title="subjectOf(term)?.name"
                       >
                         <BookOpen class="size-3" />
-                        <!-- Na telefonie kod przedmiotu - pełna nazwa (np. PSIR) rozpychała stronę. -->
-                        <span class="sm:hidden">{{ subjectOf(term)?.code }}</span>
-                        <span class="hidden truncate sm:inline">{{ subjectOf(term)?.name }}</span>
+                        <!-- Poniżej xl kod przedmiotu - pełna nazwa (np. PSIR) łamała nagłówek na kilka linii. -->
+                        <span class="xl:hidden">{{ subjectOf(term)?.code }}</span>
+                        <span class="hidden truncate xl:inline">{{ subjectOf(term)?.name }}</span>
                       </Badge>
                       <span v-if="term.start" class="tnum text-2xs text-muted-foreground">
                         · {{ term.start }}<template v-if="term.end">-{{ term.end }}</template>
@@ -341,12 +328,15 @@ function resetFilters() {
                       </span>
                     </div>
 
-                    <!-- Tytuł z wymaganiami i notatkami w jednym wierszu - zawija się dopiero, gdy brakuje miejsca. -->
+                    <!--
+                      Tytuł i szczegóły w jednym wierszu. Szczegóły to inline-block: gdy nie mieszczą się
+                      obok tytułu, przechodzą w całości do nowego wiersza zamiast łamać się w połowie.
+                    -->
                     <p class="mt-1.5 text-2xs leading-snug text-muted-foreground">
                       <span class="me-2 text-dense font-medium text-foreground">{{ term.title }}</span>
-                      <template v-if="term.requirement || term.notes">
+                      <span v-if="term.requirement || term.notes" class="inline-block max-w-full">
                         {{ [term.requirement, term.notes].filter(Boolean).join(' · ') }}
-                      </template>
+                      </span>
                     </p>
 
                     <div
